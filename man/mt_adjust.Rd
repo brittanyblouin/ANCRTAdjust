@@ -25,6 +25,7 @@ prepare the data for use here.  The data set must have the following variables:
  (only including valid coverage observations to calculate the mean) multiplied by \code{n_clients}. 
  \item \code{remove}: When \code{n_stat} > \code{n_clients}, replace \code{n_stat} as missing.
  \item \code{setmax}: When \code{n_stat} > \code{n_clients}, replace \code{n_stat} with \code{n_clients}.
+ \item \code{none}: When \code{n_stat} > \code{n_clients}, no adjustment is made. 
  }}
 }
 \value{

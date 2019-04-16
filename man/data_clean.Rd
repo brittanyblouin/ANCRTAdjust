@@ -4,30 +4,28 @@
 \alias{data_clean}
 \title{Clean ANC-RT Data}
 \usage{
-data_clean(Data_)
+data_clean(Data, total_age_cat)
 }
 \arguments{
-\item{Data_}{A country-specific ANC-RT database that has been opened using the \code{parse} function.
-The following variables (with these variable names) must be included in \code{Data_}:
+\item{Data}{A country-specific ANC-RT database.
+The following variables (with these variable names) must be included in \code{Data}:
  \itemize{
-  \item \code{quarter}
+  \item \code{time}: The time period that the data was collected.
   \item \code{age}: Age category of pregnant women.
   \item \code{faciluid}:  The unique facility identifier.
-  \item \code{period}
-  \item \code{year}: The year that the data was collected.
   \item \code{testneg}: The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
   \item \code{testpos}: The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
   \item \code{knownpos}: The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
   \item \code{n_status}:  The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
  }}
+
+\item{total_age_cat}{The value of the \code{age} variable indicating all age categories combined.}
 }
 \value{
 A cleaned ANC-RT database with additional variables:
  \itemize{
   \item \code{ID}: Facility ID
-  \item \code{Time}: The quarter that the data was collected
-  \item \code{Year}: The year that the data was collected
   \item \code{TestNeg}: Cleaned \code{testneg} (according to description)
   \item \code{TestPos}: Cleaned \code{testpos} (according to description)
   \item \code{KnownPos}: Cleaned \code{knownpos} (according to description)
@@ -49,7 +47,6 @@ This function has been developed to clean common issues asoociated with ANC-RT d
 are accomplished:
  \itemize{
    \item \code{ID} is created, corresponding to facility ID, to facilitate cluster analyses.
-   \item \code{Time} and \code{Year} are properly formatted
    \item Age disaggregated data is removed
    \item \code{TestNeg} is set to \code{n_status} - \code{knownpos} - \code{testpos} if \code{testneg} is missing.  \code{TestNeg} is set to 0 if negative.
    \item \code{KnownPos} is set to \code{n_status} - \code{testneg} - \code{testpos} if \code{knownpos} is missing.  \code{KnownPos} is set to 0 if negative.

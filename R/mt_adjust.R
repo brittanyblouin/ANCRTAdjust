@@ -23,6 +23,7 @@
 #'   (only including valid coverage observations to calculate the mean) multiplied by \code{n_clients}. 
 #'   \item \code{remove}: When \code{n_stat} > \code{n_clients}, replace \code{n_stat} as missing.
 #'   \item \code{setmax}: When \code{n_stat} > \code{n_clients}, replace \code{n_stat} with \code{n_clients}.
+#'   \item \code{none}: When \code{n_stat} > \code{n_clients}, no adjustment is made. 
 #'   }
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
@@ -57,7 +58,11 @@ mt_adjust <- function(data, adjust_option){
     data$TotPos.impute <- data$TotPos.remove <- data$TotPos.setmax <- NULL
   }
   
-
+  if (adjust_option == "none"){
+    data$n_stat.impute <- data$n_stat.remove <- data$n_stat.setmax <- NULL
+    data$TotPos.impute <- data$TotPos.remove <- data$TotPos.setmax <- NULL
+  }
+  
   data$Cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), data$n_stat / data$n_clients, NA)
   data$Prv <- ifelse(data$n_stat > 0 & !is.na(data$n_stat), data$TotPos / data$n_stat, NA)
   
