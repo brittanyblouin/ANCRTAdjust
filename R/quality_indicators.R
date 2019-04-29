@@ -1,25 +1,26 @@
 quality <- function(Data1){
   
+  Data1$totpos_raw <- ifelse(!is.na(Data1$knownpos) & !is.na(Data1$testpos), Data1$knownpos + Data1$testpos, 
+                            Data1$totpos)
   Data1$Cov_raw <- ifelse(Data1$n_clients>0 & !is.na(Data1$n_clients), (Data1$n_status / Data1$n_clients), NA)
-  Data1$Prv_raw <- ifelse(Data1$n_status>0 & !is.na(Data1$n_status), (Data1$testpos + Data1$knownpos) / Data1$n_status, NA)
+  Data1$Prv_raw <- ifelse(Data1$n_status>0 & !is.na(Data1$n_status), (Data1$totpos_raw) / Data1$n_status, NA)
   Data1$Cov <- ifelse(Data1$n_clients>0 & !is.na(Data1$n_clients), (Data1$n_stat / Data1$n_clients), NA)
-  Data1$Prv <- ifelse(Data1$n_stat>0 & !is.na(Data1$n_stat), (Data1$TestPos + Data1$KnownPos) / Data1$n_stat, NA)
+  Data1$Prv <- ifelse(Data1$n_stat>0 & !is.na(Data1$n_stat), (Data1$TotPos) / Data1$n_stat, NA)
   
   ############################
   ##1. Quarters not reported##
   ############################
   Data <- Data1
   Data$NoData <- ifelse(is.na(Data$n_clients) & (is.na(Data$n_status) | Data$n_status == 0) & (is.na(Data$testpos) | Data$testpos == 0) 
-                        & (is.na(Data$testneg) | Data$testneg == 0) & (is.na(Data$knownpos) | Data$knownpos == 0), 1, 0)
-  Data <- Data[Data$NoData == 0]
+                        & (is.na(Data$testneg) | Data$testneg == 0) & (is.na(Data$knownpos) | Data$knownpos == 0) & (is.na(Data$totpos) | Data$totpos == 0), 1, 0)
+  Data <- Data[Data$NoData == 0,]
   Data$Ones <- 1
-  Data$ID <- recode.cluster(Data$faciluid)
   quarters <- data.frame(Data$ID, Data$period, Data$Ones)
   wide <- reshape(quarters, idvar = "Data.ID", timevar = "Data.period", direction = "wide")
   wide[is.na(wide)] <- 0
   
   wide$NumVisits <- rowSums(wide[2:dim(wide)[2]])
-  wide$keep <- ifelse(wide$NumVisits == 12, 1, 0)
+  wide$keep <- ifelse(wide$NumVisits == length(unique(Data1$period)), 1, 0)
   
   o1 <- sum(ifelse(wide$keep==0,1,0)) 
   op1 <- paste("(", round((1-mean(wide$keep)) * 100, 2), "%)", sep = "")
@@ -55,10 +56,10 @@ quality <- function(Data1){
   c6 <- sum(is.na(Data1$KnownPos))
   cp6 <- paste("(", round((sum(is.na(Data1$KnownPos))/dim(Data1)[1])*100,2), "%)", sep = "")
   
-  missing <- subset(Data1, select=c('n_clients', 'n_status', 'knownpos', 'testpos'))
+  missing <- subset(Data1, select=c('n_clients', 'n_status', 'totpos_raw'))
   o7 <- (dim(missing)[1] - dim(na.omit(missing))[1])
   op7 <- paste("(", round(((dim(missing)[1] - dim(na.omit(missing))[1])/dim(missing)[1])*100,2), "%)", sep = "")
-  missing2 <- subset(Data1, select=c('n_clients', 'n_stat', 'KnownPos', 'TestPos'))
+  missing2 <- subset(Data1, select=c('n_clients', 'n_stat', 'TotPos'))
   c7 <- (dim(missing2)[1] - dim(na.omit(missing2))[1])
   cp7 <- paste("(", round(((dim(missing2)[1] - dim(na.omit(missing2))[1])/dim(missing2)[1])*100,2), "%)", sep = "")
   
@@ -210,7 +211,7 @@ quality_indicators <- function(Data1, byregion = "FALSE", bytime = "FALSE"){
     table2 <- NULL
     region.list <- (unique(Data1$snu1))
     for (i in 1:length(region.list)){
-      RegionData <- Data1[Data1$snu1 == region.list[i]]
+      RegionData <- Data1[Data1$snu1 == region.list[i],]
       table3 <- quality(RegionData)
       table3$region <- region.list[i]
       row.names(table3)<-c(paste("Missing >=1 quarter", i, sep = '.'), paste("Missing n_clients", i, sep = '.'), paste("Missing n_status", i, sep = '.'), paste("Missing testpos", i, sep = '.'), paste("Missing testneg", i, sep = '.'),
@@ -234,7 +235,7 @@ quality_indicators <- function(Data1, byregion = "FALSE", bytime = "FALSE"){
     table2 <- NULL
     time.list <- (unique(Data1$Time))
     for (i in 1:length(time.list)){
-      TimeData <- Data1[Data1$Time == time.list[i]]
+      TimeData <- Data1[Data1$Time == time.list[i],]
       table3 <- quality(TimeData)
       table3[1,1] <- table3[1,2] <- "NA"
       table3$time <- time.list[i]
@@ -261,7 +262,7 @@ quality_indicators <- function(Data1, byregion = "FALSE", bytime = "FALSE"){
     Data1$snu1.time <- paste(Data1$snu1, Data1$Time, sep = "-")
     timeregion.list <- (unique(Data1$snu1.time))
     for (i in 1:length(timeregion.list)){
-      Data <- Data1[Data1$snu1.time == timeregion.list[i]]
+      Data <- Data1[Data1$snu1.time == timeregion.list[i],]
       table3 <- quality(Data)
       table3[1,1] <- table3[1,2] <- "NA"
       table3$time <- Data$Time[1]

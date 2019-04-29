@@ -60,6 +60,9 @@
 descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.cov_min = 0, ylim.cov_max = 100, 
                               ylim.prev_min = 0, ylim.prev_max = 100, plot_type="full"){
 
+  data$totpos_raw <- ifelse(!is.na(data$knownpos) & !is.na(data$testpos), data$knownpos + data$testpos, 
+                            data$totpos)
+  
   primary_indicators <- function(data){
     data$Cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
     data$impossible_raw <- ifelse(data$Cov_raw > 1 & !is.na(data$Cov_raw), 1,
@@ -70,7 +73,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
                                                           ifelse(data$knownpos < 0 & !is.na(data$knownpos), 1, 0))))))
     impdata <- round((sum(data$impossible_raw, na.rm = TRUE) / dim(data)[1])*100, 2)
 
-    missing <- subset(data, select=c('n_clients', 'n_status', 'knownpos', 'testpos'))
+    missing <- subset(data, select=c('n_clients', 'n_status', 'totpos_raw'))
     missingdata_raw <- round(((dim(missing)[1] - dim(na.omit(missing))[1])/dim(missing)[1])*100,2)
 
     missing2 <- subset(data, select=c('n_clients', 'n_stat', 'TotPos'))
@@ -103,7 +106,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
   coverage_adjs <- round(mean(coverages$dif_adj, na.rm = TRUE), 3)
   
   HIVprevs <- function(data){
-    prev_raw <- (weighted.mean((data$testpos + data$knownpos) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100
+    prev_raw <- (weighted.mean((data$totpos_raw) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100
     prev <- (weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100
     prev.impute <- (weighted.mean((data$TotPos.impute) / data$n_stat.impute, w = data$n_stat.impute, na.rm = TRUE)) * 100
     prev.remove <- (weighted.mean((data$TotPos.remove) / data$n_stat.remove, w = data$n_stat.remove, na.rm = TRUE)) * 100
