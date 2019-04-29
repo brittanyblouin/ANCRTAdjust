@@ -1,6 +1,6 @@
-meancov_possible <- function(data){
+meancov_possible <- function(data) {
   data$cov_raw <- data$n_stat / data$n_clients
-  meancov <- mean(data$cov_raw[which(data$cov_raw<=1 & !is.na(data$cov_raw))])
+  meancov <- mean(data$cov_raw[which(data$cov_raw <= 1 & !is.na(data$cov_raw))])
   return(meancov)
 }
 
