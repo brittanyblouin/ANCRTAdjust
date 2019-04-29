@@ -67,3 +67,18 @@ An inuitive way to examine the impact of the different data cleaning options is 
 descriptive_plot(ancrt_cleaned)
 ``` 
 ![](man/figures/README-example-1.png)
+
+Data quality indicators
+-----------------------
+Brittany, this function is not working...
+
+
+Adjusting testing coverage
+--------------------------
+It is quite possible that testing coverage could be higher than 100% if, prior to a first HIV negative test, subsequent tests at ANC visits are included. One can use the `mt_adjust()` function to correct this. There are three 3 different adjustmpent options. Consult the help file for more information by typing `help(mt_adjust)` in your console.
+
+``` r
+ancrt_cleaned <- mt_adjust(data = ancrt_cleaned, adjust_option = 'setmax')
+``` 
+
+

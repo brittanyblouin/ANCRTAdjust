@@ -13,7 +13,7 @@
 #'    options for multiple testing (1. Using the impute option; 2. Using the remove option; and, 3. Using the set to maximum option).
 #'  }
 #'
-#' @param data The ANC-RT dataset.  Ideally the function \link[ANCRTAdjust]{data_clean} has been run on the data to properly
+#' @param data The ANC-RT dataset. The function \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must include the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit

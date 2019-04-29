@@ -42,7 +42,7 @@
 #' @export
 #' 
 
-HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE"){
+HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE") {
 
   Data$NoData <- ifelse(is.na(Data$n_clients) & (is.na(Data$n_status) | Data$n_status == 0) & (is.na(Data$testpos) | Data$testpos == 0) 
                       & (is.na(Data$testneg) | Data$testneg == 0) & (is.na(Data$knownpos) | Data$knownpos == 0), 1, 0)
@@ -50,13 +50,13 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   Data$Ones <- 1
   Data$ID <- recode.cluster(Data$faciluid)
   quarters <- data.frame(ID = Data$ID, Time = Data$Time, Ones = Data$Ones)
-  wide <- reshape(quarters, idvar = "ID", timevar = "Time", direction = "wide")
+  wide <- reshape(quarters, idvar = "ID", timevar = "time", direction = "wide")
   wide[is.na(wide)] <- 0
 
-  long <- reshape(wide, idvar = "ID", timevar = "Time", direction = "long")
+  long <- reshape(wide, idvar = "ID", timevar = "time", direction = "long")
   names(long)[3]<-"uncensored"
 
-  Data2 <- merge(Data, long, by = c("ID", "Time"), all = TRUE)
+  Data2 <- merge(Data, long, by = c("ID", "time"), all = TRUE)
 
   Data3 <- NULL
   for (i in 1:length(unique(Data2$ID))) {
@@ -73,8 +73,8 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     Data3 <- rbind(Data3, temp)
   }
     
-  prob.cens <- function(data){
-    weight <- sum(data$uncensored)/length(data$uncensored)
+  prob.cens <- function(data) {
+    weight <- sum(data$uncensored) / length(data$uncensored)
     return(weight)
   }
   weights <- ddply(Data3, c("ID"), prob.cens)
@@ -84,13 +84,13 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   Data4$Ones <- Data4$NoData <- Data4$uncensored <- Data4$V1 <- NULL
   
   Data4$weight_clients <- Data4$n_stat * Data4$weight
-  HIV_prev <- round(((weighted.mean(Data4$Prv, w = Data4$weight_clients, na.rm = TRUE)) * 100),2)
+  HIV_prev <- round(((weighted.mean(Data4$Prv, w = Data4$weight_clients, na.rm = TRUE)) * 100), 2)
   
   HIVprevs <- function(data){
-    prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$weight_clients, na.rm = TRUE)) * 100),2)
+    prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$weight_clients, na.rm = TRUE)) * 100), 2)
     return(prev)
   }
-  prev_Time_snu <- ddply(Data4, c("snu1", "Time"), HIVprevs)
+  prev_Time_snu <- ddply(Data4, c("snu1", "time"), HIVprevs)
   prev_Time_snu$HIVprev <- prev_Time_snu$V1
   prev_Time_snu$V1 <- NULL
   
@@ -98,7 +98,7 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   prev_snu$HIVprev <- prev_snu$V1
   prev_snu$V1 <- NULL
   
-  prev_Time <- ddply(Data4, "Time", HIVprevs)
+  prev_Time <- ddply(Data4, "time", HIVprevs)
   prev_Time$HIVprev <- prev_Time$V1
   prev_Time$V1 <- NULL
   
@@ -122,27 +122,27 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     return(result)
   }
   
-  if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "FALSE"){
+  if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "FALSE") {
     return(prev_snu)
   }
   
-  if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "FALSE"){
+  if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "FALSE") {
     return(prev_Time)
   }
   
-  if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "TRUE"){
+  if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "TRUE") {
     return(prev_year)
   }
   
-  if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "FALSE"){
+  if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "FALSE") {
     return(prev_Time_snu)
   }
   
-  if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "TRUE"){
+  if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "TRUE") {
     return(prev_year_snu)
   }
   
-  if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "TRUE"){
+  if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "TRUE") {
     prev_year$Time <- prev_year$Year
     prev_year$Year <- NULL
     prev_year$Time <- paste(prev_year$Time, 99, sep = "")
