@@ -66,3 +66,4 @@ An inuitive way to examine the impact of the different data cleaning options is 
 ``` r
 descriptive_plot(ancrt_cleaned)
 ``` 
+![](man/figures/README-example-1.png)
