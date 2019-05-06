@@ -100,9 +100,9 @@ data_clean <- function(Data, total_age_cat){
   Data$n_stat <- ifelse((Data$n_stat < 0 & !is.na(Data$n_stat)), NA, Data$n_stat)
   
   Data$TotPosA <- Data$KnownPos + Data$TestPos
-  Data$TotPosB <- ifelse(is.na(Data$TotPos), Data$n_stat - Data$TestNeg, Data$TotPos)
-  Data$TotPosC <- ifelse(Data$TotPosB < 0, 0, Data$TotPosB)
-  Data$n_stat <- ifelse(Data$TotPosB < 0 & !is.na(Data$TotPosB), Data$TotPos + Data$TestNeg, Data$n_stat)
+  Data$TotPosB <- ifelse(is.na(Data$TotPosA), Data$n_stat - Data$TestNeg, Data$TotPosA)
+  Data$TotPosC <- ifelse(Data$TotPosB < 0 & !is.na(Data$TotPosB), 0, Data$TotPosB)
+  Data$n_stat <- ifelse(Data$TotPosB < 0 & !is.na(Data$TotPosB), Data$TotPosC + Data$TestNeg, Data$n_stat)
   
   Data$ID <- recode.cluster(Data$faciluid)
   
