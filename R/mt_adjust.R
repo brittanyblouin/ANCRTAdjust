@@ -6,7 +6,7 @@
 #' This function was designed to adjust the variables \code{n_stat} and \code{TotPos}, using one of the three adjustment options, when multiple testing is 
 #' suspected (i.e. coverage values greater than 100\% are present).  The three options include: 1) impute; 2) remove; and, 3) set to maximum.
 #'
-#' @param data The ANC-RT dataset.  Ideally the function \link[ANCRTAdjust]{data_clean} has been run on the data to properly
+#' @param data The ANC-RT dataset. The function \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must have the following variables:
 #'  \itemize{
 #'   \item \code{n_stat.impute}: \code{n_stat} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
@@ -34,9 +34,9 @@
 #'
 #' @export
 
-mt_adjust <- function(data, adjust_option){
+mt_adjust <- function(data, adjust_option) {
   
-  if (adjust_option == "impute"){
+  if (adjust_option == "impute") {
     data$n_stat <- data$n_stat.impute
     data$TotPos <- data$TotPos.impute
     data$n_stat.impute <- data$n_stat.remove <- data$n_stat.setmax <- NULL
@@ -44,21 +44,21 @@ mt_adjust <- function(data, adjust_option){
     
   }
   
-  if (adjust_option == "remove"){
+  if (adjust_option == "remove") {
     data$n_stat <- data$n_stat.remove
     data$TotPos <- data$TotPos.remove
     data$n_stat.impute <- data$n_stat.remove <- data$n_stat.setmax <- NULL
     data$TotPos.impute <- data$TotPos.remove <- data$TotPos.setmax <- NULL
   }
   
-  if (adjust_option == "setmax"){
+  if (adjust_option == "setmax") {
     data$n_stat <- data$n_stat.setmax
     data$TotPos <- data$TotPos.setmax
     data$n_stat.impute <- data$n_stat.remove <- data$n_stat.setmax <- NULL
     data$TotPos.impute <- data$TotPos.remove <- data$TotPos.setmax <- NULL
   }
   
-  if (adjust_option == "none"){
+  if (adjust_option == "none") {
     data$n_stat.impute <- data$n_stat.remove <- data$n_stat.setmax <- NULL
     data$TotPos.impute <- data$TotPos.remove <- data$TotPos.setmax <- NULL
   }
