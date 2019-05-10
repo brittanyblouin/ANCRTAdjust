@@ -8,22 +8,22 @@ HIVprev_ipcw(Data, byperiod = "FALSE", bysnu1 = "FALSE",
   byyear = "FALSE")
 }
 \arguments{
-\item{Data}{The ANC-RT dataset.  Ideally the functions \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} have been run on the data to properly
+\item{Data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
   \item \code{faciluid}: Facility ID.
-  \item \code{snu1}: The subnational unit 1.
-  \item \code{Time}: The time period that the data was collected (generated using the \link[ANCRTAdjust]{data_clean} function).
-  \item \code{Year}: The year that the data was collected.
+  \item \code{time}: The time period that the data was collected.
   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
   \item \code{n_status}:  The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
   \item \code{testpos}: The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
   \item \code{knownpos}: The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
   \item \code{testneg}: The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
-  \item \code{TotPos}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} function).
+  \item \code{totpos}: Total number of positive HIV cases.
+  \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function).
   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function).
-  \item \code{Prv}: The HIV prevalence at the specified facility, during the specified time period (generated using the \link[ANCRTAdjust]{mt_adjust} function).
-    }}
+  \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
+  \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
+      }}
 
 \item{byperiod}{"TRUE" indicates that the results be stratified by reporting period.  "FALSE" indicates that the results not be stratified.}
 
@@ -34,10 +34,10 @@ prepare the data for use here.  The dataset must have the following variables:
 \value{
 A table (in dataframe format) indicating the results, stratified according to user inputs.  The results table includes the following columns:
  \itemize{
-  \item{snu1} (only if results were stratified by snu1): The subnational unit 1.  
-  \item{Time} (only if results were stratified by period and/or year): The time frame.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
+  \item \code{snu1} (only if results were stratified by snu1): The subnational unit 1.  
+  \item \code{Time} (only if results were stratified by period and/or year): The time period.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
   (i.e. "201599" refers to the yearly result for 2015).
-  \item{HIVprev}: The HIV prevalence adjusted for missing reporting periods and all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
+  \item \code{HIVprev}: The HIV prevalence adjusted for missing reporting periods and all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
  }
 }
 \description{

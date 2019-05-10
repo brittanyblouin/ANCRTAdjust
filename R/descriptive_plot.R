@@ -13,7 +13,7 @@
 #'    options for multiple testing (1. Using the impute option; 2. Using the remove option; and, 3. Using the set to maximum option).
 #'  }
 #'
-#' @param data The ANC-RT dataset. The function \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
+#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must include the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
@@ -25,11 +25,12 @@
 #'   \item \code{testpos}: The number of women who tested positive for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
-#'   \item \code{TotPos}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos}: Total number of positive HIV cases 
+#'   \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{TotPos.impute}: Adjusted \code{TotPos} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{TotPos.remove}: Adjusted \code{TotPos} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{TotPos.setmax}: Adjusted \code{TotPos} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{Time}: The time period (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{time}: The time period (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'  }
 #' @param ylim.ind_min The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)
 #' @param ylim.ind_max The y-axis upper limit of the plot of the primary data quality indicators over time (default = 100)
@@ -48,7 +49,7 @@
 #'   \item \code{ind} The plot of the primary data quality indicators over time only is included
 #'   }
 #'
-#' @import plyr ggplot2
+#' @import plyr ggplot2 ggpubr
 #'
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
@@ -82,6 +83,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
     primaryindicators <- cbind(impdata, missingdata_raw, missingdata_cleaned)
     return(primaryindicators)
   }
+  
   indicators <- plyr::ddply(data, "time", primary_indicators)
 
   coverages <- function(data){

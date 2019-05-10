@@ -10,5 +10,7 @@ This package provides a variety of functions to prepare ANC-RT data for analysis
 ultimately adjust HIV prevalences for bias caused by missing and invalid data.
 }
 \author{
+Brittany Blouin \email{brittany.blouin@mail.mcgill.ca}
+
 Mathieu Maheu-Giroux \email{mathieu.maheu-giroux@mcgill.ca}
 }

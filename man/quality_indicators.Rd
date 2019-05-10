@@ -7,31 +7,32 @@
 quality_indicators(Data1, byregion = "FALSE", bytime = "FALSE")
 }
 \arguments{
-\item{Data1}{The ANC-RT dataset.  Ideally the function \link[ANCRTAdjust]{data_clean} has been run on the data to properly
+\item{Data1}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 prepare the data for use here.  The data set must have the following variables:
  \itemize{
   \item \code{faciluid}: The facility identification code
-  \item \code{period}: The time period
-  \item \code{snu1}: The sub-national unit 1
-  \item \code{Time}: Cleaned \code{period} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{time}: The time period
+  \item \code{snu1}: The sub-national unit 1 (only necessary if results are to be stratified by region)
   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
   \item \code{n_status}: The number of women who attended the specific facility during the specific time period for their first ANC visit and had their HIV status ascertained 
   \item \code{testpos}: The number of women who tested positive for HIV at their first ANC visit at the specific facility during the specific time period
   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
+  \item \code{totpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period who were HIV-positive
   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{TestPos}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{TestNeg}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{KnownPos}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   }}
 
 \item{byregion}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}}
 
-\item{bytime}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{Time}}
+\item{bytime}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{time}}
 }
 \value{
 A table (in dataframe format) with all data quality indicators calculated for the raw and cleaned data.  If specified, data quality 
-indicators are also displayed stratified by \code{snu1} and/or \code{Time}.  The 16 data quality indicators include:
+indicators are also displayed stratified by \code{snu1} and/or \code{time}.  The 16 data quality indicators include:
 \itemize{
   \item The number and \% of facilities that don't report all quarters
   \item The number and \% of observations with missing data for \code{n_clients}
@@ -39,9 +40,9 @@ indicators are also displayed stratified by \code{snu1} and/or \code{Time}.  The
   \item The number and \% of observations with missing data for \code{testpos} 
   \item The number and \% of observations with missing data for \code{testneg} 
   \item The number and \% of observations with missing data for \code{knownpos}
-  \item The number and \% of observations with missing data for at least one of  \code{n_clients},  \code{n_status}, \code{testpos}, or \code{knownpos}
+  \item The number and \% of observations with missing data for at least one of  \code{n_clients},  \code{n_status}, or \code{totpos}
   \item The number and \% of observations with \code{n_status} > \code{n_clients}
-  \item The number and \% of observations with \code{n_status} < (\code{testpos} + \code{knownpos})
+  \item The number and \% of observations with \code{n_status} < \code{totpos}
   \item The number and \% of observations with \code{n_status} < (\code{testpos} + \code{testneg} + \code{knownpos})
   \item The number and \% of observations with negative values for \code{n_clients}
   \item The number and \% of observations with negative values for \code{n_status}

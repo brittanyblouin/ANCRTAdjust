@@ -8,15 +8,15 @@ HIV_prev_cov(Data, byperiod = "FALSE", bysnu1 = "FALSE",
   byyear = "FALSE")
 }
 \arguments{
-\item{Data}{The ANC-RT dataset.  Ideally the functions \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} have been run on the data to properly
+\item{Data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
-  \item \code{snu1}: The subnational unit 1.
-  \item \code{Time}: The time period that the data was collected (generated using the \link[ANCRTAdjust]{data_clean} function).
-  \item \code{Year}: The year that the data was collected.
   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
-  \item \code{TotPos}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} function).
-  \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function).
+  \item \code{TotPos}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+  \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+  \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
+  \item \code{time}: The time period that the data was collected (only required if results are to be stratified by the reporting time period).
+  \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
     }}
 
 \item{byperiod}{"TRUE" indicates that the results be stratified by reporting period.  "FALSE" indicates that the results not be stratified.}
@@ -29,7 +29,7 @@ prepare the data for use here.  The dataset must have the following variables:
 A table (in dataframe format) indicating the results, stratified according to user inputs.  The results table includes the following columns:
  \itemize{
   \item{snu1} (only if results were stratified by snu1): The subnational unit 1.  
-  \item{Time} (only if results were stratified by period and/or year): The time frame.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
+  \item{Time} (only if results were stratified by time period and/or year): The time frame.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
   (i.e. "201599" refers to the yearly result for 2015).
   \item{HIVprev}: The HIV prevalence adjusted for all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
   \item{HIVcov}: The HIV testing coverage adjusted for all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).

@@ -15,12 +15,12 @@ quality <- function(Data1) {
                         & (is.na(Data$testneg) | Data$testneg == 0) & (is.na(Data$knownpos) | Data$knownpos == 0) & (is.na(Data$totpos) | Data$totpos == 0), 1, 0)
   Data <- Data[Data$NoData == 0,]
   Data$Ones <- 1
-  quarters <- data.frame(Data$ID, Data$period, Data$Ones)
-  wide <- reshape(quarters, idvar = "Data.ID", timevar = "Data.period", direction = "wide")
+  quarters <- data.frame(Data$faciluid, Data$time, Data$Ones)
+  wide <- reshape(quarters, idvar = "Data.faciluid", timevar = "Data.time", direction = "wide")
   wide[is.na(wide)] <- 0
   
   wide$NumVisits <- rowSums(wide[2:dim(wide)[2]])
-  wide$keep <- ifelse(wide$NumVisits == length(unique(Data1$period)), 1, 0)
+  wide$keep <- ifelse(wide$NumVisits == length(unique(Data1$time)), 1, 0)
   
   o1 <- sum(ifelse(wide$keep == 0,1,0)) 
   op1 <- paste("(", round((1 - mean(wide$keep)) * 100, 2), "%)", sep = "")
@@ -148,25 +148,26 @@ quality <- function(Data1) {
 #' \code{testneg} and, \code{knownpos} are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
 #' variables and can be calculated stratified by region and time, according to user inputs.
 #' 
-#' @param Data1 The ANC-RT dataset.  Ideally the function \link[ANCRTAdjust]{data_clean} has been run on the data to properly
+#' @param Data1 The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: The facility identification code
-#'   \item \code{period}: The time period
-#'   \item \code{snu1}: The sub-national unit 1
-#'   \item \code{time}: Cleaned \code{period} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{time}: The time period
+#'   \item \code{snu1}: The sub-national unit 1 (only necessary if results are to be stratified by region)
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
 #'   \item \code{n_status}: The number of women who attended the specific facility during the specific time period for their first ANC visit and had their HIV status ascertained 
 #'   \item \code{testpos}: The number of women who tested positive for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
+#'   \item \code{totpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period who were HIV-positive
 #'   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{TestPos}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{TestNeg}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{KnownPos}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   }
 #' @param byregion "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}
-#' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{Time}
+#' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{time}
 #' 
 #' @import stats
 #' 
@@ -174,7 +175,7 @@ quality <- function(Data1) {
 #' @author Brittany Blouin
 #'
 #' @return A table (in dataframe format) with all data quality indicators calculated for the raw and cleaned data.  If specified, data quality 
-#' indicators are also displayed stratified by \code{snu1} and/or \code{Time}.  The 16 data quality indicators include:
+#' indicators are also displayed stratified by \code{snu1} and/or \code{time}.  The 16 data quality indicators include:
 #' \itemize{
 #'   \item The number and \% of facilities that don't report all quarters
 #'   \item The number and \% of observations with missing data for \code{n_clients}
@@ -182,9 +183,9 @@ quality <- function(Data1) {
 #'   \item The number and \% of observations with missing data for \code{testpos} 
 #'   \item The number and \% of observations with missing data for \code{testneg} 
 #'   \item The number and \% of observations with missing data for \code{knownpos}
-#'   \item The number and \% of observations with missing data for at least one of  \code{n_clients},  \code{n_status}, \code{testpos}, or \code{knownpos}
+#'   \item The number and \% of observations with missing data for at least one of  \code{n_clients},  \code{n_status}, or \code{totpos}
 #'   \item The number and \% of observations with \code{n_status} > \code{n_clients}
-#'   \item The number and \% of observations with \code{n_status} < (\code{testpos} + \code{knownpos})
+#'   \item The number and \% of observations with \code{n_status} < \code{totpos}
 #'   \item The number and \% of observations with \code{n_status} < (\code{testpos} + \code{testneg} + \code{knownpos})
 #'   \item The number and \% of observations with negative values for \code{n_clients}
 #'   \item The number and \% of observations with negative values for \code{n_status}
@@ -234,9 +235,9 @@ quality_indicators <- function(Data1, byregion = "FALSE", bytime = "FALSE"){
     
     
     table2 <- NULL
-    time.list <- (unique(Data1$Time))
+    time.list <- (unique(Data1$time))
     for (i in 1:length(time.list)) {
-      TimeData <- Data1[Data1$Time == time.list[i],]
+      TimeData <- Data1[Data1$time == time.list[i],]
       table3 <- quality(TimeData)
       table3[1,1] <- table3[1,2] <- "NA"
       table3$time <- time.list[i]
@@ -260,7 +261,7 @@ quality_indicators <- function(Data1, byregion = "FALSE", bytime = "FALSE"){
     
     
     table2 <- NULL
-    Data1$snu1.time <- paste(Data1$snu1, Data1$Time, sep = "-")
+    Data1$snu1.time <- paste(Data1$snu1, Data1$time, sep = "-")
     timeregion.list <- (unique(Data1$snu1.time))
     for (i in 1:length(timeregion.list)) {
       Data <- Data1[Data1$snu1.time == timeregion.list[i],]

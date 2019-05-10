@@ -6,7 +6,7 @@
 #' This function was designed to adjust the variables \code{n_stat} and \code{TotPos}, using one of the three adjustment options, when multiple testing is 
 #' suspected (i.e. coverage values greater than 100\% are present).  The three options include: 1) impute; 2) remove; and, 3) set to maximum.
 #'
-#' @param data The ANC-RT dataset. The function \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
+#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must have the following variables:
 #'  \itemize{
 #'   \item \code{n_stat.impute}: \code{n_stat} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
