@@ -6,7 +6,7 @@
 #' The HIV prevalence and testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, 
 #' according to user inputs.
 #'
-#' @param Data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
@@ -35,27 +35,27 @@
 #' @export
 #' 
 
-HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE"){
+HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE"){
   
-  HIVprevs <- function(Data){
-    prev <- round(((weighted.mean((Data$TotPos) / Data$n_stat, w = Data$n_stat, na.rm = TRUE)) * 100), 2)
-    cov <- round(((weighted.mean((Data$n_stat) / Data$n_clients, w = Data$n_clients, na.rm = TRUE)) * 100), 2)
+  HIVprevs <- function(data){
+    prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
+    cov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
     return(c(prev, cov))
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "FALSE"){
-    HIV_prev <- round(((weighted.mean((Data$TotPos) / Data$n_stat, w = Data$n_stat, na.rm = TRUE)) * 100), 2)
-    HIV_cov <- round(((weighted.mean((Data$n_stat) / Data$n_clients, w = Data$n_clients, na.rm = TRUE)) * 100), 2)
+    HIV_prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
+    HIV_cov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
     return(c(HIV_prev, HIV_cov))
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "TRUE"){
-    prev_year_snu <- ddply(Data, c("snu1", "Year"), HIVprevs)
+    prev_year_snu <- ddply(data, c("snu1", "Year"), HIVprevs)
     prev_year_snu$HIVprev <- prev_year_snu$V1
     prev_year_snu$HIVcov <- prev_year_snu$V2
     prev_year_snu$V1 <- prev_year_snu$V2 <- NULL
     
-    prev_Time_snu <- ddply(Data, c("snu1", "time"), HIVprevs)
+    prev_Time_snu <- ddply(data, c("snu1", "time"), HIVprevs)
     prev_Time_snu$HIVprev <- prev_Time_snu$V1
     prev_Time_snu$HIVcov <- prev_Time_snu$V2
     prev_Time_snu$V1 <- prev_Time_snu$V2 <- NULL
@@ -68,7 +68,7 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "FALSE"){
-    prev_snu <- ddply(Data, "snu1", HIVprevs)
+    prev_snu <- ddply(data, "snu1", HIVprevs)
     prev_snu$HIVprev <- prev_snu$V1
     prev_snu$HIVcov <- prev_snu$V2
     prev_snu$V1 <- prev_snu$V2 <- NULL
@@ -76,7 +76,7 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "FALSE"){
-    prev_Time <- ddply(Data, "time", HIVprevs)
+    prev_Time <- ddply(data, "time", HIVprevs)
     prev_Time$HIVprev <- prev_Time$V1
     prev_Time$HIVcov <- prev_Time$V2
     prev_Time$V1 <- prev_Time$V2 <- NULL
@@ -84,7 +84,7 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "TRUE"){
-    prev_year <- ddply(Data, "Year", HIVprevs)
+    prev_year <- ddply(data, "Year", HIVprevs)
     prev_year$HIVprev <- prev_year$V1
     prev_year$HIVcov <- prev_year$V2
     prev_year$V1 <- prev_year$V2 <- NULL
@@ -92,7 +92,7 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "FALSE"){
-    prev_Time_snu <- ddply(Data, c("snu1", "time"), HIVprevs)
+    prev_Time_snu <- ddply(data, c("snu1", "time"), HIVprevs)
     prev_Time_snu$HIVprev <- prev_Time_snu$V1
     prev_Time_snu$HIVcov <- prev_Time_snu$V2
     prev_Time_snu$V1 <- prev_Time_snu$V2 <- NULL
@@ -100,7 +100,7 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "TRUE"){
-    prev_year_snu <- ddply(Data, c("snu1", "Year"), HIVprevs)
+    prev_year_snu <- ddply(data, c("snu1", "Year"), HIVprevs)
     prev_year_snu$HIVprev <- prev_year_snu$V1
     prev_year_snu$HIVcov <- prev_year_snu$V2
     prev_year_snu$V1 <- prev_year_snu$V2 <- NULL
@@ -108,12 +108,12 @@ HIV_prev_cov <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "TRUE"){
-    prev_year <- ddply(Data, "Year", HIVprevs)
+    prev_year <- ddply(data, "Year", HIVprevs)
     prev_year$HIVprev <- prev_year$V1
     prev_year$HIVcov <- prev_year$V2
     prev_year$V1 <- prev_year$V2 <- NULL
     
-    prev_Time <- ddply(Data, "time", HIVprevs)
+    prev_Time <- ddply(data, "time", HIVprevs)
     prev_Time$HIVprev <- prev_Time$V1
     prev_Time$HIVcov <- prev_Time$V2
     prev_Time$V1 <- prev_Time$V2 <- NULL

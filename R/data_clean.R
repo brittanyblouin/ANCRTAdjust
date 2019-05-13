@@ -34,9 +34,9 @@ meancov_possible <- function(data) {
 #'        }
 #'   }
 #'   
-#' @param Data A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
+#' @param data A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
 #' prepare the data for use here.
-#' The following variables (with these variable names) must be included in \code{Data}:
+#' The following variables (with these variable names) must be included in \code{data}:
 #'  \itemize{
 #'   \item \code{time}: The time period that the data was collected.
 #'   \item \code{faciluid}:  The unique facility identifier.
@@ -72,60 +72,60 @@ meancov_possible <- function(data) {
 #'
 #' @export
 
-data_clean <- function(Data, total_age_cat){
+data_clean <- function(data, total_age_cat){
 
-  Data$ID_time <- paste(Data$faciluid, Data$time, sep = ".")
-  Data$check <- duplicated(Data$ID_time)
-  Data$check <- ifelse(Data$check == "TRUE", 1, 0)
+  data$ID_time <- paste(data$faciluid, data$time, sep = ".")
+  data$check <- duplicated(data$ID_time)
+  data$check <- ifelse(data$check == "TRUE", 1, 0)
   
-  if(sum(Data$check > 0)){
-    Data <- Data[Data$age == total_age_cat,]
+  if(sum(data$check > 0)){
+    data <- data[data$age == total_age_cat,]
   }
   
-  Data$TestNeg <- ifelse(!is.na(Data$testneg), Data$testneg,
-    Data$n_status - Data$knownpos - Data$testpos)
-  Data$TestNeg <- ifelse(!is.na(Data$TestNeg), Data$TestNeg,
-    Data$n_status - Data$totpos)
-  Data$TestNeg <- ifelse(Data$TestNeg < 0, 0, Data$TestNeg)
+  data$TestNeg <- ifelse(!is.na(data$testneg), data$testneg,
+    data$n_status - data$knownpos - data$testpos)
+  data$TestNeg <- ifelse(!is.na(data$TestNeg), data$TestNeg,
+    data$n_status - data$totpos)
+  data$TestNeg <- ifelse(data$TestNeg < 0, 0, data$TestNeg)
 
-  Data$KnownPos <- ifelse(!is.na(Data$knownpos), Data$knownpos,
-    Data$n_status - Data$TestNeg - Data$testpos)
-  Data$KnownPos <- ifelse(!is.na(Data$KnownPos), Data$KnownPos,
-    Data$totpos - Data$testpos)
-  Data$KnownPos <- ifelse(Data$KnownPos < 0, 0, Data$KnownPos)
+  data$KnownPos <- ifelse(!is.na(data$knownpos), data$knownpos,
+    data$n_status - data$TestNeg - data$testpos)
+  data$KnownPos <- ifelse(!is.na(data$KnownPos), data$KnownPos,
+    data$totpos - data$testpos)
+  data$KnownPos <- ifelse(data$KnownPos < 0, 0, data$KnownPos)
 
-  Data$TestPos <- ifelse(!is.na(Data$testpos), Data$testpos,
-    Data$n_status - Data$TestNeg - Data$KnownPos)
-  Data$TestPos <- ifelse(!is.na(Data$TestPos), Data$TestPos,
-    Data$totpos - Data$KnownPos)
-  Data$TestPos <- ifelse(Data$TestPos < 0, 0, Data$TestPos)
+  data$TestPos <- ifelse(!is.na(data$testpos), data$testpos,
+    data$n_status - data$TestNeg - data$KnownPos)
+  data$TestPos <- ifelse(!is.na(data$TestPos), data$TestPos,
+    data$totpos - data$KnownPos)
+  data$TestPos <- ifelse(data$TestPos < 0, 0, data$TestPos)
 
-  Data$n_stat <- ifelse(!is.na(Data$TestPos) & !is.na(Data$TestNeg) & !is.na(Data$KnownPos), 
-    Data$TestPos + Data$TestNeg + Data$KnownPos, Data$n_status)
-  Data$n_stat <- ifelse(!is.na(Data$n_stat), Data$n_stat, Data$totpos + Data$TestNeg)
-  Data$n_stat <- ifelse((Data$n_stat < 0 & !is.na(Data$n_stat)), NA, Data$n_stat)
+  data$n_stat <- ifelse(!is.na(data$TestPos) & !is.na(data$TestNeg) & !is.na(data$KnownPos), 
+    data$TestPos + data$TestNeg + data$KnownPos, data$n_status)
+  data$n_stat <- ifelse(!is.na(data$n_stat), data$n_stat, data$totpos + data$TestNeg)
+  data$n_stat <- ifelse((data$n_stat < 0 & !is.na(data$n_stat)), NA, data$n_stat)
   
-  Data$TotPosA <- ifelse(!is.na(Data$KnownPos) & !is.na(Data$TestPos), Data$KnownPos + Data$TestPos, 
-    Data$totpos)
-  Data$TotPosB <- ifelse(is.na(Data$TotPosA), Data$n_stat - Data$TestNeg, Data$TotPosA)
-  Data$TotPosC <- ifelse(Data$TotPosB < 0 & !is.na(Data$TotPosB), 0, Data$TotPosB)
-  Data$n_stat <- ifelse(Data$TotPosB < 0 & !is.na(Data$TotPosB), Data$TotPosC + Data$TestNeg, Data$n_stat)
+  data$TotPosA <- ifelse(!is.na(data$KnownPos) & !is.na(data$TestPos), data$KnownPos + data$TestPos, 
+    data$totpos)
+  data$TotPosB <- ifelse(is.na(data$TotPosA), data$n_stat - data$TestNeg, data$TotPosA)
+  data$TotPosC <- ifelse(data$TotPosB < 0 & !is.na(data$TotPosB), 0, data$TotPosB)
+  data$n_stat <- ifelse(data$TotPosB < 0 & !is.na(data$TotPosB), data$TotPosC + data$TestNeg, data$n_stat)
   
-  Data$n_stat.setmax <- ifelse((Data$n_stat > Data$n_clients) & !is.na(Data$n_stat) & !is.na(Data$n_clients), Data$n_clients, Data$n_stat)
-  Data$n_stat.remove <- ifelse((Data$n_stat > Data$n_clients) & !is.na(Data$n_stat) & !is.na(Data$n_clients), NA, Data$n_stat)
+  data$n_stat.setmax <- ifelse((data$n_stat > data$n_clients) & !is.na(data$n_stat) & !is.na(data$n_clients), data$n_clients, data$n_stat)
+  data$n_stat.remove <- ifelse((data$n_stat > data$n_clients) & !is.na(data$n_stat) & !is.na(data$n_clients), NA, data$n_stat)
   
-  mean_cov <- ddply(Data, "faciluid", meancov_possible)
-  Data <- merge(Data, mean_cov, by = "faciluid")
-  Data$facilmeancov <- Data$V1
-  Data$V1 <- NULL
-  Data$n_stat.impute <- ifelse(Data$n_stat > Data$n_clients & !is.na(Data$n_stat) & !is.na(Data$n_clients), round((Data$facilmeancov * Data$n_clients),0), Data$n_stat)
+  mean_cov <- ddply(data, "faciluid", meancov_possible)
+  data <- merge(data, mean_cov, by = "faciluid")
+  data$facilmeancov <- data$V1
+  data$V1 <- NULL
+  data$n_stat.impute <- ifelse(data$n_stat > data$n_clients & !is.na(data$n_stat) & !is.na(data$n_clients), round((data$facilmeancov * data$n_clients),0), data$n_stat)
   
-  Data$TotPos <- ifelse(Data$n_stat < Data$TotPosC & !is.na(Data$n_stat) & !is.na(Data$TotPosC), NA, Data$TotPosC)
-  Data$TotPos.setmax <- ifelse(Data$n_stat.setmax < Data$TotPosC & !is.na(Data$n_stat.setmax) & !is.na(Data$TotPosC), NA, Data$TotPosC)
-  Data$TotPos.impute <- ifelse(Data$n_stat.impute < Data$TotPosC & !is.na(Data$n_stat.impute) & !is.na(Data$TotPosC), NA, Data$TotPosC)
-  Data$TotPos.remove <- ifelse(Data$n_stat.remove < Data$TotPosC & !is.na(Data$n_stat.remove) & !is.na(Data$TotPosC), NA, Data$TotPosC)
+  data$TotPos <- ifelse(data$n_stat < data$TotPosC & !is.na(data$n_stat) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$TotPos.setmax <- ifelse(data$n_stat.setmax < data$TotPosC & !is.na(data$n_stat.setmax) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$TotPos.impute <- ifelse(data$n_stat.impute < data$TotPosC & !is.na(data$n_stat.impute) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$TotPos.remove <- ifelse(data$n_stat.remove < data$TotPosC & !is.na(data$n_stat.remove) & !is.na(data$TotPosC), NA, data$TotPosC)
   
-  Data$ID_time <- Data$check <- Data$TotPosA <- Data$TotPosB <- Data$TotPosC <- Data$facilmeancov <- NULL
+  data$ID_time <- data$check <- data$TotPosA <- data$TotPosB <- data$TotPosC <- data$facilmeancov <- NULL
   
-  Data.final <- Data
+  data.final <- data
 }

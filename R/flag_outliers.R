@@ -5,7 +5,7 @@
 #' This function has been developed to flag outlier observations for the following variables: \code{n_clients}, \code{n_stat}, \code{TestPos}, \code{TestNeg}, \code{KnownPos}, 
 #' \code{TotPos}, \code{Prv} and \code{Cov}.  Outliers are defined as 2 standard deviations greater than or less than the mean value.  
 #' 
-#' @param Data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: Facility ID.
@@ -59,12 +59,12 @@
 #' @export
 #' 
 
-flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
+flag_outliers <- function(data, flagby = "facility", result = "outliers") {
   
   if (flagby == "facility") {
-    Data1 <- NULL
-    for (i in levels(as.factor(Data$faciluid))) {
-      temp <- Data[Data$faciluid == i,]
+    data1 <- NULL
+    for (i in levels(as.factor(data$faciluid))) {
+      temp <- data[data$faciluid == i,]
       temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients) + (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)) | 
                                     ((temp$n_clients < (mean(temp$n_clients) - (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)), 1, 0)
       temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat) + (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)) | 
@@ -81,17 +81,17 @@ flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
                                  ((temp$Prv < (mean(temp$Prv) - (2 * sd(temp$Prv)))) & !is.na(temp$Prv)), 1, 0)
       temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov) + (2 * sd(temp$Cov)))) & !is.na(temp$Cov)) | 
                                  ((temp$Cov < (mean(temp$Cov) - (2 * sd(temp$Cov)))) & !is.na(temp$Cov)), 1, 0)
-      Data1 <- rbind(Data1, temp)
+      data1 <- rbind(data1, temp)
     }
   
-    n_clients.outliers <- subset(Data1, flag.n_clients == 1, c(faciluid, time, n_clients))
-    n_stat.outliers <- subset(Data1, flag.n_stat == 1, c(faciluid, time, n_stat))
-    TestPos.outliers <- subset(Data1, flag.TestPos == 1, c(faciluid, time, TestPos))
-    TestNeg.outliers <- subset(Data1, flag.TestNeg == 1, c(faciluid, time, TestNeg))
-    KnownPos.outliers <- subset(Data1, flag.KnownPos == 1, c(faciluid, time, KnownPos))
-    TotPos.outliers <- subset(Data1, flag.TotPos == 1, c(faciluid, time, TotPos))
-    Prv.outliers <- subset(Data1, flag.Prv == 1, c(faciluid, time, Prv))
-    Cov.outliers <- subset(Data1, flag.Cov == 1, c(faciluid, time, Cov))
+    n_clients.outliers <- subset(data1, flag.n_clients == 1, c(faciluid, time, n_clients))
+    n_stat.outliers <- subset(data1, flag.n_stat == 1, c(faciluid, time, n_stat))
+    TestPos.outliers <- subset(data1, flag.TestPos == 1, c(faciluid, time, TestPos))
+    TestNeg.outliers <- subset(data1, flag.TestNeg == 1, c(faciluid, time, TestNeg))
+    KnownPos.outliers <- subset(data1, flag.KnownPos == 1, c(faciluid, time, KnownPos))
+    TotPos.outliers <- subset(data1, flag.TotPos == 1, c(faciluid, time, TotPos))
+    Prv.outliers <- subset(data1, flag.Prv == 1, c(faciluid, time, Prv))
+    Cov.outliers <- subset(data1, flag.Cov == 1, c(faciluid, time, Cov))
   
     resultsa <- merge(n_clients.outliers, n_stat.outliers, by = c("faciluid", "time"), all = TRUE)
     resultsb <- merge(resultsa, TestPos.outliers, by = c("faciluid", "time"), all = TRUE)
@@ -102,13 +102,13 @@ flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
     results <- merge(resultsf, Cov.outliers, by = c("faciluid", "time"), all = TRUE)
 
     if (result == "outliers") {return(results)}
-    if (result == "data") {return(Data1)}
+    if (result == "data") {return(data1)}
   }
   
   if (flagby == "snu1") {
-    Data1 <- NULL
-    for (i in levels(as.factor(Data$snu1))) {
-      temp <- Data[Data$snu1 == i,]
+    data1 <- NULL
+    for (i in levels(as.factor(data$snu1))) {
+      temp <- data[data$snu1 == i,]
       temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients) + (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)) | 
                                       ((temp$n_clients < (mean(temp$n_clients) - (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)), 1, 0)
       temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat) + (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)) | 
@@ -125,17 +125,17 @@ flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
                                 ((temp$Prv < (mean(temp$Prv) - (2 * sd(temp$Prv)))) & !is.na(temp$Prv)), 1, 0)
       temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov) + (2 * sd(temp$Cov)))) & !is.na(temp$Cov)) | 
                                 ((temp$Cov < (mean(temp$Cov) - (2 * sd(temp$Cov)))) & !is.na(temp$Cov)), 1, 0)
-      Data1 <- rbind(Data1, temp)
+      data1 <- rbind(data1, temp)
     }
     
-    n_clients.outliers <- subset(Data1, flag.n_clients == 1, c(faciluid, time, n_clients))
-    n_stat.outliers <- subset(Data1, flag.n_stat == 1, c(faciluid, time, n_stat))
-    TestPos.outliers <- subset(Data1, flag.TestPos == 1, c(faciluid, time, TestPos))
-    TestNeg.outliers <- subset(Data1, flag.TestNeg == 1, c(faciluid, time, TestNeg))
-    KnownPos.outliers <- subset(Data1, flag.KnownPos == 1, c(faciluid, time, KnownPos))
-    TotPos.outliers <- subset(Data1, flag.TotPos == 1, c(faciluid, time, TotPos))
-    Prv.outliers <- subset(Data1, flag.Prv == 1, c(faciluid, time, Prv))
-    Cov.outliers <- subset(Data1, flag.Cov == 1, c(faciluid, time, Cov))
+    n_clients.outliers <- subset(data1, flag.n_clients == 1, c(faciluid, time, n_clients))
+    n_stat.outliers <- subset(data1, flag.n_stat == 1, c(faciluid, time, n_stat))
+    TestPos.outliers <- subset(data1, flag.TestPos == 1, c(faciluid, time, TestPos))
+    TestNeg.outliers <- subset(data1, flag.TestNeg == 1, c(faciluid, time, TestNeg))
+    KnownPos.outliers <- subset(data1, flag.KnownPos == 1, c(faciluid, time, KnownPos))
+    TotPos.outliers <- subset(data1, flag.TotPos == 1, c(faciluid, time, TotPos))
+    Prv.outliers <- subset(data1, flag.Prv == 1, c(faciluid, time, Prv))
+    Cov.outliers <- subset(data1, flag.Cov == 1, c(faciluid, time, Cov))
     
     resultsa <- merge(n_clients.outliers, n_stat.outliers, by = c("faciluid", "time"), all = TRUE)
     resultsb <- merge(resultsa, TestPos.outliers, by = c("faciluid", "time"), all = TRUE)
@@ -146,36 +146,36 @@ flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
     results <- merge(resultsf, Cov.outliers, by = c("faciluid", "time"), all = TRUE)
     
     if (result == "outliers") {return(results)}
-    if (result == "data") {return(Data1)}
+    if (result == "data") {return(data1)}
   }
   
   if (flagby == "country") {
     
-    Data$flag.n_clients <- ifelse(((Data$n_clients > (mean(Data$n_clients) + (2 * sd(Data$n_clients)))) & !is.na(Data$n_clients)) | 
-                                    ((Data$n_clients < (mean(Data$n_clients) - (2 * sd(Data$n_clients)))) & !is.na(Data$n_clients)), 1, 0)
-    Data$flag.n_stat <- ifelse(((Data$n_stat > (mean(Data$n_stat) + (2 * sd(Data$n_stat)))) & !is.na(Data$n_stat)) | 
-                                 ((Data$n_stat < (mean(Data$n_stat) - (2 * sd(Data$n_stat)))) & !is.na(Data$n_stat)), 1, 0)
-    Data$flag.TestPos <- ifelse(((Data$TestPos > (mean(Data$TestPos) + (2 * sd(Data$TestPos)))) & !is.na(Data$TestPos)) | 
-                                  ((Data$TestPos < (mean(Data$TestPos) - (2 * sd(Data$TestPos)))) & !is.na(Data$TestPos)), 1, 0)
-    Data$flag.TestNeg <- ifelse(((Data$TestNeg > (mean(Data$TestNeg) + (2 * sd(Data$TestNeg)))) & !is.na(Data$TestNeg)) | 
-                                  ((Data$TestNeg < (mean(Data$TestNeg) - (2 * sd(Data$TestNeg)))) & !is.na(Data$TestNeg)), 1, 0)
-    Data$flag.KnownPos <- ifelse(((Data$KnownPos > (mean(Data$KnownPos) + (2 * sd(Data$KnownPos)))) & !is.na(Data$KnownPos)) | 
-                                   ((Data$KnownPos < (mean(Data$KnownPos) - (2 * sd(Data$KnownPos)))) & !is.na(Data$KnownPos)), 1, 0)
-    Data$flag.TotPos <- ifelse(((Data$TotPos > (mean(Data$TotPos) + (2 * sd(Data$TotPos)))) & !is.na(Data$TotPos)) | 
-                                 ((Data$TotPos < (mean(Data$TotPos) - (2 * sd(Data$TotPos)))) & !is.na(Data$TotPos)), 1, 0)
-    Data$flag.Prv <- ifelse(((Data$Prv > (mean(Data$Prv) + (2 * sd(Data$Prv)))) & !is.na(Data$Prv)) | 
-                              ((Data$Prv < (mean(Data$Prv) - (2 * sd(Data$Prv)))) & !is.na(Data$Prv)), 1, 0)
-    Data$flag.Cov <- ifelse(((Data$Cov > (mean(Data$Cov) + (2 * sd(Data$Cov)))) & !is.na(Data$Cov)) | 
-                              ((Data$Cov < (mean(Data$Cov) - (2 * sd(Data$Cov)))) & !is.na(Data$Cov)), 1, 0)
+    data$flag.n_clients <- ifelse(((data$n_clients > (mean(data$n_clients) + (2 * sd(data$n_clients)))) & !is.na(data$n_clients)) | 
+                                    ((data$n_clients < (mean(data$n_clients) - (2 * sd(data$n_clients)))) & !is.na(data$n_clients)), 1, 0)
+    data$flag.n_stat <- ifelse(((data$n_stat > (mean(data$n_stat) + (2 * sd(data$n_stat)))) & !is.na(data$n_stat)) | 
+                                 ((data$n_stat < (mean(data$n_stat) - (2 * sd(data$n_stat)))) & !is.na(data$n_stat)), 1, 0)
+    data$flag.TestPos <- ifelse(((data$TestPos > (mean(data$TestPos) + (2 * sd(data$TestPos)))) & !is.na(data$TestPos)) | 
+                                  ((data$TestPos < (mean(data$TestPos) - (2 * sd(data$TestPos)))) & !is.na(data$TestPos)), 1, 0)
+    data$flag.TestNeg <- ifelse(((data$TestNeg > (mean(data$TestNeg) + (2 * sd(data$TestNeg)))) & !is.na(data$TestNeg)) | 
+                                  ((data$TestNeg < (mean(data$TestNeg) - (2 * sd(data$TestNeg)))) & !is.na(data$TestNeg)), 1, 0)
+    data$flag.KnownPos <- ifelse(((data$KnownPos > (mean(data$KnownPos) + (2 * sd(data$KnownPos)))) & !is.na(data$KnownPos)) | 
+                                   ((data$KnownPos < (mean(data$KnownPos) - (2 * sd(data$KnownPos)))) & !is.na(data$KnownPos)), 1, 0)
+    data$flag.TotPos <- ifelse(((data$TotPos > (mean(data$TotPos) + (2 * sd(data$TotPos)))) & !is.na(data$TotPos)) | 
+                                 ((data$TotPos < (mean(data$TotPos) - (2 * sd(data$TotPos)))) & !is.na(data$TotPos)), 1, 0)
+    data$flag.Prv <- ifelse(((data$Prv > (mean(data$Prv) + (2 * sd(data$Prv)))) & !is.na(data$Prv)) | 
+                              ((data$Prv < (mean(data$Prv) - (2 * sd(data$Prv)))) & !is.na(data$Prv)), 1, 0)
+    data$flag.Cov <- ifelse(((data$Cov > (mean(data$Cov) + (2 * sd(data$Cov)))) & !is.na(data$Cov)) | 
+                              ((data$Cov < (mean(data$Cov) - (2 * sd(data$Cov)))) & !is.na(data$Cov)), 1, 0)
 
-    n_clients.outliers <- subset(Data, flag.n_clients == 1, c(faciluid, time, n_clients))
-    n_stat.outliers <- subset(Data, flag.n_stat == 1, c(faciluid, time, n_stat))
-    TestPos.outliers <- subset(Data, flag.TestPos == 1, c(faciluid, time, TestPos))
-    TestNeg.outliers <- subset(Data, flag.TestNeg == 1, c(faciluid, time, TestNeg))
-    KnownPos.outliers <- subset(Data, flag.KnownPos == 1, c(faciluid, time, KnownPos))
-    TotPos.outliers <- subset(Data, flag.TotPos == 1, c(faciluid, time, TotPos))
-    Prv.outliers <- subset(Data, flag.Prv == 1, c(faciluid, time, Prv))
-    Cov.outliers <- subset(Data, flag.Cov == 1, c(faciluid, time, Cov))
+    n_clients.outliers <- subset(data, flag.n_clients == 1, c(faciluid, time, n_clients))
+    n_stat.outliers <- subset(data, flag.n_stat == 1, c(faciluid, time, n_stat))
+    TestPos.outliers <- subset(data, flag.TestPos == 1, c(faciluid, time, TestPos))
+    TestNeg.outliers <- subset(data, flag.TestNeg == 1, c(faciluid, time, TestNeg))
+    KnownPos.outliers <- subset(data, flag.KnownPos == 1, c(faciluid, time, KnownPos))
+    TotPos.outliers <- subset(data, flag.TotPos == 1, c(faciluid, time, TotPos))
+    Prv.outliers <- subset(data, flag.Prv == 1, c(faciluid, time, Prv))
+    Cov.outliers <- subset(data, flag.Cov == 1, c(faciluid, time, Cov))
     
     resultsa <- merge(n_clients.outliers, n_stat.outliers, by = c("faciluid", "time"), all = TRUE)
     resultsb <- merge(resultsa, TestPos.outliers, by = c("faciluid", "time"), all = TRUE)
@@ -186,7 +186,7 @@ flag_outliers <- function(Data, flagby = "facility", result = "outliers") {
     results <- merge(resultsf, Cov.outliers, by = c("faciluid", "time"), all = TRUE)
     
     if (result == "outliers") {return(results)}
-    if (result == "data") {return(Data)}
+    if (result == "data") {return(data)}
   }  
 }
   

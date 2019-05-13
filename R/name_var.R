@@ -20,6 +20,7 @@
 #'    \item Age category of pregnant women
 #'    \item The number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit.
 #'    \item The sub-national unit 1
+#'    \item The calendar year from which the data was collected
 #'    }
 #'    
 #' @param faciluid The variable name in \code{data} for the unique facility identifier
@@ -33,6 +34,7 @@
 #' be automatically created by summing \code{testpos} and \code{knownpos}.
 #' @param age The variable name in \code{data} for the age category of pregnant women (if available).
 #' @param snu1 The variable name in \code{data} for the sub-national unit 1 (if available).
+#' @param Year The variable name in \code{data} for the sub-national unit 1 (if available).
 #'
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
@@ -42,7 +44,7 @@
 #' @export
 
 name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL, n_status = NULL, 
-                     knownpos = NULL, testpos = NULL, testneg = NULL, totpos = NULL, age = NULL, snu1 = NULL) {
+                     knownpos = NULL, testpos = NULL, testneg = NULL, totpos = NULL, age = NULL, snu1 = NULL, Year = NULL) {
   
   # verifying inputs
   if (is.null(data)) { stop('Provide input data') }
@@ -74,6 +76,8 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   names(data)[names(data) == totpos] <- "totpos"
   names(data)[names(data) == age] <- "age"
   names(data)[names(data) == snu1] <- "snu1"
+  names(data)[names(data) == Year] <- "Year"
+  
   
   if (is.null(totpos)) { data$totpos <- data$testpos + data$knownpos }
   

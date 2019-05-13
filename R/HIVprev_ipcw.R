@@ -8,7 +8,7 @@
 #' reported period in a facility to avoid adjusting for periods where the facility may have been inoperational. The adjusted HIV 
 #' prevalence can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
 #'
-#' @param Data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: Facility ID.
@@ -42,25 +42,25 @@
 #' @export
 #' 
 
-HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE") {
+HIVprev_ipcw <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE") {
 
-  Data$NoData <- ifelse(is.na(Data$n_clients) & (is.na(Data$n_status) | Data$n_status == 0) & (is.na(Data$testpos) | Data$testpos == 0) 
-                      & (is.na(Data$testneg) | Data$testneg == 0) & (is.na(Data$knownpos) | Data$knownpos == 0) & 
-                        (is.na(Data$totpos) | Data$totpos == 0), 1, 0)
-  Data <- Data[Data$NoData == 0,]
-  Data$Ones <- 1
-  quarters <- data.frame(faciluid = Data$faciluid, time = Data$time, Ones = Data$Ones)
+  data$NoData <- ifelse(is.na(data$n_clients) & (is.na(data$n_status) | data$n_status == 0) & (is.na(data$testpos) | data$testpos == 0) 
+                      & (is.na(data$testneg) | data$testneg == 0) & (is.na(data$knownpos) | data$knownpos == 0) & 
+                        (is.na(data$totpos) | data$totpos == 0), 1, 0)
+  data <- data[data$NoData == 0,]
+  data$Ones <- 1
+  quarters <- data.frame(faciluid = data$faciluid, time = data$time, Ones = data$Ones)
   wide <- reshape(quarters, idvar = "faciluid", timevar = "time", direction = "wide")
   wide[is.na(wide)] <- 0
 
   long <- reshape(wide, idvar = "faciluid", timevar = "time", direction = "long")
   names(long)[3]<-"uncensored"
 
-  Data2 <- merge(Data, long, by = c("faciluid", "time"), all = TRUE)
+  data2 <- merge(data, long, by = c("faciluid", "time"), all = TRUE)
 
-  Data3 <- NULL
-  for (i in levels(Data2$faciluid)) {
-    temp <- Data2[Data2$faciluid == i,]
+  data3 <- NULL
+  for (i in levels(data2$faciluid)) {
+    temp <- data2[data2$faciluid == i,]
     temp <- temp[order(temp$time), ]
     temp$sum <- cumsum(temp$uncensored)
     temp$first <- ifelse(temp$sum == 1 & temp$uncensored == 1, 1, 0)
@@ -70,36 +70,36 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     temp$include <- ifelse((temp$time >= Time_first) & (temp$time <= Time_last), 1, 0)
     temp <- temp[temp$include == 1, ]
     temp$include <- temp$first <- temp$last <- temp$sum <- NULL
-    Data3 <- rbind(Data3, temp)
+    data3 <- rbind(data3, temp)
   }
     
   prob.cens <- function(data) {
     weight <- sum(data$uncensored) / length(data$uncensored)
     return(weight)
   }
-  weights <- ddply(Data3, c("faciluid"), prob.cens)
-  Data3 <- merge(Data3, weights, by = "faciluid", all = TRUE)
-  Data3$weight <- 1/Data3$V1
-  Data4 <- Data3[Data3$uncensored == 1,]
-  Data4$Ones <- Data4$NoData <- Data4$uncensored <- Data4$V1 <- NULL
+  weights <- ddply(data3, c("faciluid"), prob.cens)
+  data3 <- merge(data3, weights, by = "faciluid", all = TRUE)
+  data3$weight <- 1/data3$V1
+  data4 <- data3[data3$uncensored == 1,]
+  data4$Ones <- data4$NoData <- data4$uncensored <- data4$V1 <- NULL
   
-  Data4$weight_clients <- Data4$n_stat * Data4$weight
+  data4$weight_clients <- data4$n_stat * data4$weight
   HIVprevs <- function(data){
     prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$weight_clients, na.rm = TRUE)) * 100), 2)
     return(prev)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "FALSE"){
-    HIV_prev <- round(((weighted.mean(Data4$TotPos / Data4$n_stat, w = Data4$weight_clients, na.rm = TRUE)) * 100), 2)
+    HIV_prev <- round(((weighted.mean(data4$TotPos / data4$n_stat, w = data4$weight_clients, na.rm = TRUE)) * 100), 2)
     return(HIV_prev)
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "TRUE"){
-    prev_year_snu <- ddply(Data4, c("snu1", "Year"), HIVprevs)
+    prev_year_snu <- ddply(data4, c("snu1", "Year"), HIVprevs)
     prev_year_snu$HIVprev <- prev_year_snu$V1
     prev_year_snu$V1 <- NULL
     
-    prev_Time_snu <- ddply(Data4, c("snu1", "time"), HIVprevs)
+    prev_Time_snu <- ddply(data4, c("snu1", "time"), HIVprevs)
     prev_Time_snu$HIVprev <- prev_Time_snu$V1
     prev_Time_snu$V1 <- NULL
     
@@ -111,46 +111,46 @@ HIVprev_ipcw <- function(Data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "FALSE") {
-    prev_snu <- ddply(Data4, "snu1", HIVprevs)
+    prev_snu <- ddply(data4, "snu1", HIVprevs)
     prev_snu$HIVprev <- prev_snu$V1
     prev_snu$V1 <- NULL
     return(prev_snu)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "FALSE") {
-    prev_Time <- ddply(Data4, "time", HIVprevs)
+    prev_Time <- ddply(data4, "time", HIVprevs)
     prev_Time$HIVprev <- prev_Time$V1
     prev_Time$V1 <- NULL
     return(prev_Time)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "TRUE") {
-    prev_year <- ddply(Data4, "Year", HIVprevs)
+    prev_year <- ddply(data4, "Year", HIVprevs)
     prev_year$HIVprev <- prev_year$V1
     prev_year$V1 <- NULL
     return(prev_year)
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "FALSE") {
-    prev_Time_snu <- ddply(Data4, c("snu1", "time"), HIVprevs)
+    prev_Time_snu <- ddply(data4, c("snu1", "time"), HIVprevs)
     prev_Time_snu$HIVprev <- prev_Time_snu$V1
     prev_Time_snu$V1 <- NULL
     return(prev_Time_snu)
   }
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "TRUE") {
-    prev_year_snu <- ddply(Data4, c("snu1", "Year"), HIVprevs)
+    prev_year_snu <- ddply(data4, c("snu1", "Year"), HIVprevs)
     prev_year_snu$HIVprev <- prev_year_snu$V1
     prev_year_snu$V1 <- NULL
     return(prev_year_snu)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "TRUE") {
-    prev_year <- ddply(Data4, "Year", HIVprevs)
+    prev_year <- ddply(data4, "Year", HIVprevs)
     prev_year$HIVprev <- prev_year$V1
     prev_year$V1 <- NULL
     
-    prev_Time <- ddply(Data4, "time", HIVprevs)
+    prev_Time <- ddply(data4, "time", HIVprevs)
     prev_Time$HIVprev <- prev_Time$V1
     prev_Time$V1 <- NULL
     
