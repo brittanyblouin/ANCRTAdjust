@@ -34,14 +34,14 @@ Naming your variables
 ---------------------
 After loading the data, the first step is to make sure we are following the naming conventions for the most important variables. These include:
 
-- `faciluid`: the unique facility identifier.   
-- `time`: the calendar time over which the data was collected.   
-- `n_clients`: the number of women from the specified facility, during the specified time period, that attended their first ANC visit.   
-- `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
-- `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
-- `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
-- `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
-- `totpos`: the number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `totpos` it will automatically be created as the sum of `testpos` and `knownpos`.
+* `faciluid`: the unique facility identifier.   
+* `time`: the calendar time over which the data was collected.   
+* `n_clients`: the number of women from the specified facility, during the specified time period, that attended their first ANC visit.   
+* `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
+* `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
+* `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
+* `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
+* `totpos`: the number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `totpos` it will automatically be created as the sum of `testpos` and `knownpos`.
 
 Some data might be available age-disaggregated. If so, the variable should be named:
 
@@ -148,7 +148,7 @@ Calculating HIV prevalence and HIV testing coverage
 The function `HIV_prev_cov()`  will calculate the HIV prevalence and HIV testing coverage using the variables `n_clients`, `n_stat` and `TotPos`.  Note that these estimates are not adjusted for missing reporting periods or imperfect HIV testing coverage.  Results can be calculated stratified by the subnational unit 1, the reporting period or the year according to user inputs (see `help(HIV_prev_cov)` for more information).
 
 ```r
-HIV_prev_cov(ancrt_cleaned, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE")
+> HIV_prev_cov(ancrt_cleaned, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE")
 [1] 17.11 95.55
 ```
 
@@ -157,6 +157,6 @@ Calculating HIV prevalence adjusted for missing reporting periods
 In the event that some facilities did not report data at certain time periods, the function `HIVprev_ipcw()` can be used to adjust the HIV prevalence for missing reporting periods (thereby reducing a possible selection bias) using inverse probability of censoring weighting.  Results can be calculated stratified by the subnational unit 1, the reporting period or the year according to user inputs (see `help(HIV_prev_cov)` for more information).
 
 ```r
-HIVprev_ipcw(ancrt_cleaned, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE")
+> HIVprev_ipcw(ancrt_cleaned, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE")
 [1] 17.11
 ```
