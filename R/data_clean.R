@@ -32,6 +32,7 @@ meancov_possible <- function(data) {
 #'        \item \code{TotPos.setmax}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat.setmax}
 #'        \item \code{TotPos}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat}
 #'        }
+#'    \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time})
 #'   }
 #'   
 #' @param data A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
@@ -124,6 +125,11 @@ data_clean <- function(data, total_age_cat){
   data$TotPos.setmax <- ifelse(data$n_stat.setmax < data$TotPosC & !is.na(data$n_stat.setmax) & !is.na(data$TotPosC), NA, data$TotPosC)
   data$TotPos.impute <- ifelse(data$n_stat.impute < data$TotPosC & !is.na(data$n_stat.impute) & !is.na(data$TotPosC), NA, data$TotPosC)
   data$TotPos.remove <- ifelse(data$n_stat.remove < data$TotPosC & !is.na(data$n_stat.remove) & !is.na(data$TotPosC), NA, data$TotPosC)
+  
+  data$check <- duplicated(data$ID_time)
+  data$check <- ifelse(data$check == "TRUE", 1, 0)
+  
+  if (sum(data$check) > 0) {warning("Duplicate observations exist")}
   
   data$ID_time <- data$check <- data$TotPosA <- data$TotPosB <- data$TotPosC <- data$facilmeancov <- NULL
   
