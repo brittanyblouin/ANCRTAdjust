@@ -44,9 +44,9 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "FALSE"){
-    HIV_prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
-    HIV_cov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
-    return(c(HIV_prev, HIV_cov))
+    HIVprev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
+    HIVcov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
+    return(data.frame(HIVprev, HIVcov))
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "TRUE"){
