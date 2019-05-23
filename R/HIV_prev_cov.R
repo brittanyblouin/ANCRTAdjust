@@ -28,6 +28,7 @@
 #'   \item{snu1} (only if results were stratified by snu1): The subnational unit 1.  
 #'   \item{Time} (only if results were stratified by time period and/or year): The time frame.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
 #'   (i.e. "201599" refers to the yearly result for 2015).
+#'   \item{HIVraw}: The raw HIV prevalence (i.e. with no previous adjustments).
 #'   \item{HIVprev}: The HIV prevalence adjusted for all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
 #'   \item{HIVcov}: The HIV testing coverage adjusted for all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
 #'  }
@@ -38,27 +39,32 @@
 HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "FALSE"){
   
   HIVprevs <- function(data){
+    raw <- round(((weighted.mean((data$totpos) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100), 2)
     prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
     cov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
-    return(c(prev, cov))
+    return(c(raw, prev, cov))
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "FALSE"){
+    HIVraw <- round(((weighted.mean((data$totpos) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100), 2)
     HIVprev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
     HIVcov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
-    return(data.frame(HIVprev, HIVcov))
+    snu1 <- "All"
+    return(data.frame(snu1, HIVraw, HIVprev, HIVcov))
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "TRUE"){
     prev_year_snu <- ddply(data, c("snu1", "Year"), HIVprevs)
-    prev_year_snu$HIVprev <- prev_year_snu$V1
-    prev_year_snu$HIVcov <- prev_year_snu$V2
-    prev_year_snu$V1 <- prev_year_snu$V2 <- NULL
+    prev_year_snu$HIVraw <- prev_year_snu$V1
+    prev_year_snu$HIVprev <- prev_year_snu$V2
+    prev_year_snu$HIVcov <- prev_year_snu$V3
+    prev_year_snu$V1 <- prev_year_snu$V2 <- prev_year_snu$V3 <- NULL
     
     prev_Time_snu <- ddply(data, c("snu1", "time"), HIVprevs)
-    prev_Time_snu$HIVprev <- prev_Time_snu$V1
-    prev_Time_snu$HIVcov <- prev_Time_snu$V2
-    prev_Time_snu$V1 <- prev_Time_snu$V2 <- NULL
+    prev_Time_snu$HIVraw <- prev_Time_snu$V1
+    prev_Time_snu$HIVprev <- prev_Time_snu$V2
+    prev_Time_snu$HIVcov <- prev_Time_snu$V3
+    prev_Time_snu$V1 <- prev_Time_snu$V2 <- prev_Time_snu$V3 <- NULL
     
     prev_year_snu$time <- prev_year_snu$Year
     prev_year_snu$Year <- NULL
@@ -69,59 +75,71 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "FALSE"){
     prev_snu <- ddply(data, "snu1", HIVprevs)
-    prev_snu$HIVprev <- prev_snu$V1
-    prev_snu$HIVcov <- prev_snu$V2
-    prev_snu$V1 <- prev_snu$V2 <- NULL
+    prev_snu$HIVraw <- prev_snu$V1
+    prev_snu$HIVprev <- prev_snu$V2
+    prev_snu$HIVcov <- prev_snu$V3
+    prev_snu$V1 <- prev_snu$V2 <- prev_snu$V3 <- NULL
     return(prev_snu)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "FALSE"){
     prev_Time <- ddply(data, "time", HIVprevs)
-    prev_Time$HIVprev <- prev_Time$V1
-    prev_Time$HIVcov <- prev_Time$V2
-    prev_Time$V1 <- prev_Time$V2 <- NULL
+    prev_Time$HIVraw <- prev_Time$V1
+    prev_Time$HIVprev <- prev_Time$V2
+    prev_Time$HIVcov <- prev_Time$V3
+    prev_Time$snu1 <- "All"
+    prev_Time$V1 <- prev_Time$V2 <- prev_Time$V3 <- NULL
     return(prev_Time)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "TRUE"){
     prev_year <- ddply(data, "Year", HIVprevs)
-    prev_year$HIVprev <- prev_year$V1
-    prev_year$HIVcov <- prev_year$V2
-    prev_year$V1 <- prev_year$V2 <- NULL
+    prev_year$HIVraw <- prev_year$V1
+    prev_year$HIVprev <- prev_year$V2
+    prev_year$HIVcov <- prev_year$V3
+    prev_year$snu1 <- "All"
+    prev_year$time <- prev_year$Year
+    prev_year$V1 <- prev_year$V2 <- prev_year$V3 <- prev_year$Year <- NULL
     return(prev_year)
   }
   
   if (bysnu1 == "TRUE" & byperiod == "TRUE" & byyear == "FALSE"){
     prev_Time_snu <- ddply(data, c("snu1", "time"), HIVprevs)
-    prev_Time_snu$HIVprev <- prev_Time_snu$V1
-    prev_Time_snu$HIVcov <- prev_Time_snu$V2
-    prev_Time_snu$V1 <- prev_Time_snu$V2 <- NULL
+    prev_Time_snu$HIVraw <- prev_Time_snu$V1
+    prev_Time_snu$HIVprev <- prev_Time_snu$V2
+    prev_Time_snu$HIVcov <- prev_Time_snu$V3
+    prev_Time_snu$V1 <- prev_Time_snu$V2 <- prev_Time_snu$V3 <- NULL
     return(prev_Time_snu)
   }
   
   if (bysnu1 == "TRUE" & byperiod == "FALSE" & byyear == "TRUE"){
     prev_year_snu <- ddply(data, c("snu1", "Year"), HIVprevs)
-    prev_year_snu$HIVprev <- prev_year_snu$V1
-    prev_year_snu$HIVcov <- prev_year_snu$V2
-    prev_year_snu$V1 <- prev_year_snu$V2 <- NULL
+    prev_year_snu$HIVraw <- prev_year_snu$V1
+    prev_year_snu$HIVprev <- prev_year_snu$V2
+    prev_year_snu$HIVcov <- prev_year_snu$V3
+    prev_year_snu$time <- prev_year_snu$Year
+    prev_year_snu$V1 <- prev_year_snu$V2 <- prev_year_snu$V3 <- prev_year_snu$Year <- NULL
     return(prev_year_snu)
   }
   
   if (bysnu1 == "FALSE" & byperiod == "TRUE" & byyear == "TRUE"){
     prev_year <- ddply(data, "Year", HIVprevs)
-    prev_year$HIVprev <- prev_year$V1
-    prev_year$HIVcov <- prev_year$V2
-    prev_year$V1 <- prev_year$V2 <- NULL
+    prev_year$HIVraw <- prev_year$V1
+    prev_year$HIVprev <- prev_year$V2
+    prev_year$HIVcov <- prev_year$V3
+    prev_year$V1 <- prev_year$V2 <- prev_year$V3 <- NULL
     
     prev_Time <- ddply(data, "time", HIVprevs)
-    prev_Time$HIVprev <- prev_Time$V1
-    prev_Time$HIVcov <- prev_Time$V2
-    prev_Time$V1 <- prev_Time$V2 <- NULL
+    prev_Time$HIVraw <- prev_Time$V1
+    prev_Time$HIVprev <- prev_Time$V2
+    prev_Time$HIVcov <- prev_Time$V3
+    prev_Time$V1 <- prev_Time$V2 <- prev_Time$V3 <- NULL
     
     prev_year$time <- prev_year$Year
     prev_year$Year <- NULL
     prev_year$time <- paste(prev_year$time, 99, sep = "")
     result2 <- rbind(prev_year, prev_Time)
+    result2$snu1 <- "All"
     return(result2)
   }
 }
