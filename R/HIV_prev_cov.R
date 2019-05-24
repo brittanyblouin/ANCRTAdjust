@@ -70,6 +70,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_year_snu$Year <- NULL
     prev_year_snu$time <- paste(prev_year_snu$time, 99, sep = "")
     result <- rbind(prev_year_snu, prev_Time_snu)
+    result <- result[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(result)
   }
   
@@ -89,6 +90,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_Time$HIVcov <- prev_Time$V3
     prev_Time$snu1 <- "All"
     prev_Time$V1 <- prev_Time$V2 <- prev_Time$V3 <- NULL
+    prev_Time <- prev_Time[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(prev_Time)
   }
   
@@ -100,6 +102,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_year$snu1 <- "All"
     prev_year$time <- prev_year$Year
     prev_year$V1 <- prev_year$V2 <- prev_year$V3 <- prev_year$Year <- NULL
+    prev_year <- prev_year[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(prev_year)
   }
   
@@ -109,6 +112,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_Time_snu$HIVprev <- prev_Time_snu$V2
     prev_Time_snu$HIVcov <- prev_Time_snu$V3
     prev_Time_snu$V1 <- prev_Time_snu$V2 <- prev_Time_snu$V3 <- NULL
+    prev_Time_snu <- prev_Time_snu[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(prev_Time_snu)
   }
   
@@ -119,6 +123,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_year_snu$HIVcov <- prev_year_snu$V3
     prev_year_snu$time <- prev_year_snu$Year
     prev_year_snu$V1 <- prev_year_snu$V2 <- prev_year_snu$V3 <- prev_year_snu$Year <- NULL
+    prev_year_snu <- prev_year_snu[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(prev_year_snu)
   }
   
@@ -140,6 +145,7 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
     prev_year$time <- paste(prev_year$time, 99, sep = "")
     result2 <- rbind(prev_year, prev_Time)
     result2$snu1 <- "All"
+    result2 <- result2[,c("snu1", "time", "HIVraw", "HIVprev", "HIVcov")]
     return(result2)
   }
 }
