@@ -9,14 +9,14 @@
 #'  \itemize{
 #'   \item The time period that the data was collected.
 #'   \item The unique facility identifier.
-#'   \item The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
-#'   \item The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
-#'   \item The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
 #'   \item The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
 #'   \item The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
 #'   }
 #'  Optional variables that can be included for re-naming in \code{data} include: 
 #'   \itemize{
+#'    \item The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
+#'    \item The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
+#'    \item The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
 #'    \item Age category of pregnant women
 #'    \item The number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit.
 #'    \item The sub-national unit 1
@@ -27,9 +27,12 @@
 #' @param time The variable name in \code{data} for the time period that the data was collected
 #' @param n_clients The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that attended their first ANC visit.
 #' @param n_status The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
-#' @param knownpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
-#' @param testpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
-#' @param testneg The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
+#' @param knownpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).
+#' If this variable is not specified, it will be created and marked as missing for all observations.
+#' @param testpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit (if available).
+#' If this variable is not specified, it will be created and marked as missing for all observations.
+#' @param testneg The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit (if available).
+#' If this variable is not specified, it will be created and marked as missing for all observations.
 #' @param totpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that were HIV-positive (if available).  If this variable name is not specified it will 
 #' be automatically created by summing \code{testpos} and \code{knownpos}.
 #' @param age The variable name in \code{data} for the age category of pregnant women (if available).
@@ -48,23 +51,33 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   
   # verifying inputs
   if (is.null(data)) { stop('Provide input data') }
-  if (is.null(faciluid)) { stop('Provide name of faciluid variable') }
+  if (is.null(faciluid)) { stop('Provide name of the facility ID variable') }
   if (is.null(time)) { stop('Provide name of time variable') }
-  if (is.null(n_clients)) { stop('Provide name of n_clients variable') }
-  if (is.null(n_status)) { stop('Provide name of n_status variable') }
-  if (is.null(knownpos)) { stop('Provide name of knownpos variable') }
-  if (is.null(testpos)) { stop('Provide name of testpos variable') }
-  if (is.null(testneg)) { stop('Provide name of testneg variable') }
+  if (is.null(n_clients)) { stop('Provide name of the variable for the number of women that attended their first ANC visit') }
+  if (is.null(n_status)) { stop('Provide name of the variable for the number of women that had their HIV status ascertained, either by testing or through previous knowledge') }
+  if (is.null(knownpos)) { 
+    data$knownpos <- NA 
+    warning("Because no 'knownpos' variable was provided, this variable is assumed to be missing for all observations and 
+             the variable 'knownpos' was created reflecting this assumption.")
+    }
+  if (is.null(testpos)) { 
+    data$testpos <- NA 
+    warning("Because no 'testpos' variable was provided, this variable is assumed to be missing for all observations and 
+             the variable 'testpos' was created reflecting this assumption.")
+    }
+  if (is.null(testneg)) {
+    data$testneg <- NA 
+    warning("Because no 'testneg' variable was provided, this variable is assumed to be missing for all observations and 
+             the variable 'testneg' was created reflecting this assumption.")
+    
+    }
   
   # second verification
   if (length(names(data)[names(data) == faciluid]) == 0) { stop("faciluid's name not recognized in data") }
   if (length(names(data)[names(data) == time]) == 0) { stop("time's name not recognized in data") }
   if (length(names(data)[names(data) == n_clients]) == 0) { stop("n_clients's name not recognized in data") }
   if (length(names(data)[names(data) == n_status]) == 0) { stop("n_status's name not recognized in data") }
-  if (length(names(data)[names(data) == knownpos]) == 0) { stop("knownpos's name not recognized in data") }
-  if (length(names(data)[names(data) == testpos]) == 0) { stop("tespos's name not recognized in data") }
-  if (length(names(data)[names(data) == testneg]) == 0) { stop("testneg's name not recognized in data") }
-  
+
   # chaging names
   names(data)[names(data) == faciluid] <- "faciluid"
   names(data)[names(data) == time] <- "time"
