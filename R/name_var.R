@@ -101,6 +101,8 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   
   
   if (is.null(totpos)) { data$totpos <- data$testpos + data$knownpos }
+  if (!is.numeric(data$time)) { warning("The 'time' variable is not numeric.  For all functions in the R package 'ANCRTAdjust' 
+                                   to work properly, please create a numeric 'time' variable.")}
   
   return(data)
 }
