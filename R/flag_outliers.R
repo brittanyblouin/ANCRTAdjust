@@ -65,22 +65,22 @@ flag_outliers <- function(data, flagby = "facility", result = "outliers") {
     data1 <- NULL
     for (i in levels(as.factor(data$faciluid))) {
       temp <- data[data$faciluid == i,]
-      temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients) + (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)) | 
-                                    ((temp$n_clients < (mean(temp$n_clients) - (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)), 1, 0)
-      temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat) + (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)) | 
-                                    ((temp$n_stat < (mean(temp$n_stat) - (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)), 1, 0)
-      temp$flag.TestPos <- ifelse(((temp$TestPos > (mean(temp$TestPos) + (2 * sd(temp$TestPos)))) & !is.na(temp$TestPos)) | 
-                                 ((temp$TestPos < (mean(temp$TestPos) - (2 * sd(temp$TestPos)))) & !is.na(temp$TestPos)), 1, 0)
-      temp$flag.TestNeg <- ifelse(((temp$TestNeg > (mean(temp$TestNeg) + (2 * sd(temp$TestNeg)))) & !is.na(temp$TestNeg)) | 
-                                  ((temp$TestNeg < (mean(temp$TestNeg) - (2 * sd(temp$TestNeg)))) & !is.na(temp$TestNeg)), 1, 0)
-      temp$flag.KnownPos <- ifelse(((temp$KnownPos > (mean(temp$KnownPos) + (2 * sd(temp$KnownPos)))) & !is.na(temp$KnownPos)) | 
-                                  ((temp$KnownPos < (mean(temp$KnownPos) - (2 * sd(temp$KnownPos)))) & !is.na(temp$KnownPos)), 1, 0)
-      temp$flag.TotPos <- ifelse(((temp$TotPos > (mean(temp$TotPos) + (2 * sd(temp$TotPos)))) & !is.na(temp$TotPos)) | 
-                                  ((temp$TotPos < (mean(temp$TotPos) - (2 * sd(temp$TotPos)))) & !is.na(temp$TotPos)), 1, 0)
-      temp$flag.Prv <- ifelse(((temp$Prv > (mean(temp$Prv) + (2 * sd(temp$Prv)))) & !is.na(temp$Prv)) | 
-                                 ((temp$Prv < (mean(temp$Prv) - (2 * sd(temp$Prv)))) & !is.na(temp$Prv)), 1, 0)
-      temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov) + (2 * sd(temp$Cov)))) & !is.na(temp$Cov)) | 
-                                 ((temp$Cov < (mean(temp$Cov) - (2 * sd(temp$Cov)))) & !is.na(temp$Cov)), 1, 0)
+      temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
+                                    ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
+      temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat, na.rm = TRUE) + (2 * sd(temp$n_stat, na.rm = TRUE)))) & !is.na(temp$n_stat)) | 
+                                    ((temp$n_stat < (mean(temp$n_stat, na.rm = TRUE) - (2 * sd(temp$n_stat, na.rm = TRUE)))) & !is.na(temp$n_stat)), 1, 0)
+      temp$flag.TestPos <- ifelse(((temp$TestPos > (mean(temp$TestPos, na.rm = TRUE) + (2 * sd(temp$TestPos, na.rm = TRUE)))) & !is.na(temp$TestPos)) | 
+                                 ((temp$TestPos < (mean(temp$TestPos, na.rm = TRUE) - (2 * sd(temp$TestPos, na.rm = TRUE)))) & !is.na(temp$TestPos)), 1, 0)
+      temp$flag.TestNeg <- ifelse(((temp$TestNeg > (mean(temp$TestNeg, na.rm = TRUE) + (2 * sd(temp$TestNeg, na.rm = TRUE)))) & !is.na(temp$TestNeg)) | 
+                                  ((temp$TestNeg < (mean(temp$TestNeg, na.rm = TRUE) - (2 * sd(temp$TestNeg, na.rm = TRUE)))) & !is.na(temp$TestNeg)), 1, 0)
+      temp$flag.KnownPos <- ifelse(((temp$KnownPos > (mean(temp$KnownPos, na.rm = TRUE) + (2 * sd(temp$KnownPos, na.rm = TRUE)))) & !is.na(temp$KnownPos)) | 
+                                  ((temp$KnownPos < (mean(temp$KnownPos, na.rm = TRUE) - (2 * sd(temp$KnownPos, na.rm = TRUE)))) & !is.na(temp$KnownPos)), 1, 0)
+      temp$flag.TotPos <- ifelse(((temp$TotPos > (mean(temp$TotPos, na.rm = TRUE) + (2 * sd(temp$TotPos, na.rm = TRUE)))) & !is.na(temp$TotPos)) | 
+                                  ((temp$TotPos < (mean(temp$TotPos, na.rm = TRUE) - (2 * sd(temp$TotPos, na.rm = TRUE)))) & !is.na(temp$TotPos)), 1, 0)
+      temp$flag.Prv <- ifelse(((temp$Prv > (mean(temp$Prv, na.rm = TRUE) + (2 * sd(temp$Prv, na.rm = TRUE)))) & !is.na(temp$Prv)) | 
+                                 ((temp$Prv < (mean(temp$Prv, na.rm = TRUE) - (2 * sd(temp$Prv, na.rm = TRUE)))) & !is.na(temp$Prv)), 1, 0)
+      temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov, na.rm = TRUE) + (2 * sd(temp$Cov, na.rm = TRUE)))) & !is.na(temp$Cov)) | 
+                                 ((temp$Cov < (mean(temp$Cov, na.rm = TRUE) - (2 * sd(temp$Cov, na.rm = TRUE)))) & !is.na(temp$Cov)), 1, 0)
       data1 <- rbind(data1, temp)
     }
   
@@ -109,22 +109,22 @@ flag_outliers <- function(data, flagby = "facility", result = "outliers") {
     data1 <- NULL
     for (i in levels(as.factor(data$snu1))) {
       temp <- data[data$snu1 == i,]
-      temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients) + (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)) | 
-                                      ((temp$n_clients < (mean(temp$n_clients) - (2 * sd(temp$n_clients)))) & !is.na(temp$n_clients)), 1, 0)
-      temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat) + (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)) | 
-                                   ((temp$n_stat < (mean(temp$n_stat) - (2 * sd(temp$n_stat)))) & !is.na(temp$n_stat)), 1, 0)
-      temp$flag.TestPos <- ifelse(((temp$TestPos > (mean(temp$TestPos) + (2 * sd(temp$TestPos)))) & !is.na(temp$TestPos)) | 
-                                    ((temp$TestPos < (mean(temp$TestPos) - (2 * sd(temp$TestPos)))) & !is.na(temp$TestPos)), 1, 0)
-      temp$flag.TestNeg <- ifelse(((temp$TestNeg > (mean(temp$TestNeg) + (2 * sd(temp$TestNeg)))) & !is.na(temp$TestNeg)) | 
-                                    ((temp$TestNeg < (mean(temp$TestNeg) - (2 * sd(temp$TestNeg)))) & !is.na(temp$TestNeg)), 1, 0)
-      temp$flag.KnownPos <- ifelse(((temp$KnownPos > (mean(temp$KnownPos) + (2 * sd(temp$KnownPos)))) & !is.na(temp$KnownPos)) | 
-                                     ((temp$KnownPos < (mean(temp$KnownPos) - (2 * sd(temp$KnownPos)))) & !is.na(temp$KnownPos)), 1, 0)
-      temp$flag.TotPos <- ifelse(((temp$TotPos > (mean(temp$TotPos) + (2 * sd(temp$TotPos)))) & !is.na(temp$TotPos)) | 
-                                   ((temp$TotPos < (mean(temp$TotPos) - (2 * sd(temp$TotPos)))) & !is.na(temp$TotPos)), 1, 0)
-      temp$flag.Prv <- ifelse(((temp$Prv > (mean(temp$Prv) + (2 * sd(temp$Prv)))) & !is.na(temp$Prv)) | 
-                                ((temp$Prv < (mean(temp$Prv) - (2 * sd(temp$Prv)))) & !is.na(temp$Prv)), 1, 0)
-      temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov) + (2 * sd(temp$Cov)))) & !is.na(temp$Cov)) | 
-                                ((temp$Cov < (mean(temp$Cov) - (2 * sd(temp$Cov)))) & !is.na(temp$Cov)), 1, 0)
+      temp$flag.n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
+                                      ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
+      temp$flag.n_stat <- ifelse(((temp$n_stat > (mean(temp$n_stat, na.rm = TRUE) + (2 * sd(temp$n_stat, na.rm = TRUE)))) & !is.na(temp$n_stat)) | 
+                                   ((temp$n_stat < (mean(temp$n_stat, na.rm = TRUE) - (2 * sd(temp$n_stat, na.rm = TRUE)))) & !is.na(temp$n_stat)), 1, 0)
+      temp$flag.TestPos <- ifelse(((temp$TestPos > (mean(temp$TestPos, na.rm = TRUE) + (2 * sd(temp$TestPos, na.rm = TRUE)))) & !is.na(temp$TestPos)) | 
+                                    ((temp$TestPos < (mean(temp$TestPos, na.rm = TRUE) - (2 * sd(temp$TestPos, na.rm = TRUE)))) & !is.na(temp$TestPos)), 1, 0)
+      temp$flag.TestNeg <- ifelse(((temp$TestNeg > (mean(temp$TestNeg, na.rm = TRUE) + (2 * sd(temp$TestNeg, na.rm = TRUE)))) & !is.na(temp$TestNeg)) | 
+                                    ((temp$TestNeg < (mean(temp$TestNeg, na.rm = TRUE) - (2 * sd(temp$TestNeg, na.rm = TRUE)))) & !is.na(temp$TestNeg)), 1, 0)
+      temp$flag.KnownPos <- ifelse(((temp$KnownPos > (mean(temp$KnownPos, na.rm = TRUE) + (2 * sd(temp$KnownPos, na.rm = TRUE)))) & !is.na(temp$KnownPos)) | 
+                                     ((temp$KnownPos < (mean(temp$KnownPos, na.rm = TRUE) - (2 * sd(temp$KnownPos, na.rm = TRUE)))) & !is.na(temp$KnownPos)), 1, 0)
+      temp$flag.TotPos <- ifelse(((temp$TotPos > (mean(temp$TotPos, na.rm = TRUE) + (2 * sd(temp$TotPos, na.rm = TRUE)))) & !is.na(temp$TotPos)) | 
+                                   ((temp$TotPos < (mean(temp$TotPos, na.rm = TRUE) - (2 * sd(temp$TotPos, na.rm = TRUE)))) & !is.na(temp$TotPos)), 1, 0)
+      temp$flag.Prv <- ifelse(((temp$Prv > (mean(temp$Prv, na.rm = TRUE) + (2 * sd(temp$Prv, na.rm = TRUE)))) & !is.na(temp$Prv)) | 
+                                ((temp$Prv < (mean(temp$Prv, na.rm = TRUE) - (2 * sd(temp$Prv, na.rm = TRUE)))) & !is.na(temp$Prv)), 1, 0)
+      temp$flag.Cov <- ifelse(((temp$Cov > (mean(temp$Cov, na.rm = TRUE) + (2 * sd(temp$Cov, na.rm = TRUE)))) & !is.na(temp$Cov)) | 
+                                ((temp$Cov < (mean(temp$Cov, na.rm = TRUE) - (2 * sd(temp$Cov, na.rm = TRUE)))) & !is.na(temp$Cov)), 1, 0)
       data1 <- rbind(data1, temp)
     }
     
@@ -151,22 +151,22 @@ flag_outliers <- function(data, flagby = "facility", result = "outliers") {
   
   if (flagby == "country") {
     
-    data$flag.n_clients <- ifelse(((data$n_clients > (mean(data$n_clients) + (2 * sd(data$n_clients)))) & !is.na(data$n_clients)) | 
-                                    ((data$n_clients < (mean(data$n_clients) - (2 * sd(data$n_clients)))) & !is.na(data$n_clients)), 1, 0)
-    data$flag.n_stat <- ifelse(((data$n_stat > (mean(data$n_stat) + (2 * sd(data$n_stat)))) & !is.na(data$n_stat)) | 
-                                 ((data$n_stat < (mean(data$n_stat) - (2 * sd(data$n_stat)))) & !is.na(data$n_stat)), 1, 0)
-    data$flag.TestPos <- ifelse(((data$TestPos > (mean(data$TestPos) + (2 * sd(data$TestPos)))) & !is.na(data$TestPos)) | 
-                                  ((data$TestPos < (mean(data$TestPos) - (2 * sd(data$TestPos)))) & !is.na(data$TestPos)), 1, 0)
-    data$flag.TestNeg <- ifelse(((data$TestNeg > (mean(data$TestNeg) + (2 * sd(data$TestNeg)))) & !is.na(data$TestNeg)) | 
-                                  ((data$TestNeg < (mean(data$TestNeg) - (2 * sd(data$TestNeg)))) & !is.na(data$TestNeg)), 1, 0)
-    data$flag.KnownPos <- ifelse(((data$KnownPos > (mean(data$KnownPos) + (2 * sd(data$KnownPos)))) & !is.na(data$KnownPos)) | 
-                                   ((data$KnownPos < (mean(data$KnownPos) - (2 * sd(data$KnownPos)))) & !is.na(data$KnownPos)), 1, 0)
-    data$flag.TotPos <- ifelse(((data$TotPos > (mean(data$TotPos) + (2 * sd(data$TotPos)))) & !is.na(data$TotPos)) | 
-                                 ((data$TotPos < (mean(data$TotPos) - (2 * sd(data$TotPos)))) & !is.na(data$TotPos)), 1, 0)
-    data$flag.Prv <- ifelse(((data$Prv > (mean(data$Prv) + (2 * sd(data$Prv)))) & !is.na(data$Prv)) | 
-                              ((data$Prv < (mean(data$Prv) - (2 * sd(data$Prv)))) & !is.na(data$Prv)), 1, 0)
-    data$flag.Cov <- ifelse(((data$Cov > (mean(data$Cov) + (2 * sd(data$Cov)))) & !is.na(data$Cov)) | 
-                              ((data$Cov < (mean(data$Cov) - (2 * sd(data$Cov)))) & !is.na(data$Cov)), 1, 0)
+    data$flag.n_clients <- ifelse(((data$n_clients > (mean(data$n_clients, na.rm = TRUE) + (2 * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)) | 
+                                    ((data$n_clients < (mean(data$n_clients, na.rm = TRUE) - (2 * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)), 1, 0)
+    data$flag.n_stat <- ifelse(((data$n_stat > (mean(data$n_stat, na.rm = TRUE) + (2 * sd(data$n_stat, na.rm = TRUE)))) & !is.na(data$n_stat)) | 
+                                 ((data$n_stat < (mean(data$n_stat, na.rm = TRUE) - (2 * sd(data$n_stat, na.rm = TRUE)))) & !is.na(data$n_stat)), 1, 0)
+    data$flag.TestPos <- ifelse(((data$TestPos > (mean(data$TestPos, na.rm = TRUE) + (2 * sd(data$TestPos, na.rm = TRUE)))) & !is.na(data$TestPos)) | 
+                                  ((data$TestPos < (mean(data$TestPos, na.rm = TRUE) - (2 * sd(data$TestPos, na.rm = TRUE)))) & !is.na(data$TestPos)), 1, 0)
+    data$flag.TestNeg <- ifelse(((data$TestNeg > (mean(data$TestNeg, na.rm = TRUE) + (2 * sd(data$TestNeg, na.rm = TRUE)))) & !is.na(data$TestNeg)) | 
+                                  ((data$TestNeg < (mean(data$TestNeg, na.rm = TRUE) - (2 * sd(data$TestNeg, na.rm = TRUE)))) & !is.na(data$TestNeg)), 1, 0)
+    data$flag.KnownPos <- ifelse(((data$KnownPos > (mean(data$KnownPos, na.rm = TRUE) + (2 * sd(data$KnownPos, na.rm = TRUE)))) & !is.na(data$KnownPos)) | 
+                                   ((data$KnownPos < (mean(data$KnownPos, na.rm = TRUE) - (2 * sd(data$KnownPos, na.rm = TRUE)))) & !is.na(data$KnownPos)), 1, 0)
+    data$flag.TotPos <- ifelse(((data$TotPos > (mean(data$TotPos, na.rm = TRUE) + (2 * sd(data$TotPos, na.rm = TRUE)))) & !is.na(data$TotPos)) | 
+                                 ((data$TotPos < (mean(data$TotPos, na.rm = TRUE) - (2 * sd(data$TotPos, na.rm = TRUE)))) & !is.na(data$TotPos)), 1, 0)
+    data$flag.Prv <- ifelse(((data$Prv > (mean(data$Prv, na.rm = TRUE) + (2 * sd(data$Prv, na.rm = TRUE)))) & !is.na(data$Prv)) | 
+                              ((data$Prv < (mean(data$Prv, na.rm = TRUE) - (2 * sd(data$Prv, na.rm = TRUE)))) & !is.na(data$Prv)), 1, 0)
+    data$flag.Cov <- ifelse(((data$Cov > (mean(data$Cov, na.rm = TRUE) + (2 * sd(data$Cov, na.rm = TRUE)))) & !is.na(data$Cov)) | 
+                              ((data$Cov < (mean(data$Cov, na.rm = TRUE) - (2 * sd(data$Cov, na.rm = TRUE)))) & !is.na(data$Cov)), 1, 0)
 
     n_clients.outliers <- subset(data, flag.n_clients == 1, c(faciluid, time, n_clients))
     n_stat.outliers <- subset(data, flag.n_stat == 1, c(faciluid, time, n_stat))
