@@ -77,6 +77,14 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   if (length(names(data)[names(data) == time]) == 0) { stop("time's name not recognized in data") }
   if (length(names(data)[names(data) == n_clients]) == 0) { stop("n_clients's name not recognized in data") }
   if (length(names(data)[names(data) == n_status]) == 0) { stop("n_status's name not recognized in data") }
+  if (length(names(data)[names(data) == testpos]) == 0 & !is.null(testpos)) { stop("testpos's name not recognized in data") }
+  if (length(names(data)[names(data) == testneg]) == 0 & !is.null(testneg)) { stop("testneg's name not recognized in data") }
+  if (length(names(data)[names(data) == knownpos]) == 0 & !is.null(knownpos)) { stop("knownpos's name not recognized in data") }
+  if (length(names(data)[names(data) == totpos]) == 0 & !is.null(totpos)) { stop("totpos's name not recognized in data") }
+  if (length(names(data)[names(data) == age]) == 0 & !is.null(age)) { stop("age's name not recognized in data") }
+  if (length(names(data)[names(data) == snu1]) == 0 & !is.null(snu1)) { stop("snu1's name not recognized in data") }
+  if (length(names(data)[names(data) == Year]) == 0 & !is.null(Year)) { stop("Year's name not recognized in data") }
+  
 
   # chaging names
   names(data)[names(data) == faciluid] <- "faciluid"
