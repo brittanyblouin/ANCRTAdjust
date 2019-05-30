@@ -73,13 +73,13 @@ meancov_possible <- function(data) {
 #'
 #' @export
 
-data_clean <- function(data, total_age_cat){
+data_clean <- function(data, total_age_cat = NULL){
 
   data$ID_time <- paste(data$faciluid, data$time, sep = ".")
   data$check <- duplicated(data$ID_time)
   data$check <- ifelse(data$check == "TRUE", 1, 0)
   
-  if(sum(data$check > 0)){
+  if(sum(data$check > 0) & !is.null(total_age_cat)){
     data <- data[data$age == total_age_cat,]
   }
   
@@ -129,7 +129,7 @@ data_clean <- function(data, total_age_cat){
   data$check <- duplicated(data$ID_time)
   data$check <- ifelse(data$check == "TRUE", 1, 0)
   
-  if (sum(data$check) > 0) {warning("Duplicate observations exist")}
+  if (sum(data$check) > 0) {warning("Duplicate observations exist.  If age-disagregated data is included, ensure that 'total_age_cat' has been specified.")}
   
   data$ID_time <- data$check <- data$TotPosA <- data$TotPosB <- data$TotPosC <- data$facilmeancov <- NULL
   

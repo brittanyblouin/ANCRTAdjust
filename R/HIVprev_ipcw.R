@@ -58,6 +58,7 @@ HIVprev_ipcw <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   names(long)[3]<-"uncensored"
 
   data2 <- merge(data, long, by = c("faciluid", "time"), all = TRUE)
+  data2$faciluid <- as.factor(data2$faciluid)
 
   data3 <- NULL
   for (i in levels(data2$faciluid)) {
