@@ -129,7 +129,7 @@ data_clean <- function(data, total_age_cat = NULL){
   data$check <- duplicated(data$ID_time)
   data$check <- ifelse(data$check == "TRUE", 1, 0)
   
-  if (sum(data$check) > 0) {warning("Duplicate observations exist.  If age-disagregated data is included, ensure that 'total_age_cat' has been specified.")}
+  if (sum(data$check) > 0) {warning("Duplicate observations exist.  If age-disaggregated data is included, ensure that 'total_age_cat' has been specified.")}
   
   data$ID_time <- data$check <- data$TotPosA <- data$TotPosB <- data$TotPosC <- data$facilmeancov <- NULL
   
