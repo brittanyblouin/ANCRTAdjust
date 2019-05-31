@@ -4,10 +4,10 @@
 \alias{flag_outliers}
 \title{Flag outlier observations}
 \usage{
-flag_outliers(Data, flagby = "facility", result = "outliers")
+flag_outliers(data, flagby = "facility", result = "outliers")
 }
 \arguments{
-\item{Data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+\item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
   \item \code{faciluid}: Facility ID.

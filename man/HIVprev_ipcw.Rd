@@ -4,11 +4,11 @@
 \alias{HIVprev_ipcw}
 \title{Adjustment for missing reporting periods}
 \usage{
-HIVprev_ipcw(Data, byperiod = "FALSE", bysnu1 = "FALSE",
+HIVprev_ipcw(data, byperiod = "FALSE", bysnu1 = "FALSE",
   byyear = "FALSE")
 }
 \arguments{
-\item{Data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+\item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
   \item \code{faciluid}: Facility ID.
@@ -38,17 +38,18 @@ A table (in dataframe format) indicating the results, stratified according to us
   \item \code{Time} (only if results were stratified by period and/or year): The time period.  When results are stratified by year and reporting period, the digits "99" are suffixed to the year 
   (i.e. "201599" refers to the yearly result for 2015).
   \item \code{HIVprev}: The HIV prevalence adjusted for missing reporting periods and all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
+  \item \code{HIVcov}: The HIV testing coverage adjusted for missing reporting periods and all previous adjustments (i.e. data cleaning and adjustment for multiple testing, if performed).
  }
 }
 \description{
-Adjusts HIV prevalence from ANC-RT data for missing data due to facilities missing reporting periods
+Adjusts HIV prevalence and HIV testing coverage from ANC-RT data for missing data due to facilities missing reporting periods
 }
 \details{
-This function has been developed to adjust HIV prevalence from ANC-RT data for missing reporting periods within a facility.
+This function has been developed to adjust HIV prevalence and HIV testing coverage from ANC-RT data for missing reporting periods within a facility.
 Inverse probability of censoring weighting is used to account for the missing reporting periods.  The weights are 
 calculated conditional on the facility.  The adjustment is only made for missing reporting periods in between the first and last 
 reported period in a facility to avoid adjusting for periods where the facility may have been inoperational. The adjusted HIV 
-prevalence can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
+prevalence and HIV testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
 }
 \author{
 Mathieu Maheu-Giroux

@@ -4,12 +4,12 @@
 \alias{data_clean}
 \title{Clean ANC-RT Data}
 \usage{
-data_clean(Data, total_age_cat)
+data_clean(data, total_age_cat = NULL)
 }
 \arguments{
-\item{Data}{A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
+\item{data}{A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
 prepare the data for use here.
-The following variables (with these variable names) must be included in \code{Data}:
+The following variables (with these variable names) must be included in \code{data}:
  \itemize{
   \item \code{time}: The time period that the data was collected.
   \item \code{faciluid}:  The unique facility identifier.
@@ -68,6 +68,7 @@ are accomplished:
        \item \code{TotPos.setmax}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat.setmax}
        \item \code{TotPos}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat}
        }
+   \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time})
   }
 }
 \author{
