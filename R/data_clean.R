@@ -1,5 +1,5 @@
 meancov_possible <- function(data) {
-  data$cov_raw <- data$n_stat / data$n_clients
+  data$cov_raw <- data$n_status_c / data$n_clients
   meancov <- mean(data$cov_raw[which(data$cov_raw <= 1 & !is.na(data$cov_raw))])
   return(meancov)
 }
@@ -12,25 +12,25 @@ meancov_possible <- function(data) {
 #' are accomplished:
 #'  \itemize{
 #'    \item Age disaggregated data is removed (if applicable)
-#'    \item \code{TestNeg} is set to \code{n_status} - \code{knownpos} - \code{testpos} or \code{n_status} - \code{totpos} if \code{testneg} is missing.  \code{TestNeg} is set to 0 if negative.
-#'    \item \code{KnownPos} is set to \code{n_status} - \code{testneg} - \code{testpos} or \code{totpos} - \code{testpos} if \code{knownpos} is missing.  \code{KnownPos} is set to 0 if negative.
-#'    \item \code{TestPos} is set to \code{n_status} - \code{testneg} - \code{knownpos} or \code{totpos} - \code{knownpos} if \code{testpos} is missing.  \code{TestPos} is set to 0 if negative.
-#'    \item \code{n_stat} is set to \code{TestPos} + \code{TestNeg} + \code{KnownPos} when all of these variables are available.  If either of the three variables is
-#'    missing, \code{n_stat} = \code{n_status}
-#'    \item \code{TotPos} (total number of HIV positives) is created as \code{KnownPos} + \code{TestPos}. If either \code{TestPos} or \code{KnownPos} are 
-#'    missing but \code{totpos} is available, \code{TotPos} is set to \code{totpos}.  If \code{TotPos} is missing but \code{n_stat} and \code{TestNeg} are available, \code{TotPos} = \code{n_stat} - \code{TestNeg}. 
-#'    \item The three suggested \code{n_stat} adjustments are created in the case that \code{n_stat} > \code{n_clients}:
+#'    \item \code{testneg_c} is set to \code{n_status} - \code{knownpos} - \code{testpos} or \code{n_status} - \code{totpos} if \code{testneg} is missing.  \code{testneg_c} is set to 0 if negative.
+#'    \item \code{knownpos_c} is set to \code{n_status} - \code{testneg} - \code{testpos} or \code{totpos} - \code{testpos} if \code{knownpos} is missing.  \code{knownpos_c} is set to 0 if negative.
+#'    \item \code{testpos_c} is set to \code{n_status} - \code{testneg} - \code{knownpos} or \code{totpos} - \code{knownpos} if \code{testpos} is missing.  \code{testpos_c} is set to 0 if negative.
+#'    \item \code{n_status_c} is set to \code{testpos_c} + \code{testneg_c} + \code{knownpos_c} when all of these variables are available.  If either of the three variables is
+#'    missing, \code{n_status_c} = \code{n_status}
+#'    \item \code{totpos_c} (total number of HIV positives) is created as \code{knownpos_c} + \code{testpos_c}. If either \code{testpos_c} or \code{knownpos_c} are 
+#'    missing but \code{totpos} is available, \code{totpos_c} is set to \code{totpos}.  If \code{totpos_c} is missing but \code{n_status_c} and \code{testneg_c} are available, \code{totpos_c} = \code{n_status_c} - \code{testneg_c}. 
+#'    \item The three suggested \code{n_status_c} adjustments are created in the case that \code{n_status_c} > \code{n_clients}:
 #'    \itemize{
-#'      \item \code{n_stat.impute} uses the impute adjustment option
-#'      \item \code{n_stat.remove} uses the remove adjustment option
-#'      \item \code{n_stat.setmax} uses the set to maximum adjustment option
+#'      \item \code{n_status_c.impute} uses the impute adjustment option
+#'      \item \code{n_status_c.remove} uses the remove adjustment option
+#'      \item \code{n_status_c.setmax} uses the set to maximum adjustment option
 #'      }
-#'    \item \code{TotPos} is adjusted if \code{TotPos} > \code{n_stat}:
+#'    \item \code{totpos_c} is adjusted if \code{totpos_c} > \code{n_status_c}:
 #'      \itemize{
-#'        \item \code{TotPos.impute}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat.impute}
-#'        \item \code{TotPos.remove}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat.remove}
-#'        \item \code{TotPos.setmax}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat.setmax}
-#'        \item \code{TotPos}: \code{TotPos} is set to missing when \code{TotPos} > \code{n_stat}
+#'        \item \code{totpos_c.impute}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.impute}
+#'        \item \code{totpos_c.remove}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.remove}
+#'        \item \code{totpos_c.setmax}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.setmax}
+#'        \item \code{totpos_c}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c}
 #'        }
 #'    \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time})
 #'   }
@@ -58,17 +58,17 @@ meancov_possible <- function(data) {
 #'
 #' @return A cleaned ANC-RT database with additional variables:
 #'  \itemize{
-#'   \item \code{TestNeg}: Cleaned \code{testneg} (according to description)
-#'   \item \code{TestPos}: Cleaned \code{testpos} (according to description)
-#'   \item \code{KnownPos}: Cleaned \code{knownpos} (according to description)
-#'   \item \code{n_stat}: Cleaned \code{n_status} (according to description)
-#'   \item \code{n_stat.impute}:  Adjusted \code{n_stat} using the impute adjustment option
-#'   \item \code{n_stat.remove}:  Adjusted \code{n_stat} using the remove adjustment option
-#'   \item \code{n_stat.setmax}:  Adjusted \code{n_stat} using the set to maximum adjustment option
-#'   \item \code{TotPos}: Cleaned \code{totpos} (according to description)
-#'   \item \code{TotPos.impute}: Adjusted \code{TotPos} if the impute adjustment option for multiple testing is used
-#'   \item \code{TotPos.remove}: Adjusted \code{TotPos} if the remove adjustment option for multiple testing is used
-#'   \item \code{TotPos.setmax}: Adjusted \code{TotPos} if the set to maximum adjustment option for multiple testing is used
+#'   \item \code{testneg_c}: Cleaned \code{testneg} (according to description)
+#'   \item \code{testpos_c}: Cleaned \code{testpos} (according to description)
+#'   \item \code{knownpos_c}: Cleaned \code{knownpos} (according to description)
+#'   \item \code{n_status_c}: Cleaned \code{n_status} (according to description)
+#'   \item \code{n_status_c.impute}:  Adjusted \code{n_status_c} using the impute adjustment option
+#'   \item \code{n_status_c.remove}:  Adjusted \code{n_status_c} using the remove adjustment option
+#'   \item \code{n_status_c.setmax}:  Adjusted \code{n_status_c} using the set to maximum adjustment option
+#'   \item \code{totpos_c}: Cleaned \code{totpos} (according to description)
+#'   \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used
+#'   \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used
+#'   \item \code{totpos_c.setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used
 #'  }
 #'
 #' @export
@@ -83,48 +83,48 @@ data_clean <- function(data, total_age_cat = NULL){
     data <- data[data$age == total_age_cat,]
   }
   
-  data$TestNeg <- ifelse(!is.na(data$testneg), data$testneg,
+  data$testneg_c <- ifelse(!is.na(data$testneg), data$testneg,
     data$n_status - data$knownpos - data$testpos)
-  data$TestNeg <- ifelse(!is.na(data$TestNeg), data$TestNeg,
+  data$testneg_c <- ifelse(!is.na(data$testneg_c), data$testneg_c,
     data$n_status - data$totpos)
-  data$TestNeg <- ifelse(data$TestNeg < 0, 0, data$TestNeg)
+  data$testneg_c <- ifelse(data$testneg_c < 0, 0, data$testneg_c)
 
-  data$KnownPos <- ifelse(!is.na(data$knownpos), data$knownpos,
-    data$n_status - data$TestNeg - data$testpos)
-  data$KnownPos <- ifelse(!is.na(data$KnownPos), data$KnownPos,
+  data$knownpos_c <- ifelse(!is.na(data$knownpos), data$knownpos,
+    data$n_status - data$testneg_c - data$testpos)
+  data$knownpos_c <- ifelse(!is.na(data$knownpos_c), data$knownpos_c,
     data$totpos - data$testpos)
-  data$KnownPos <- ifelse(data$KnownPos < 0, 0, data$KnownPos)
+  data$knownpos_c <- ifelse(data$knownpos_c < 0, 0, data$knownpos_c)
 
-  data$TestPos <- ifelse(!is.na(data$testpos), data$testpos,
-    data$n_status - data$TestNeg - data$KnownPos)
-  data$TestPos <- ifelse(!is.na(data$TestPos), data$TestPos,
-    data$totpos - data$KnownPos)
-  data$TestPos <- ifelse(data$TestPos < 0, 0, data$TestPos)
+  data$testpos_c <- ifelse(!is.na(data$testpos), data$testpos,
+    data$n_status - data$testneg_c - data$knownpos_c)
+  data$testpos_c <- ifelse(!is.na(data$testpos_c), data$testpos_c,
+    data$totpos - data$knownpos_c)
+  data$testpos_c <- ifelse(data$testpos_c < 0, 0, data$testpos_c)
 
-  data$n_stat <- ifelse(!is.na(data$TestPos) & !is.na(data$TestNeg) & !is.na(data$KnownPos), 
-    data$TestPos + data$TestNeg + data$KnownPos, data$n_status)
-  data$n_stat <- ifelse(!is.na(data$n_stat), data$n_stat, data$totpos + data$TestNeg)
-  data$n_stat <- ifelse((data$n_stat < 0 & !is.na(data$n_stat)), NA, data$n_stat)
+  data$n_status_c <- ifelse(!is.na(data$testpos_c) & !is.na(data$testneg_c) & !is.na(data$knownpos_c), 
+    data$testpos_c + data$testneg_c + data$knownpos_c, data$n_status)
+  data$n_status_c <- ifelse(!is.na(data$n_status_c), data$n_status_c, data$totpos + data$testneg_c)
+  data$n_status_c <- ifelse((data$n_status_c < 0 & !is.na(data$n_status_c)), NA, data$n_status_c)
   
-  data$TotPosA <- ifelse(!is.na(data$KnownPos) & !is.na(data$TestPos), data$KnownPos + data$TestPos, 
+  data$TotPosA <- ifelse(!is.na(data$knownpos_c) & !is.na(data$testpos_c), data$knownpos_c + data$testpos_c, 
     data$totpos)
-  data$TotPosB <- ifelse(is.na(data$TotPosA), data$n_stat - data$TestNeg, data$TotPosA)
+  data$TotPosB <- ifelse(is.na(data$TotPosA), data$n_status_c - data$testneg_c, data$TotPosA)
   data$TotPosC <- ifelse(data$TotPosB < 0 & !is.na(data$TotPosB), 0, data$TotPosB)
-  data$n_stat <- ifelse(data$TotPosB < 0 & !is.na(data$TotPosB), data$TotPosC + data$TestNeg, data$n_stat)
+  data$n_status_c <- ifelse(data$TotPosB < 0 & !is.na(data$TotPosB), data$TotPosC + data$testneg_c, data$n_status_c)
   
-  data$n_stat.setmax <- ifelse((data$n_stat > data$n_clients) & !is.na(data$n_stat) & !is.na(data$n_clients), data$n_clients, data$n_stat)
-  data$n_stat.remove <- ifelse((data$n_stat > data$n_clients) & !is.na(data$n_stat) & !is.na(data$n_clients), NA, data$n_stat)
+  data$n_status_c.setmax <- ifelse((data$n_status_c > data$n_clients) & !is.na(data$n_status_c) & !is.na(data$n_clients), data$n_clients, data$n_status_c)
+  data$n_status_c.remove <- ifelse((data$n_status_c > data$n_clients) & !is.na(data$n_status_c) & !is.na(data$n_clients), NA, data$n_status_c)
   
   mean_cov <- ddply(data, "faciluid", meancov_possible)
   data <- merge(data, mean_cov, by = "faciluid")
   data$facilmeancov <- data$V1
   data$V1 <- NULL
-  data$n_stat.impute <- ifelse(data$n_stat > data$n_clients & !is.na(data$n_stat) & !is.na(data$n_clients), round((data$facilmeancov * data$n_clients),0), data$n_stat)
+  data$n_status_c.impute <- ifelse(data$n_status_c > data$n_clients & !is.na(data$n_status_c) & !is.na(data$n_clients), round((data$facilmeancov * data$n_clients),0), data$n_status_c)
   
-  data$TotPos <- ifelse(data$n_stat < data$TotPosC & !is.na(data$n_stat) & !is.na(data$TotPosC), NA, data$TotPosC)
-  data$TotPos.setmax <- ifelse(data$n_stat.setmax < data$TotPosC & !is.na(data$n_stat.setmax) & !is.na(data$TotPosC), NA, data$TotPosC)
-  data$TotPos.impute <- ifelse(data$n_stat.impute < data$TotPosC & !is.na(data$n_stat.impute) & !is.na(data$TotPosC), NA, data$TotPosC)
-  data$TotPos.remove <- ifelse(data$n_stat.remove < data$TotPosC & !is.na(data$n_stat.remove) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$totpos_c <- ifelse(data$n_status_c < data$TotPosC & !is.na(data$n_status_c) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$totpos_c.setmax <- ifelse(data$n_status_c.setmax < data$TotPosC & !is.na(data$n_status_c.setmax) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$totpos_c.impute <- ifelse(data$n_status_c.impute < data$TotPosC & !is.na(data$n_status_c.impute) & !is.na(data$TotPosC), NA, data$TotPosC)
+  data$totpos_c.remove <- ifelse(data$n_status_c.remove < data$TotPosC & !is.na(data$n_status_c.remove) & !is.na(data$TotPosC), NA, data$TotPosC)
   
   data$check <- duplicated(data$ID_time)
   data$check <- ifelse(data$check == "TRUE", 1, 0)

@@ -4,8 +4,8 @@ quality <- function(data) {
                             data$totpos)
   data$Cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
   data$Prv_raw <- ifelse(data$n_status > 0 & !is.na(data$n_status), (data$totpos_raw) / data$n_status, NA)
-  data$Cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_stat / data$n_clients), NA)
-  data$Prv <- ifelse(data$n_stat > 0 & !is.na(data$n_stat), (data$TotPos) / data$n_stat, NA)
+  data$Cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status_c / data$n_clients), NA)
+  data$Prv <- ifelse(data$n_status_c > 0 & !is.na(data$n_status_c), (data$totpos_c) / data$n_status_c, NA)
   
   ############################
   ##1. Quarters not reported##
@@ -38,29 +38,29 @@ quality <- function(data) {
   
   o3 <- sum(is.na(data$n_status))
   op3 <- paste("(", round((sum(is.na(data$n_status))/dim(data)[1]) * 100, 2), "%)", sep = "")
-  c3 <- sum(is.na(data$n_stat))
-  cp3 <- paste("(", round((sum(is.na(data$n_stat))/dim(data)[1]) * 100, 2), "%)", sep = "")
+  c3 <- sum(is.na(data$n_status_c))
+  cp3 <- paste("(", round((sum(is.na(data$n_status_c))/dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o4 <- sum(is.na(data$testpos))
   op4 <- paste("(", round((sum(is.na(data$testpos))/dim(data)[1]) * 100, 2), "%)", sep = "")
-  c4 <- sum(is.na(data$TestPos))
-  cp4 <- paste("(", round((sum(is.na(data$TestPos))/dim(data)[1]) * 100, 2), "%)", sep = "")
+  c4 <- sum(is.na(data$testpos_c))
+  cp4 <- paste("(", round((sum(is.na(data$testpos_c))/dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o5 <- sum(is.na(data$testneg))
   op5 <- paste("(", round((sum(is.na(data$testneg))/dim(data)[1]) * 100, 2), "%)", sep = "")
-  c5 <- sum(is.na(data$TestNeg))
-  cp5 <- paste("(", round((sum(is.na(data$TestNeg))/dim(data)[1]) * 100, 2), "%)", sep = "")
+  c5 <- sum(is.na(data$testneg_c))
+  cp5 <- paste("(", round((sum(is.na(data$testneg_c))/dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o6 <- sum(is.na(data$knownpos))
   op6 <- paste("(", round((sum(is.na(data$knownpos))/dim(data)[1]) * 100, 2), "%)", sep = "")
-  c6 <- sum(is.na(data$KnownPos))
-  cp6 <- paste("(", round((sum(is.na(data$KnownPos))/dim(data)[1]) * 100, 2), "%)", sep = "")
+  c6 <- sum(is.na(data$knownpos_c))
+  cp6 <- paste("(", round((sum(is.na(data$knownpos_c))/dim(data)[1]) * 100, 2), "%)", sep = "")
   
 
   missing <- subset(data, select = c('n_clients', 'n_status', 'totpos_raw'))
   o7 <- (dim(missing)[1] - dim(na.omit(missing))[1])
   op7 <- paste("(", round(((dim(missing)[1] - dim(na.omit(missing))[1]) / dim(missing)[1]) * 100, 2), "%)", sep = "")
-  missing2 <- subset(data, select = c('n_clients', 'n_stat', 'TotPos'))
+  missing2 <- subset(data, select = c('n_clients', 'n_status_c', 'totpos_c'))
   c7 <- (dim(missing2)[1] - dim(na.omit(missing2))[1])
   cp7 <- paste("(", round(((dim(missing2)[1] - dim(na.omit(missing2))[1]) / dim(missing2)[1]) * 100, 2), "%)", sep = "")
   
@@ -80,8 +80,8 @@ quality <- function(data) {
   o10 <- sum(ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos), 1, 0), na.rm = TRUE)
   op10 <- paste("(", round((sum(ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos), 1, 0), na.rm = TRUE)/
                               dim(data)[1]) * 100, 2), "%)", sep = "")
-  c10 <- sum(ifelse(data$n_stat < (data$TestNeg + data$TestPos + data$KnownPos), 1, 0), na.rm = TRUE)
-  cp10 <- paste("(", round((sum(ifelse(data$n_stat < (data$TestNeg + data$TestPos + data$KnownPos), 1, 0), na.rm = TRUE)/
+  c10 <- sum(ifelse(data$n_status_c < (data$testneg_c + data$testpos_c + data$knownpos_c), 1, 0), na.rm = TRUE)
+  cp10 <- paste("(", round((sum(ifelse(data$n_status_c < (data$testneg_c + data$testpos_c + data$knownpos_c), 1, 0), na.rm = TRUE)/
                               dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o11 <- sum(ifelse(data$n_clients < 0, 1, 0), na.rm = TRUE)
@@ -91,23 +91,23 @@ quality <- function(data) {
   
   o12 <- sum(ifelse(data$n_status < 0, 1, 0), na.rm = TRUE)
   op12 <- paste("(", round((sum(ifelse(data$n_status<0,1,0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c12 <- sum(ifelse(data$n_stat < 0, 1, 0), na.rm = TRUE)
-  cp12 <- paste("(", round((sum(ifelse(data$n_stat < 0, 1, 0), na.rm  =TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c12 <- sum(ifelse(data$n_status_c < 0, 1, 0), na.rm = TRUE)
+  cp12 <- paste("(", round((sum(ifelse(data$n_status_c < 0, 1, 0), na.rm  =TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o13 <- sum(ifelse(data$testpos < 0, 1, 0), na.rm = TRUE)
   op13 <- paste("(", round((sum(ifelse(data$testpos < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c13 <- sum(ifelse(data$TestPos < 0, 1, 0), na.rm = TRUE)
-  cp13 <- paste("(", round((sum(ifelse(data$TestPos < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c13 <- sum(ifelse(data$testpos_c < 0, 1, 0), na.rm = TRUE)
+  cp13 <- paste("(", round((sum(ifelse(data$testpos_c < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o14 <- sum(ifelse(data$testneg < 0, 1, 0), na.rm = TRUE)
   op14 <- paste("(", round((sum(ifelse(data$testneg < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c14 <- sum(ifelse(data$TestNeg < 0, 1, 0), na.rm = TRUE)
-  cp14 <- paste("(", round((sum(ifelse(data$TestNeg < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c14 <- sum(ifelse(data$testneg_c < 0, 1, 0), na.rm = TRUE)
+  cp14 <- paste("(", round((sum(ifelse(data$testneg_c < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
   o15 <- sum(ifelse(data$knownpos < 0, 1, 0), na.rm = TRUE)
   op15 <- paste("(", round((sum(ifelse(data$knownpos < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c15 <- sum(ifelse(data$KnownPos < 0, 1, 0), na.rm = TRUE)
-  cp15 <- paste("(", round((sum(ifelse(data$KnownPos < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c15 <- sum(ifelse(data$knownpos_c < 0, 1, 0), na.rm = TRUE)
+  cp15 <- paste("(", round((sum(ifelse(data$knownpos_c < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
   data$impossible_raw <- ifelse(data$Cov_raw > 1 & !is.na(data$Cov_raw), 1, 
                                  ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos) & !is.na(data$n_status) & !is.na(data$testneg) & !is.na(data$testpos) & !is.na(data$knownpos), 1,
@@ -116,11 +116,11 @@ quality <- function(data) {
                                                       ifelse(data$testpos < 0 & !is.na(data$testpos), 1,
                                                              ifelse(data$knownpos < 0 & !is.na(data$knownpos), 1, 0))))))
   data$impossible_cleaned <- ifelse(data$Cov > 1 & !is.na(data$Cov), 1, 
-                                     ifelse(data$n_stat < (data$TestNeg + data$TestPos + data$KnownPos) & !is.na(data$n_stat) & !is.na(data$TestNeg) & !is.na(data$TestPos) & !is.na(data$KnownPos), 1,
+                                     ifelse(data$n_status_c < (data$testneg_c + data$testpos_c + data$knownpos_c) & !is.na(data$n_status_c) & !is.na(data$testneg_c) & !is.na(data$testpos_c) & !is.na(data$knownpos_c), 1,
                                             ifelse(data$n_clients < 0 & !is.na(data$n_clients), 1,
-                                                   ifelse(data$n_stat < 0 & !is.na(data$n_stat), 1,
-                                                          ifelse(data$TestPos < 0 & !is.na(data$TestPos), 1,
-                                                                 ifelse(data$KnownPos < 0 & !is.na(data$KnownPos), 1, 0))))))
+                                                   ifelse(data$n_status_c < 0 & !is.na(data$n_status_c), 1,
+                                                          ifelse(data$testpos_c < 0 & !is.na(data$testpos_c), 1,
+                                                                 ifelse(data$knownpos_c < 0 & !is.na(data$knownpos_c), 1, 0))))))
   
   o16 <- sum(data$impossible_raw, na.rm = TRUE)
   op16 <- paste("(", round((sum(data$impossible_raw, na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
@@ -160,11 +160,11 @@ quality <- function(data) {
 #'   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
 #'   \item \code{totpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period who were HIV-positive
-#'   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TestPos}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TestNeg}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{KnownPos}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{testpos_c}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{testneg_c}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{knownpos_c}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   }
 #' @param byregion "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}
 #' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{time}

@@ -19,8 +19,8 @@ prepare the data for use here.  The dataset must have the following variables:
   \item \code{knownpos}: The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
   \item \code{testneg}: The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
   \item \code{totpos}: Total number of positive HIV cases.
-  \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function).
-  \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function).
+  \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function).
+  \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function).
   \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
   \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
       }}

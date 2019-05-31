@@ -5,7 +5,7 @@
 #' This function has been developed to create three plots:
 #'  \itemize{
 #'    \item The two primary data quality indicators over time.  The two primary data quality indicators include: 1) The percent of observations with missing data for \code{n_clients}, 
-#'    \code{n_stat} or \code{TotPos} (in the cleaned data); and, 2) The percent of observations with invalid values for \code{n_clients}, \code{n_status}, 
+#'    \code{n_status_c} or \code{totpos_c} (in the cleaned data); and, 2) The percent of observations with invalid values for \code{n_clients}, \code{n_status}, 
 #'    \code{testpos} or \code{knownpos} (in the raw data).
 #'    \item HIV testing coverage over time.  For comparison purposes, HIV testing coverage is calculated using the raw  and cleaned data and also using the three adjustment 
 #'    options for multiple testing (1. Using the impute option; 2. Using the remove option; and, 3. Using the set to maximum option).
@@ -18,18 +18,18 @@
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
 #'   \item \code{n_status}: The number of women who attended the specific facility during the specific time period for their first ANC visit and had their HIV status ascertained
-#'   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_stat.impute}: \code{n_stat} adjusted for multiple testing using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_stat.remove}: \code{n_stat} adjusted for multiple testing using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_stat.setmax}: \code{n_stat} adjusted for multiple testing using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c.impute}: \code{n_status_c} adjusted for multiple testing using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c.remove}: \code{n_status_c} adjusted for multiple testing using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c.setmax}: \code{n_status_c} adjusted for multiple testing using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{testpos}: The number of women who tested positive for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
 #'   \item \code{totpos}: Total number of positive HIV cases 
-#'   \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TotPos.impute}: Adjusted \code{TotPos} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TotPos.remove}: Adjusted \code{TotPos} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{TotPos.setmax}: Adjusted \code{TotPos} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c.setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{time}: The time period (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'  }
 #' @param ylim.ind_min The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)
@@ -77,7 +77,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
 
     missing <- subset(data, select = c('n_clients', 'n_status', 'totpos_raw'))
     missingdata_raw <- round(((dim(missing)[1] - dim(na.omit(missing))[1]) / dim(missing)[1]) * 100, 2)
-    missing2 <- subset(data, select = c('n_clients', 'n_stat', 'TotPos'))
+    missing2 <- subset(data, select = c('n_clients', 'n_status_c', 'totpos_c'))
     missingdata_cleaned <- round(((dim(missing2)[1] - dim(na.omit(missing2))[1]) / dim(missing2)[1]) * 100, 2)
 
     primaryindicators <- cbind(impdata, missingdata_raw, missingdata_cleaned)
@@ -88,10 +88,10 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
 
   coverages <- function(data){
     coverage_raw <- (weighted.mean(data$n_status/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage <- (weighted.mean(data$n_stat/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.impute <- (weighted.mean(data$n_stat.impute/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.remove <- (weighted.mean(data$n_stat.remove/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.setmax <- (weighted.mean(data$n_stat.setmax/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage <- (weighted.mean(data$n_status_c/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage.impute <- (weighted.mean(data$n_status_c.impute/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage.remove <- (weighted.mean(data$n_status_c.remove/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage.setmax <- (weighted.mean(data$n_status_c.setmax/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
     results <- cbind (coverage_raw, coverage, coverage.impute, coverage.remove, coverage.setmax)
     return(results)
   }
@@ -110,10 +110,10 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
   
   HIVprevs <- function(data){
     prev_raw <- (weighted.mean((data$totpos_raw) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100
-    prev <- (weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100
-    prev.impute <- (weighted.mean((data$TotPos.impute) / data$n_stat.impute, w = data$n_stat.impute, na.rm = TRUE)) * 100
-    prev.remove <- (weighted.mean((data$TotPos.remove) / data$n_stat.remove, w = data$n_stat.remove, na.rm = TRUE)) * 100
-    prev.setmax <- (weighted.mean((data$TotPos.setmax) / data$n_stat.setmax, w = data$n_stat.setmax, na.rm = TRUE)) * 100
+    prev <- (weighted.mean((data$totpos_c) / data$n_status_c, w = data$n_status_c, na.rm = TRUE)) * 100
+    prev.impute <- (weighted.mean((data$totpos_c.impute) / data$n_status_c.impute, w = data$n_status_c.impute, na.rm = TRUE)) * 100
+    prev.remove <- (weighted.mean((data$totpos_c.remove) / data$n_status_c.remove, w = data$n_status_c.remove, na.rm = TRUE)) * 100
+    prev.setmax <- (weighted.mean((data$totpos_c.setmax) / data$n_status_c.setmax, w = data$n_status_c.setmax, na.rm = TRUE)) * 100
     HIVprevs <- cbind(prev_raw, prev, prev.impute, prev.remove, prev.setmax)
     return(HIVprevs)
   }

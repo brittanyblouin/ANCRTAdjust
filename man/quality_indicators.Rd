@@ -19,11 +19,11 @@ prepare the data for use here.  The data set must have the following variables:
   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
   \item \code{totpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period who were HIV-positive
-  \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{TestPos}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{TestNeg}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{KnownPos}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{TotPos}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{testpos_c}: Cleaned \code{testpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{testneg_c}: Cleaned \code{testneg} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{knownpos_c}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   }}
 
 \item{byregion}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}}

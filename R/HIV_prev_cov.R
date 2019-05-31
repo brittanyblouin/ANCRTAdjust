@@ -10,8 +10,8 @@
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
-#'   \item \code{TotPos}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
-#'   \item \code{n_stat}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+#'   \item \code{totpos_c}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+#'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
 #'   \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
 #'   \item \code{time}: The time period that the data was collected (only required if results are to be stratified by the reporting time period).
 #'   \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
@@ -40,15 +40,15 @@ HIV_prev_cov <- function(data, byperiod = "FALSE", bysnu1 = "FALSE", byyear = "F
   
   HIVprevs <- function(data){
     raw <- round(((weighted.mean((data$totpos) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100), 2)
-    prev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
-    cov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
+    prev <- round(((weighted.mean((data$totpos_c) / data$n_status_c, w = data$n_status_c, na.rm = TRUE)) * 100), 2)
+    cov <- round(((weighted.mean((data$n_status_c) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
     return(c(raw, prev, cov))
   }
   
   if (bysnu1 == "FALSE" & byperiod == "FALSE" & byyear == "FALSE"){
     HIVraw <- round(((weighted.mean((data$totpos) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100), 2)
-    HIVprev <- round(((weighted.mean((data$TotPos) / data$n_stat, w = data$n_stat, na.rm = TRUE)) * 100), 2)
-    HIVcov <- round(((weighted.mean((data$n_stat) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
+    HIVprev <- round(((weighted.mean((data$totpos_c) / data$n_status_c, w = data$n_status_c, na.rm = TRUE)) * 100), 2)
+    HIVcov <- round(((weighted.mean((data$n_status_c) / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100), 2)
     snu1 <- "All"
     return(data.frame(snu1, HIVraw, HIVprev, HIVcov))
   }
