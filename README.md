@@ -124,7 +124,7 @@ ancrt_cleaned <- mt_adjust(ancrt_cleaned, adjust_option = 'setmax')
 
 Flagging outliers
 -----------------
-It is possible that errors exist in the data and these may be detected by investigating outlier observations.  The function `flag_outliers()` will flag outliers for the variables `n_clients`, `n_stat`, `TestPos`, `TestNeg`, `KnownPos`, `TotPos`, `Prv` and `Cov`.  Outliers are defined as being more than two standard deviations greater than or less than the mean value.  The mean reference to which observations are compared can either be the facility-specific mean, the subnational unit 1-specific mean or the country-specific mean, according to user inputs.  The flagged data can either be output as the full dataset with additional variables indicating outlier observations, or a dataset that only includes data for outlier observations.  See `help(flag_outliers)` for more information.
+It is possible that errors exist in the data and these may be detected by investigating outlier observations.  The function `flag_outliers()` will flag outliers for the variables `n_clients`, `n_status_c`, `testpos_c`, `testneg_c`, `knownpos_c`, `totpos_c`, `Prv` and `Cov`.  Outliers are defined as being more than two standard deviations greater than or less than the mean value.  The mean reference to which observations are compared can either be the facility-specific mean, the subnational unit 1-specific mean or the country-specific mean, according to user inputs.  The flagged data can either be output as the full dataset with additional variables indicating outlier observations, or a dataset that only includes data for outlier observations.  See `help(flag_outliers)` for more information.
 
 ``` r
 outliers <- flag_outliers(ancrt_cleaned, flagby = "facility", result = "outliers")
@@ -132,13 +132,13 @@ outliers <- flag_outliers(ancrt_cleaned, flagby = "facility", result = "outliers
 
 ``` r
 > head(outliers)
-  faciluid time n_clients n_stat TestPos TestNeg KnownPos TotPos       Prv       Cov
-1      F_1    4       159    159      NA     109       NA     NA        NA        NA
-2      F_1    7        NA     NA      NA      NA       37     NA        NA        NA
-3      F_1   13        NA     NA      NA      NA       NA     NA        NA 0.9956140
-4      F_1   14        NA     NA      NA      NA       NA     NA        NA 0.9954128
-5      F_1   18        NA     NA      NA     104       NA     NA 0.3918129        NA
-6     F_10   17        NA    243       8      NA        6     14        NA        NA
+  faciluid time n_clients n_status_c testpos_c testneg_c knownpos_c totpos_c       Prv       Cov
+1      F_1    4       159        159        NA       109         NA       NA        NA        NA
+2      F_1    7        NA         NA        NA        NA         37       NA        NA        NA
+3      F_1   13        NA         NA        NA        NA         NA       NA        NA 0.9956140
+4      F_1   14        NA         NA        NA        NA         NA       NA        NA 0.9954128
+5      F_1   18        NA         NA        NA       104         NA       NA 0.3918129        NA
+6     F_10   17        NA        243         8        NA          6       14        NA        NA
 ```
 
 Calculating HIV prevalence and HIV testing coverage
