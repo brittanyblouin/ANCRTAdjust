@@ -8,7 +8,7 @@ Description: This package provides a series of tools to: 1) Prepare country-spec
 	testing data for analysis.  The data is 'cleaned' according to common inconsistencies found in this 
 	type of data. 2) Adjust HIV prevalence estimates for biases due to missing data and invalid data.   
 Depends:
-	R(>= 3.5) 
+	R(>= 3.5)
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
