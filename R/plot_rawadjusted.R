@@ -39,7 +39,7 @@ plot_rawadjusted <- function(Data, snu1 = "All", time.unit = "PERIOD", HIVraw = 
     ggplot(Data[Data$time < 9000 & Data$snu1 == snu1,], aes(time)) +
     geom_line(aes(y = HIVraw, color = "Raw HIV prevalence"), size=1) + geom_point(aes(y = HIVraw, color = "Raw HIV prevalence"))+
     geom_line(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"), size=1) + geom_point(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"))+
-    xlab("time") +
+    xlab("Time") +
     ylab("HIV Prevalence (%)") +
     ylim(c(0, y.lim))+
     theme(axis.text = element_text(size = 7), axis.title = element_text(size = 7), legend.position = "right")+
@@ -62,7 +62,7 @@ plot_rawadjusted <- function(Data, snu1 = "All", time.unit = "PERIOD", HIVraw = 
       ggplot(Data[Data$snu1 == snu1,], aes(time)) +
       geom_line(aes(y = HIVraw, color = "Raw HIV prevalence"), size=1) + geom_point(aes(y = HIVraw, color = "Raw HIV prevalence"))+
       geom_line(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"), size=1) + geom_point(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"))+
-      xlab("time") +
+      xlab("Time") +
       ylab("HIV Prevalence (%)") +
       ylim(c(0, y.lim))+
       theme(axis.text = element_text(size = 7), axis.title = element_text(size = 7), legend.position = "right")+
@@ -75,7 +75,7 @@ plot_rawadjusted <- function(Data, snu1 = "All", time.unit = "PERIOD", HIVraw = 
     Plot3 <-
       ggplot(Data[Data$time < 9000 & Data$snu1 == snu1,], aes(time)) +
       geom_line(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"), size=1) + geom_point(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"))+
-      xlab("time") +
+      xlab("Time") +
       ylab("HIV Prevalence (%)") +
       ylim(c(0, y.lim))+
       theme(axis.text = element_text(size = 7), axis.title = element_text(size = 7), legend.position = "none")+
@@ -96,7 +96,7 @@ plot_rawadjusted <- function(Data, snu1 = "All", time.unit = "PERIOD", HIVraw = 
     Plot4 <-
       ggplot(Data[Data$snu1 == snu1,], aes(time)) +
       geom_line(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"), size=1) + geom_point(aes(y = Adjusted_prev, color = "Adjusted HIV prevalence"))+
-      xlab("time") +
+      xlab("Time") +
       ylab("HIV Prevalence (%)") +
       ylim(c(0, y.lim))+
       theme(axis.text = element_text(size = 7), axis.title = element_text(size = 7), legend.position = "none")+
