@@ -26,9 +26,9 @@ prepare the data for use here.  The data set must have the following variables:
   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   }}
 
-\item{byregion}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}}
+\item{byregion}{"TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{snu1}}
 
-\item{bytime}{"TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{time}}
+\item{bytime}{"TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{time}}
 }
 \value{
 A table (in dataframe format) with all data quality indicators calculated for the raw and cleaned data.  If specified, data quality 
@@ -53,12 +53,12 @@ indicators are also displayed stratified by \code{snu1} and/or \code{time}.  The
 }
 }
 \description{
-Calculates the different data quality indicators due to missing data and invalid data from ANC-RT data.
+Calculates the different data quality indicators regarding missing data and invalid data from ANC-RT data.
 }
 \details{
 This function was designed to calculate 16 data quality indicators from ANC-RT data.  The amount of missing data and invalid data for the 
 five primary variables used to calculate HIV testing coverage and HIV prevalence (i.e. \code{n_clients}, \code{n_status}, \code{testpos}, 
-\code{testneg} and, \code{knownpos} are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
+\code{testneg} and, \code{knownpos}) are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
 variables and can be calculated stratified by region and time, according to user inputs.
 }
 \author{

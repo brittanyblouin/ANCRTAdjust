@@ -7,9 +7,11 @@
 impcov_adjust_simple(HIVprev, HIVcov)
 }
 \arguments{
-\item{HIVprev}{The unadjusted HIV prevalence (this MUST be input as a proportion, between 0-1)}
+\item{HIVprev}{The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.}
 
-\item{HIVcov}{The HIV testing coverage (this MUST be input as a proportion, between 0-1)}
+\item{HIVcov}{The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.}
 }
 \value{
 The HIV prevalence adjusted for imperfect HIV testing coverage.

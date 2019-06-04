@@ -10,9 +10,11 @@ mt_adjust(data, adjust_option)
 \item{data}{The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 prepare the data for use here.  The data set must have the following variables:
  \itemize{
+  \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{n_status_c.impute}: \code{n_status_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{n_status_c.remove}: \code{n_status_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{n_status_c.setmax}: \code{n_status_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c.impute}: \code{totpos_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c.remove}: \code{totpos_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c.setmax}: \code{totpos_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)

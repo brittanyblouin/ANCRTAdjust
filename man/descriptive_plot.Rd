@@ -10,7 +10,7 @@ descriptive_plot(data, ylim.ind_min = 0, ylim.ind_max = 100,
 }
 \arguments{
 \item{data}{The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
-prepare the data for use here.  The data set must include the following variables:
+prepare the data for use here.  The dataset must include the following variables:
  \itemize{
   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
   \item \code{n_status}: The number of women who attended the specific facility during the specific time period for their first ANC visit and had their HIV status ascertained
@@ -26,7 +26,7 @@ prepare the data for use here.  The data set must include the following variable
   \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c.setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{time}: The time period (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{time}: The time period
  }}
 
 \item{ylim.ind_min}{The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)}

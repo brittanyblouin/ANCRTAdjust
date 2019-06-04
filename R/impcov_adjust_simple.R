@@ -4,8 +4,10 @@
 #' 
 #' This function was designed to adjust HIV prevalence when HIV testing coverage is less than 100\%.
 #' 
-#' @param HIVprev The unadjusted HIV prevalence (this MUST be input as a proportion, between 0-1)
-#' @param HIVcov The HIV testing coverage (this MUST be input as a proportion, between 0-1)
+#' @param HIVprev The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+#' for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.
+#' @param HIVcov The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+#' for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.
 #' 
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin

@@ -11,7 +11,7 @@ flag_outliers(data, flagby = "facility", result = "outliers")
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
   \item \code{faciluid}: Facility ID.
-  \item \code{time}: The time period that the data was collected.
+  \item \code{time}: The time period over which the data was collected.
   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
   \item \code{n_status_c}:  The cleaned number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge
   (generated using the \link[ANCRTAdjust]{data_clean} function).

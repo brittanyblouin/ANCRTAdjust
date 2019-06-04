@@ -10,10 +10,10 @@
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
-#'   \item \code{totpos_c}: Total number of positive HIV cases (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+#'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
 #'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
 #'   \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
-#'   \item \code{time}: The time period that the data was collected (only required if results are to be stratified by the reporting time period).
+#'   \item \code{time}: The time period over which the data was collected (only required if results are to be stratified by the reporting time period).
 #'   \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
 #'     }
 #' @param bysnu1 "TRUE" indicates that the results be stratified by snu1.  "FALSE" indicates that the results not be stratified.

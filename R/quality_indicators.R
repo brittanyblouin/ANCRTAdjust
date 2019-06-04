@@ -141,11 +141,11 @@ quality <- function(data) {
 
 #' Data Quality Indicators
 #'
-#' Calculates the different data quality indicators due to missing data and invalid data from ANC-RT data.
+#' Calculates the different data quality indicators regarding missing data and invalid data from ANC-RT data.
 #'
 #' This function was designed to calculate 16 data quality indicators from ANC-RT data.  The amount of missing data and invalid data for the 
 #' five primary variables used to calculate HIV testing coverage and HIV prevalence (i.e. \code{n_clients}, \code{n_status}, \code{testpos}, 
-#' \code{testneg} and, \code{knownpos} are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
+#' \code{testneg} and, \code{knownpos}) are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
 #' variables and can be calculated stratified by region and time, according to user inputs.
 #' 
 #' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
@@ -166,8 +166,8 @@ quality <- function(data) {
 #'   \item \code{knownpos_c}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   }
-#' @param byregion "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{snu1}
-#' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators should be calculated stratified by \code{time}
+#' @param byregion "TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{snu1}
+#' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{time}
 #' 
 #' @import stats
 #' 

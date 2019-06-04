@@ -31,9 +31,9 @@ A cleaned ANC-RT database with additional variables:
   \item \code{testpos_c}: Cleaned \code{testpos} (according to description)
   \item \code{knownpos_c}: Cleaned \code{knownpos} (according to description)
   \item \code{n_status_c}: Cleaned \code{n_status} (according to description)
-  \item \code{n_status_c.impute}:  Adjusted \code{n_status_c} using the impute adjustment option
-  \item \code{n_status_c.remove}:  Adjusted \code{n_status_c} using the remove adjustment option
-  \item \code{n_status_c.setmax}:  Adjusted \code{n_status_c} using the set to maximum adjustment option
+  \item \code{n_status_c.impute}:  Adjusted \code{n_status_c} using the impute adjustment option for multiple testing
+  \item \code{n_status_c.remove}:  Adjusted \code{n_status_c} using the remove adjustment option for multiple testing
+  \item \code{n_status_c.setmax}:  Adjusted \code{n_status_c} using the set to maximum adjustment option for multiple testing
   \item \code{totpos_c}: Cleaned \code{totpos} (according to description)
   \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used
   \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used
@@ -41,19 +41,19 @@ A cleaned ANC-RT database with additional variables:
  }
 }
 \description{
-Cleans ANC-RT data to be used with other functions in this package
+Cleans ANC-RT data so that it can be used with other functions in the \link[ANCRTAdjust] package.
 }
 \details{
 This function has been developed to clean common issues asoociated with ANC-RT data.  The following tasks
 are accomplished:
  \itemize{
-   \item Age disaggregated data is removed (if applicable)
+   \item Age disaggregated data is removed (if applicable).
    \item \code{testneg_c} is set to \code{n_status} - \code{knownpos} - \code{testpos} or \code{n_status} - \code{totpos} if \code{testneg} is missing.  \code{testneg_c} is set to 0 if negative.
-   \item \code{knownpos_c} is set to \code{n_status} - \code{testneg} - \code{testpos} or \code{totpos} - \code{testpos} if \code{knownpos} is missing.  \code{knownpos_c} is set to 0 if negative.
-   \item \code{testpos_c} is set to \code{n_status} - \code{testneg} - \code{knownpos} or \code{totpos} - \code{knownpos} if \code{testpos} is missing.  \code{testpos_c} is set to 0 if negative.
+   \item \code{knownpos_c} is set to \code{n_status} - \code{testneg_c} - \code{testpos} or \code{totpos} - \code{testpos} if \code{knownpos} is missing.  \code{knownpos_c} is set to 0 if negative.
+   \item \code{testpos_c} is set to \code{n_status} - \code{testneg_c} - \code{knownpos_c} or \code{totpos} - \code{knownpos} if \code{testpos} is missing.  \code{testpos_c} is set to 0 if negative.
    \item \code{n_status_c} is set to \code{testpos_c} + \code{testneg_c} + \code{knownpos_c} when all of these variables are available.  If either of the three variables is
-   missing, \code{n_status_c} = \code{n_status}
-   \item \code{totpos_c} (total number of HIV positives) is created as \code{knownpos_c} + \code{testpos_c}. If either \code{testpos_c} or \code{knownpos_c} are 
+   missing, \code{n_status_c} = \code{n_status}.
+   \item \code{totpos_c} is set to \code{knownpos_c} + \code{testpos_c} if both of these variables are available. If either \code{testpos_c} or \code{knownpos_c} are 
    missing but \code{totpos} is available, \code{totpos_c} is set to \code{totpos}.  If \code{totpos_c} is missing but \code{n_status_c} and \code{testneg_c} are available, \code{totpos_c} = \code{n_status_c} - \code{testneg_c}. 
    \item The three suggested \code{n_status_c} adjustments are created in the case that \code{n_status_c} > \code{n_clients}:
    \itemize{
@@ -63,12 +63,12 @@ are accomplished:
      }
    \item \code{totpos_c} is adjusted if \code{totpos_c} > \code{n_status_c}:
      \itemize{
+       \item \code{totpos_c}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c}
        \item \code{totpos_c.impute}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.impute}
        \item \code{totpos_c.remove}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.remove}
        \item \code{totpos_c.setmax}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.setmax}
-       \item \code{totpos_c}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c}
        }
-   \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time})
+   \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time}).
   }
 }
 \author{

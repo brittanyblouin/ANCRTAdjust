@@ -1,32 +1,34 @@
 #' Name ANC-RT variables
 #'
-#' Renames the variables in the ANC-RT dataset to ensure that they follow the necessary naming conventions
+#' Prepares the ANC-RT dataset to ensure that subsequent functions in the \link[ANCRTAdjust] package work properly.
 #'
-#' This function has been developed to rename variables in the ANC-RT dataset to ensure that they conform to the 
+#' This function has been developed to prepare the ANC-RT dataset for use within the \link[ANCRTAdjust] package.  
+#' The function ensures that all necessary variables are included in the dataset and renames the variables to ensure that they conform to the 
 #' naming conventions necessary for use in this package.
 #' 
 #' @param data A country-specific ANC-RT database.  The following variables must be included in \code{data}:
 #'  \itemize{
 #'   \item The time period that the data was collected.
 #'   \item The unique facility identifier.
-#'   \item The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
 #'   \item The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
 #'   }
 #'  Optional variables that can be included for re-naming in \code{data} include: 
 #'   \itemize{
+#'    \item The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
 #'    \item The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
 #'    \item The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
 #'    \item The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
-#'    \item Age category of pregnant women
+#'    \item Age category of pregnant women.
 #'    \item The number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit.
-#'    \item The sub-national unit 1
-#'    \item The calendar year from which the data was collected
+#'    \item The sub-national unit 1.
+#'    \item The calendar year from which the data was collected.
 #'    }
 #'    
 #' @param faciluid The variable name in \code{data} for the unique facility identifier
 #' @param time The variable name in \code{data} for the time period that the data was collected
 #' @param n_clients The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that attended their first ANC visit.
-#' @param n_status The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
+#' @param n_status The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge
+#' (if available).  If this variable is not specified, it will be created and marked as missing for all observations.
 #' @param knownpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).
 #' If this variable is not specified, it will be created and marked as missing for all observations.
 #' @param testpos The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit (if available).
@@ -42,7 +44,7 @@
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
 #'
-#' @return The ANC-RT dataset with variables re-named, ensuring that subsequent package functions will work.
+#' @return The ANC-RT dataset with variables created and/or re-named, if necessary, ensuring that subsequent package functions will work.
 #'
 #' @export
 
@@ -54,7 +56,11 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   if (is.null(faciluid)) { stop('Provide name of the facility ID variable') }
   if (is.null(time)) { stop('Provide name of time variable') }
   if (is.null(n_clients)) { stop('Provide name of the variable for the number of women that attended their first ANC visit') }
-  if (is.null(n_status)) { stop('Provide name of the variable for the number of women that had their HIV status ascertained, either by testing or through previous knowledge') }
+  if (is.null(n_status)) { 
+    data$n_status <- NA 
+    warning("Because no 'n_status' variable was provided, this variable is assumed to be missing for all observations and 
+            the variable 'n_status' was created reflecting this assumption.")
+    }
   if (is.null(knownpos)) { 
     data$knownpos <- NA 
     warning("Because no 'knownpos' variable was provided, this variable is assumed to be missing for all observations and 
@@ -76,7 +82,7 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   if (length(names(data)[names(data) == faciluid]) == 0) { stop("faciluid's name not recognized in data") }
   if (length(names(data)[names(data) == time]) == 0) { stop("time's name not recognized in data") }
   if (length(names(data)[names(data) == n_clients]) == 0) { stop("n_clients's name not recognized in data") }
-  if (length(names(data)[names(data) == n_status]) == 0) { stop("n_status's name not recognized in data") }
+  if (length(names(data)[names(data) == n_status]) == 0 & !is.null(n_status)) { stop("n_status's name not recognized in data") }
   if (length(names(data)[names(data) == testpos]) == 0 & !is.null(testpos)) { stop("testpos's name not recognized in data") }
   if (length(names(data)[names(data) == testneg]) == 0 & !is.null(testneg)) { stop("testneg's name not recognized in data") }
   if (length(names(data)[names(data) == knownpos]) == 0 & !is.null(knownpos)) { stop("knownpos's name not recognized in data") }

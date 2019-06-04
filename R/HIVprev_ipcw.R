@@ -5,22 +5,22 @@
 #' This function has been developed to adjust HIV prevalence and HIV testing coverage from ANC-RT data for missing reporting periods within a facility.
 #' Inverse probability of censoring weighting is used to account for the missing reporting periods.  The weights are 
 #' calculated conditional on the facility.  The adjustment is only made for missing reporting periods in between the first and last 
-#' reported period in a facility to avoid adjusting for periods where the facility may have been inoperational. The adjusted HIV 
+#' reported period in a facility to avoid adjusting for periods when the facility may have been inoperational. The adjusted HIV 
 #' prevalence and HIV testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
 #'
 #' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: Facility ID.
-#'   \item \code{time}: The time period that the data was collected.
+#'   \item \code{time}: The time period over which the data was collected.
 #'   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
 #'   \item \code{n_status}:  The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
 #'   \item \code{testpos}: The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
 #'   \item \code{knownpos}: The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
 #'   \item \code{testneg}: The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
 #'   \item \code{totpos}: Total number of positive HIV cases.
-#'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function).
-#'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function).
+#'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
+#'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} functions).
 #'   \item \code{snu1}: The subnational unit 1 (only required if results are to be stratified by snu1).
 #'   \item \code{Year}: The year that the data was collected (only required if results are to be stratified by year).
 #'       }

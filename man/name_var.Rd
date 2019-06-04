@@ -14,18 +14,18 @@ name_var(data = NULL, faciluid = NULL, time = NULL,
 \itemize{
  \item The time period that the data was collected.
  \item The unique facility identifier.
- \item The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
  \item The number of women from the specified facility, during the specified time period, that attended their first ANC visit.
  }
 Optional variables that can be included for re-naming in \code{data} include: 
  \itemize{
+  \item The number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
   \item The number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
   \item The number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
   \item The number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
-  \item Age category of pregnant women
+  \item Age category of pregnant women.
   \item The number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit.
-  \item The sub-national unit 1
-  \item The calendar year from which the data was collected
+  \item The sub-national unit 1.
+  \item The calendar year from which the data was collected.
   }}
 
 \item{faciluid}{The variable name in \code{data} for the unique facility identifier}
@@ -34,7 +34,8 @@ Optional variables that can be included for re-naming in \code{data} include:
 
 \item{n_clients}{The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that attended their first ANC visit.}
 
-\item{n_status}{The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.}
+\item{n_status}{The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge
+(if available).  If this variable is not specified, it will be created and marked as missing for all observations.}
 
 \item{knownpos}{The variable name in \code{data} for the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).
 If this variable is not specified, it will be created and marked as missing for all observations.}
@@ -55,13 +56,14 @@ be automatically created by summing \code{testpos} and \code{knownpos}.}
 \item{Year}{The variable name in \code{data} for the sub-national unit 1 (if available).}
 }
 \value{
-The ANC-RT dataset with variables re-named, ensuring that subsequent package functions will work.
+The ANC-RT dataset with variables created and/or re-named, if necessary, ensuring that subsequent package functions will work.
 }
 \description{
-Renames the variables in the ANC-RT dataset to ensure that they follow the necessary naming conventions
+Prepares the ANC-RT dataset to ensure that subsequent functions in the \link[ANCRTAdjust] package work properly.
 }
 \details{
-This function has been developed to rename variables in the ANC-RT dataset to ensure that they conform to the 
+This function has been developed to prepare the ANC-RT dataset for use within the \link[ANCRTAdjust] package.  
+The function ensures that all necessary variables are included in the dataset and renames the variables to ensure that they conform to the 
 naming conventions necessary for use in this package.
 }
 \author{
