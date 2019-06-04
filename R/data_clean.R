@@ -6,7 +6,7 @@ meancov_possible <- function(data) {
 
 #' Clean ANC-RT Data
 #'
-#' Cleans ANC-RT data so that it can be used with other functions in the \link[ANCRTAdjust] package.
+#' Cleans ANC-RT data so that it can be used with other functions in the \code{ANCRTAdjust} package.
 #'
 #' This function has been developed to clean common issues asoociated with ANC-RT data.  The following tasks
 #' are accomplished:

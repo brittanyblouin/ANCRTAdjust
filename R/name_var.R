@@ -1,8 +1,8 @@
-#' Name ANC-RT variables
+#' Prepares ANC-RT data
 #'
-#' Prepares the ANC-RT dataset to ensure that subsequent functions in the \link[ANCRTAdjust] package work properly.
+#' Prepares the ANC-RT dataset to ensure that subsequent functions in the \code{ANCRTAdjust} package work properly.
 #'
-#' This function has been developed to prepare the ANC-RT dataset for use within the \link[ANCRTAdjust] package.  
+#' This function has been developed to prepare the ANC-RT dataset for use within the \code{ANCRTAdjust} package.  
 #' The function ensures that all necessary variables are included in the dataset and renames the variables to ensure that they conform to the 
 #' naming conventions necessary for use in this package.
 #' 

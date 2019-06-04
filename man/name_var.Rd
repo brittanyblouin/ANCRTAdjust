@@ -2,7 +2,7 @@
 % Please edit documentation in R/name_var.R
 \name{name_var}
 \alias{name_var}
-\title{Name ANC-RT variables}
+\title{Prepares ANC-RT data}
 \usage{
 name_var(data = NULL, faciluid = NULL, time = NULL,
   n_clients = NULL, n_status = NULL, knownpos = NULL,
@@ -59,10 +59,10 @@ be automatically created by summing \code{testpos} and \code{knownpos}.}
 The ANC-RT dataset with variables created and/or re-named, if necessary, ensuring that subsequent package functions will work.
 }
 \description{
-Prepares the ANC-RT dataset to ensure that subsequent functions in the \link[ANCRTAdjust] package work properly.
+Prepares the ANC-RT dataset to ensure that subsequent functions in the \code{ANCRTAdjust} package work properly.
 }
 \details{
-This function has been developed to prepare the ANC-RT dataset for use within the \link[ANCRTAdjust] package.  
+This function has been developed to prepare the ANC-RT dataset for use within the \code{ANCRTAdjust} package.  
 The function ensures that all necessary variables are included in the dataset and renames the variables to ensure that they conform to the 
 naming conventions necessary for use in this package.
 }
