@@ -9,6 +9,7 @@ Install via Github using `devtools`:
 
 ``` r
 devtools::install_github("brittanyblouin/ANCRTAdjust")
+library(ANCRTAdjust)
 ```
 
 Loading the data

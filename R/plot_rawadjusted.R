@@ -15,7 +15,7 @@
 #'   byyear = "TRUE" must have been specified when running \link[ANCRTAdjust]{impcov_adjust}.
 #'   \item \code{Adjusted_prev}: The HIV prevalence adjusted for imperfect testing coverage and all previous adjustments (i.e. data cleaning, adjustment 
 #'   for multiple testing and/or adjustment for missing reporting periods, if performed) (generated using the \link[ANCRTAdjust]{impcov_adjust} function).
-#'   \item{HIVraw}: The HIV prevalence using the raw data (generated using the \link[ANCRTAdjust]{impcov_adjust} function).
+#'   \item \code{HIVraw}: The HIV prevalence using the raw data (generated using the \link[ANCRTAdjust]{impcov_adjust} function).
 #'  }
 #' @param snu1 The snu1 for which the plot is generated.  "All" indicates that the plot include the entire country data (i.e. not snu1-specific). Default = "All".
 #' @param time.unit "PERIOD" indicates that the results be plotted by reporting period.  "YEAR" indicates that the results be plotted by year. Default = "PERIOD".
