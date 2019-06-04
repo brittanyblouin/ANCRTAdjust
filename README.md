@@ -38,10 +38,10 @@ After loading the data, the first step is to make sure we are following the nami
 * `faciluid`: the unique facility identifier.   
 * `time`: the calendar time over which the data was collected.   
 * `n_clients`: the number of women from the specified facility, during the specified time period, that attended their first ANC visit.   
-* `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge.
-* `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit.
-* `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit.
-* `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit.
+* `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge (if available).  NOTE: If data is not available for `n_status` it will automatically be created with missing data for all observations.
+* `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `knownpos` it will automatically be created with missing data for all observations.
+* `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit (if available).  NOTE: If data is not available for `testpos` it will automatically be created with missing data for all observations.
+* `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit (if available).  NOTE: If data is not available for `testneg` it will automatically be created with missing data for all observations.
 * `totpos`: the number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `totpos` it will automatically be created as the sum of `testpos` and `knownpos`.
 
 Some data might be available age-disaggregated. If so, the variable should be named:
