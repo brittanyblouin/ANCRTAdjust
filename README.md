@@ -168,7 +168,7 @@ It has been found that selection bias can be introduced into HIV prevalence esti
 
 ```r
 > impcov_adjust_simple(0.1711, 0.9555)
-[1] 0.1704367
+[1] 0.1697773
 ```
 
 To use the `impcov_adjust()` function, input the dataframe that was output from either the `HIV_prev_cov()` function (if results are not to be adjusted for missing reporting periods) or the `HIVprev_ipcw()` function (if results are also to be adjusted for missing reporting periods).  If results were reported stratified by the subnational unit 1, the reporting period and/or the year in `HIV_prev_cov()` or `HIVprev_ipcw()`, the adjustment for imperfect testing coverage will also be made strafied by the same variable(s).  See `help(impcov_adjust)` for more information.
@@ -181,9 +181,9 @@ To use the `impcov_adjust()` function, input the dataframe that was output from 
 ```r
 > results
   snu1 HIVraw HIVprev HIVcov Adjusted_prev
-1    1  15.89   15.93  95.74         15.87
-2    2  17.44   17.48  95.52         17.41
-3    3  18.14   18.17  95.33         18.08
+1    1  15.89   15.93  95.74         15.81
+2    2  17.44   17.48  95.52         17.35
+3    3  18.14   18.17  95.33         18.00
 ```
 
 Plotting raw and adjusted HIV prevalence over time
