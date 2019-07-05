@@ -1,6 +1,20 @@
 ANCRTAdjust
 =======
-R Package to adjust antenatal care routine HIV testing (ANC-RT) data to reduce bias in estimating HIV prevalence trends
+
+Introduction
+------------
+
+In HIV-endemic countries, antenatal care sentinel surveillance (ANC-SS) has historically been used to monitor epidemiological trends in HIV prevalence over time.  Recently, several countries are transitioning from ANC-SS to the use of ANC routine testing (ANC-RT) data. Despite important advantages of using ANC-RT over conducting sentinel surveillance, the use of routinely collected program data raises concerns regarding data completeness and consistency. It is imperative that a clear and simple procedure be established for the use of such data so that valid conclusions can be drawn.
+
+`ANCRTAdjust` is an R package that was developed to check and validate ANC-RT data. The specific functions have been designed to allow program managers using ANC-RT data to monitor HIV trends in endemic countries to use a standard protocol to:
+
+1. Evaluate data quality and completeness;  
+2. Perform data cleaning;  
+3. Identify outlying observations; and,  
+4. Perform adjustments for common data inconsistencies due to incomplete reporting periods, multiple testing, and/or imperfect testing coverage.  
+
+A standard protocol for data validation, implemented across all countries providing ANC-RT data for monitoring HIV trends, will ensure that HIV prevalence estimates are consistent, reproducible and valid.
+
 
 Installation
 ------------
@@ -8,6 +22,7 @@ Installation
 Install via Github using `devtools`:
 
 ``` r
+# install.packages("devtools")
 devtools::install_github("brittanyblouin/ANCRTAdjust")
 library(ANCRTAdjust)
 ```
@@ -197,3 +212,7 @@ It can be useful to compare the raw HIV prevalence to the fully adjusted HIV pre
 ```
 ![](man/figures/README-example-2.png)
 
+Community Guidelines
+--------------------
+
+Contributions to the software are welcome and can be made as pull requests to the branch master.  Issues or problems with the software can be reported and support can be obtained in the project's Github page or by e-mailing brittany.blouin@mail.mcgill.ca.  
