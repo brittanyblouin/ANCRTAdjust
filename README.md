@@ -22,14 +22,14 @@ Installation
 Install via Github using `devtools`:
 
 ``` r
-# install.packages("devtools")
+# if devtools is not already installed, copy-paste the following: install.packages("devtools")
 devtools::install_github("brittanyblouin/ANCRTAdjust")
 library(ANCRTAdjust)
 ```
 
-Loading the data
+Loading the ANC-RT data
 ----------------
-We can then try the package using a syntethetic dataset that we first load.
+For illustration purposes, we first load the supplied syntethetic ANC-RT dataset.
 
 ``` r
 data(ancrt)
@@ -53,11 +53,11 @@ After loading the data, the first step is to make sure we are following the nami
 * `faciluid`: the unique facility identifier.   
 * `time`: the calendar time over which the data was collected.   
 * `n_clients`: the number of women from the specified facility, during the specified time period, that attended their first ANC visit.   
-* `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge (if available).  NOTE: If data is not available for `n_status` it will automatically be created with missing data for all observations.
-* `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `knownpos` it will automatically be created with missing data for all observations.
-* `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit (if available).  NOTE: If data is not available for `testpos` it will automatically be created with missing data for all observations.
-* `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit (if available).  NOTE: If data is not available for `testneg` it will automatically be created with missing data for all observations.
-* `totpos`: the number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit (if available).  NOTE: If data is not available for `totpos` it will automatically be created as the sum of `testpos` and `knownpos`.
+* `n_status`: the number of women from the specified facility, during the specified time period, that had their HIV status ascertained at their first ANC visit, either by testing or through previous knowledge of their status (if available). Note: If data is not available for `n_status` it will automatically be created with missing data for all observations.
+* `knownpos`: the number of women from the specified facility, during the specified time period, that already knew that they were HIV-positive at their first ANC visit (if available).  Note: If data is not available for `knownpos` it will automatically be created with missing data for all observations.
+* `testpos`: the number of women from the specified facility, during the specified time period, that tested positive for HIV at their first ANC visit (if available).  Note: If data is not available for `testpos` it will automatically be created with missing data for all observations.
+* `testneg`: the number of women from the specified facility, during the specified time period, that tested negative for HIV at their first ANC visit (if available).  Note: If data is not available for `testneg` it will automatically be created with missing data for all observations.
+* `totpos`: the number of women from the specified facility, during the specified time period, that were HIV-positive at their first ANC visit (if available).  Note: If data is not available for `totpos` it will automatically be created as the sum of `testpos` and `knownpos`.
 
 Some data might be available age-disaggregated. If so, the variable should be named:
 
@@ -76,7 +76,7 @@ The function `name_var()` can automatically rename the variables for you (see `h
 
 Data cleaning
 -------------
-The second step is to clean the data using the `data_clean()` function. The data cleaning process used in this function can be found by typing `help(data_clean)` in your console.
+The second step is to clean the data using the `data_clean()` function. Details on the data cleaning procedure implemented in this function can be found by typing `help(data_clean)` in your console.
 
 ``` r
 ancrt_cleaned <- data_clean(ancrt)
