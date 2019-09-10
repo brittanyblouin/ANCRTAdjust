@@ -10,19 +10,28 @@ authors:
   - name: Brittany Blouin
     orcid: 0000-0001-7447-7467
     affiliation: 1
+  - name: Jeffrey W Eaton
+    orcid: 0000-0001-7728-728X
+    affiliation: 2
+  - name: Mary Mahy
+    affiliation: 3
   - name: Mathieu Maheu-Giroux
     orcid: 0000-0002-8363-4388
     affiliation: 1
 affiliations:
   - name: McGill University, Department of Epidemiology, Biostatistics, and Occupational Health
     index: 1
-date: July 12, 2019
+  - name: Imperial College London, Department of Infectious Disease Epidemiology
+    index: 2
+  - name: The Joint United Nations Programme on HIV/AIDS (UNAIDS), Department of Strategic Information
+    index: 3
+date: September 10, 2019
 bibliography: paper.bib
 ---
 
 # Summary
 
-HIV surveillance in high-burden countries has traditionally been conducted using sentinel surveillance of pregnant women attending antenatal care (ANC-SS). Nowadays, program data from routine HIV testing at antenatal care (ANC-RT) are increasingly being used for monitoring HIV epidemic trends [@WHO:2015]. Importantly, using ANC-RT data could increase representativeness, geographical coverage, and granularity of HIV surveillance systems. If ANC-RT data on HIV serostatus are to be used for HIV surveillance, several challenges need to be addressed, however [@Diaz:2005]. First, the use of routinely collected program data raises concerns regarding data completeness, with some health facilities not reporting HIV testing data [@WHO:2013]. Second, ANC-RT data could be inconsistent with missing and/or invalid data. Missing data problems include: missing entire reporting periods or missing one or more variables within a reporting period. Invalid data problems include: negative count values, the *‘number of HIV-positive women’* exceeding the *‘number of women tested for HIV’*, and, the *‘number of women tested for HIV’* exceeding the *‘number of women who attended the health facility’*. Finally, imperfect testing coverage during antenatal care could result in selection bias, leading to overestimation of HIV prevalence [@Maheu-Giroux:2019].
+HIV surveillance in high-burden countries has traditionally been conducted using sentinel surveillance of pregnant women attending antenatal care (ANC-SS). Presently, administrative reporting data about routine HIV testing of all pregnant women attending antenatal care (ANC-RT) are increasingly being used for monitoring HIV epidemic trends [@WHO:2015]. Importantly, using ANC-RT data could increase representativeness, geographical coverage, and granularity of information about HIV. If ANC-RT data on HIV serostatus are to be used for HIV surveillance, several challenges need to be addressed, however [@Diaz:2005]. First, inferences from routinely collected program could be biased due to imperfect data completeness, with some health facilities not reporting HIV testing data [@WHO:2013]. Second, ANC-RT data could be inconsistent with missing and/or invalid data. Missing data problems include: missing entire reporting periods or missing one or more variables within a reporting period. Invalid data problems include: negative count values, the *‘number of HIV-positive women’* exceeding the *‘number of women tested for HIV’*, and, the *‘number of women tested for HIV’* exceeding the *‘number of women who attended the health facility’*. Finally, imperfect testing coverage during antenatal care could result in selection bias, leading to overestimation of HIV prevalence [@Maheu-Giroux:2019].
 
 ``ANCRTAdjust`` is an R package that facilitates assessment of ANC-RT data quality, helps clean ANC-RT data, and, if warranted, can perform specific adjustments for common data inconsistencies as to minimize both information and selection in HIV prevalence estimates. Functionalities to longitudinally visualize and tabulate data quality indicators, as well as to identify outliers, are provided. A standard data cleaning function can be used to impute missing data (when possible), and to eliminate impossible negative count values and the possibility that the *‘number of HIV-positive women’* exceeds the *‘number of women tested’*. Specifically, different functions can be used to:
 
