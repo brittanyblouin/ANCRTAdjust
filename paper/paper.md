@@ -1,5 +1,5 @@
 ---
-title: 'ANCRTAdjust: An R package to adjust ANC-RT data to reduce bias in estimating HIV prevalence trends'
+title: 'ANCRTAdjust: An R package to adjust routine HIV testing data from antenatal care to reduce bias in estimating HIV prevalence trends'
 tags:
   - R
   - antenatal care routine HIV testing data
