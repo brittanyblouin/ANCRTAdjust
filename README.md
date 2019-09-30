@@ -179,7 +179,7 @@ In the event that some facilities did not report data at certain time periods, t
 
 Adjusting HIV prevalence for imperfect testing coverage
 -------------------------------------------------------
-It has been found that selection bias can be introduced into HIV prevalence estimates due to imperfect HIV testing coverage (i.e. < 100% coverage).  This bias can be adjusted for using either the `impcov_adjust_simple()` function or the `impcov_adjust` function.  If data cleaning, adjustment for multiple testing and adjustment for missing reporting periods is also being performed, the `data_clean()`, `mt_adjust()` and `HIVprev_ipcw()` functions must be run prior to this adjustment.  To use the `impcov_adjust_simple()` function, simply entre the HIV prevalence and HIV testing coverage and the adjusted prevalence will be output. 
+It has been found that selection bias can be introduced into HIV prevalence estimates due to imperfect HIV testing coverage (i.e. < 100% coverage).  This bias can be adjusted for using either the `impcov_adjust_simple()` function or the `impcov_adjust` function.  If data cleaning, adjustment for multiple testing and adjustment for missing reporting periods is also being performed, the `data_clean()`, `mt_adjust()` and `HIVprev_ipcw()` functions must be run prior to this adjustment.  To use the `impcov_adjust_simple()` function, simply enter the HIV prevalence and HIV testing coverage and the adjusted prevalence will be output. 
 
 ```r
 > impcov_adjust_simple(0.1711, 0.9555)
