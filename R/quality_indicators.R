@@ -2,10 +2,10 @@ quality <- function(data) {
   
   data$totpos_raw <- ifelse(!is.na(data$knownpos) & !is.na(data$testpos), data$knownpos + data$testpos, 
                             data$totpos)
-  data$Cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
-  data$Prv_raw <- ifelse(data$n_status > 0 & !is.na(data$n_status), (data$totpos_raw) / data$n_status, NA)
-  data$Cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status_c / data$n_clients), NA)
-  data$Prv <- ifelse(data$n_status_c > 0 & !is.na(data$n_status_c), (data$totpos_c) / data$n_status_c, NA)
+  data$cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
+  data$prv_raw <- ifelse(data$n_status > 0 & !is.na(data$n_status), (data$totpos_raw) / data$n_status, NA)
+  data$cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status_c / data$n_clients), NA)
+  data$prv <- ifelse(data$n_status_c > 0 & !is.na(data$n_status_c), (data$totpos_c) / data$n_status_c, NA)
   
   ############################
   ##1. Quarters not reported##
@@ -67,15 +67,15 @@ quality <- function(data) {
   #######################
   ##1 Impossible Values##
   #######################
-  o8 <- sum(ifelse(data$Cov_raw > 1, 1, 0), na.rm = TRUE)
-  op8 <- paste("(", round((sum(ifelse(data$Cov_raw > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c8 <- sum(ifelse(data$Cov > 1, 1, 0), na.rm = TRUE)
-  cp8 <- paste("(", round((sum(ifelse(data$Cov > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  o8 <- sum(ifelse(data$cov_raw > 1, 1, 0), na.rm = TRUE)
+  op8 <- paste("(", round((sum(ifelse(data$cov_raw > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c8 <- sum(ifelse(data$cov > 1, 1, 0), na.rm = TRUE)
+  cp8 <- paste("(", round((sum(ifelse(data$cov > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
-  o9 <- sum(ifelse(data$Prv_raw > 1, 1, 0), na.rm = TRUE)
-  op9 <- paste("(", round((sum(ifelse(data$Prv_raw > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
-  c9 <- sum(ifelse(data$Prv > 1, 1, 0), na.rm = TRUE)
-  cp9 <- paste("(", round((sum(ifelse(data$Prv > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100 ,2), "%)", sep = "")
+  o9 <- sum(ifelse(data$prv_raw > 1, 1, 0), na.rm = TRUE)
+  op9 <- paste("(", round((sum(ifelse(data$prv_raw > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
+  c9 <- sum(ifelse(data$prv > 1, 1, 0), na.rm = TRUE)
+  cp9 <- paste("(", round((sum(ifelse(data$prv > 1, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100 ,2), "%)", sep = "")
   
   o10 <- sum(ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos), 1, 0), na.rm = TRUE)
   op10 <- paste("(", round((sum(ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos), 1, 0), na.rm = TRUE)/
@@ -109,13 +109,13 @@ quality <- function(data) {
   c15 <- sum(ifelse(data$knownpos_c < 0, 1, 0), na.rm = TRUE)
   cp15 <- paste("(", round((sum(ifelse(data$knownpos_c < 0, 1, 0), na.rm = TRUE) / dim(data)[1]) * 100, 2), "%)", sep = "")
   
-  data$impossible_raw <- ifelse(data$Cov_raw > 1 & !is.na(data$Cov_raw), 1, 
+  data$impossible_raw <- ifelse(data$cov_raw > 1 & !is.na(data$cov_raw), 1, 
                                  ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos) & !is.na(data$n_status) & !is.na(data$testneg) & !is.na(data$testpos) & !is.na(data$knownpos), 1,
                                         ifelse(data$n_clients < 0 & !is.na(data$n_clients), 1,
                                                ifelse(data$n_status < 0 & !is.na(data$n_status), 1,
                                                       ifelse(data$testpos < 0 & !is.na(data$testpos), 1,
                                                              ifelse(data$knownpos < 0 & !is.na(data$knownpos), 1, 0))))))
-  data$impossible_cleaned <- ifelse(data$Cov > 1 & !is.na(data$Cov), 1, 
+  data$impossible_cleaned <- ifelse(data$cov > 1 & !is.na(data$cov), 1, 
                                      ifelse(data$n_status_c < (data$testneg_c + data$testpos_c + data$knownpos_c) & !is.na(data$n_status_c) & !is.na(data$testneg_c) & !is.na(data$testpos_c) & !is.na(data$knownpos_c), 1,
                                             ifelse(data$n_clients < 0 & !is.na(data$n_clients), 1,
                                                    ifelse(data$n_status_c < 0 & !is.na(data$n_status_c), 1,
@@ -166,8 +166,8 @@ quality <- function(data) {
 #'   \item \code{knownpos_c}: Cleaned \code{knownpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   }
-#' @param byregion "TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{snu1}
-#' @param bytime "TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{time}
+#' @param by_region TRUE or FALSE to indicate whether the data quality indicators be calculated stratified by \code{snu1}
+#' @param by_time TRUE or FALSE to indicate whether the data quality indicators be calculated stratified by \code{time}
 #' 
 #' @import stats
 #' 
@@ -196,13 +196,13 @@ quality <- function(data) {
 #'}
 #' @export
 
-quality_indicators <- function(data, byregion = "FALSE", bytime = "FALSE"){
-  if (byregion == "FALSE" & bytime == "FALSE"){
+quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
+  if (by_region == FALSE & by_time == FALSE){
     table <- quality(data)
     return(table)
   }
   
-  if (byregion == "TRUE" & bytime == "FALSE"){
+  if (by_region == TRUE & by_time == FALSE){
     table <- quality(data)
     table$region <- "All"
     row.names(table) <- c("Missing >=1 quarter", "Missing n_clients", "Missing n_status", "Missing testpos", "Missing testneg", "Missing knownpos", "Missing >=1 variables",
@@ -226,7 +226,7 @@ quality_indicators <- function(data, byregion = "FALSE", bytime = "FALSE"){
     return(table)
   }
 
-  if (byregion == "FALSE" & bytime == "TRUE") {
+  if (by_region == FALSE & by_time == TRUE) {
     table <- quality(data)
     table$time <- "All"
     row.names(table) <- c("Missing >=1 quarter", "Missing n_clients", "Missing n_status", "Missing testpos", "Missing testneg", "Missing knownpos", "Missing >=1 variables",
@@ -251,7 +251,7 @@ quality_indicators <- function(data, byregion = "FALSE", bytime = "FALSE"){
     return(table)
   }
   
-  if (byregion == "TRUE" & bytime == "TRUE") {
+  if (by_region == TRUE & by_time == TRUE) {
     table <- quality(data)
     table$time <- "All"
     table$region <- "All"

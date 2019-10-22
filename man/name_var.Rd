@@ -7,7 +7,7 @@
 name_var(data = NULL, faciluid = NULL, time = NULL,
   n_clients = NULL, n_status = NULL, knownpos = NULL,
   testpos = NULL, testneg = NULL, totpos = NULL, age = NULL,
-  snu1 = NULL, Year = NULL)
+  snu1 = NULL, year = NULL)
 }
 \arguments{
 \item{data}{A country-specific ANC-RT database.  The following variables must be included in \code{data}:
@@ -53,7 +53,7 @@ be automatically created by summing \code{testpos} and \code{knownpos}.}
 
 \item{snu1}{The variable name in \code{data} for the sub-national unit 1 (if available).}
 
-\item{Year}{The variable name in \code{data} for the sub-national unit 1 (if available).}
+\item{year}{The variable name in \code{data} for the sub-national unit 1 (if available).}
 }
 \value{
 The ANC-RT dataset with variables created and/or re-named, if necessary, ensuring that subsequent package functions will work.

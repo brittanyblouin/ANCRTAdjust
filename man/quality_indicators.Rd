@@ -4,7 +4,7 @@
 \alias{quality_indicators}
 \title{Data Quality Indicators}
 \usage{
-quality_indicators(data, byregion = "FALSE", bytime = "FALSE")
+quality_indicators(data, by_region = FALSE, by_time = FALSE)
 }
 \arguments{
 \item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
@@ -26,9 +26,9 @@ prepare the data for use here.  The data set must have the following variables:
   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
   }}
 
-\item{byregion}{"TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{snu1}}
+\item{by_region}{TRUE or FALSE to indicate whether the data quality indicators be calculated stratified by \code{snu1}}
 
-\item{bytime}{"TRUE" or "FALSE" to indicate whether the data quality indicators be calculated stratified by \code{time}}
+\item{by_time}{TRUE or FALSE to indicate whether the data quality indicators be calculated stratified by \code{time}}
 }
 \value{
 A table (in dataframe format) with all data quality indicators calculated for the raw and cleaned data.  If specified, data quality 

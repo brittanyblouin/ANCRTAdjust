@@ -19,25 +19,25 @@
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
 #'   \item \code{n_status}: The number of women who attended the specific facility during the specific time period for their first ANC visit and had their HIV status ascertained
 #'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.impute}: \code{n_status_c} adjusted for multiple testing using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.remove}: \code{n_status_c} adjusted for multiple testing using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.setmax}: \code{n_status_c} adjusted for multiple testing using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_impute}: \code{n_status_c} adjusted for multiple testing using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_remove}: \code{n_status_c} adjusted for multiple testing using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_setmax}: \code{n_status_c} adjusted for multiple testing using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{testpos}: The number of women who tested positive for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{testneg}: The number of women who tested negative for HIV at their first ANC visit at the specific facility during the specific time period
 #'   \item \code{knownpos}: The number of women who attended their first ANC visit at the specific facility during the specific time period with previous knowledge of being HIV positive
 #'   \item \code{totpos}: Total number of positive HIV cases 
 #'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{time}: The time period
 #'  }
-#' @param ylim.ind_min The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)
-#' @param ylim.ind_max The y-axis upper limit of the plot of the primary data quality indicators over time (default = 100)
-#' @param ylim.cov_min The y-axis lower limit of the plot of HIV testing coverage over time (default = 0)
-#' @param ylim.cov_max The y-axis upper limit of the plot of HIV testing coverage over time (default = 100)
-#' @param ylim.prev_min The y-axis lower limit of the plot of HIV prevalence over time (default = 0)
-#' @param ylim.prev_max The y-axis upper limit of the plot of HIV prevalence over time (default = 100)
+#' @param ylim_ind_min The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)
+#' @param ylim_ind_max The y-axis upper limit of the plot of the primary data quality indicators over time (default = 100)
+#' @param ylim_cov_min The y-axis lower limit of the plot of HIV testing coverage over time (default = 0)
+#' @param ylim_cov_max The y-axis upper limit of the plot of HIV testing coverage over time (default = 100)
+#' @param ylim_prv_min The y-axis lower limit of the plot of HIV prevalence over time (default = 0)
+#' @param ylim_prv_max The y-axis upper limit of the plot of HIV prevalence over time (default = 100)
 #' @param plot_type The plots included in the final plot.  Options include:
 #'  \itemize{
 #'   \item \code{full} All three plots are included (default)
@@ -58,15 +58,15 @@
 #'
 #' @export
 
-descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.cov_min = 0, ylim.cov_max = 100, 
-                              ylim.prev_min = 0, ylim.prev_max = 100, plot_type = "full"){
+descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_cov_min = 0, ylim_cov_max = 100, 
+                              ylim_prv_min = 0, ylim_prv_max = 100, plot_type = "full"){
 
   data$totpos_raw <- ifelse(!is.na(data$knownpos) & !is.na(data$testpos), data$knownpos + data$testpos, 
                             data$totpos)
   
   primary_indicators <- function(data) {
-    data$Cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
-    data$impossible_raw <- ifelse(data$Cov_raw > 1 & !is.na(data$Cov_raw), 1,
+    data$cov_raw <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), (data$n_status / data$n_clients), NA)
+    data$impossible_raw <- ifelse(data$cov_raw > 1 & !is.na(data$cov_raw), 1,
                                   ifelse(data$n_status < (data$testneg + data$testpos + data$knownpos) &
                                            !is.na(data$n_status) & !is.na(data$testneg) & !is.na(data$testpos) & !is.na(data$knownpos), 1,
                                          ifelse(data$n_clients < 0 & !is.na(data$n_clients), 1,
@@ -86,48 +86,48 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
   
   indicators <- plyr::ddply(data, "time", primary_indicators)
 
-  coverages <- function(data){
-    coverage_raw <- (weighted.mean(data$n_status/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage <- (weighted.mean(data$n_status_c/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.impute <- (weighted.mean(data$n_status_c.impute/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.remove <- (weighted.mean(data$n_status_c.remove/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage.setmax <- (weighted.mean(data$n_status_c.setmax/data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    results <- cbind (coverage_raw, coverage, coverage.impute, coverage.remove, coverage.setmax)
+  coverages <- function(data) {
+    coverage_raw <- (weighted.mean(data$n_status / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage <- (weighted.mean(data$n_status_c / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage_impute <- (weighted.mean(data$n_status_c_impute/  data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage_remove <- (weighted.mean(data$n_status_c_remove / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage_setmax <- (weighted.mean(data$n_status_c_setmax / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    results <- cbind (coverage_raw, coverage, coverage_impute, coverage_remove, coverage_setmax)
     return(results)
   }
   coverages <- plyr::ddply(data, "time", coverages)
-  coverages$dif_raw.clean <- abs(coverages$coverage_raw - coverages$coverage)
-  coverages$dif_1.2 <- abs(coverages$coverage - coverages$coverage.impute)
-  coverages$dif_1.3 <- abs(coverages$coverage - coverages$coverage.remove)
-  coverages$dif_1.4 <- abs(coverages$coverage - coverages$coverage.setmax)
-  coverages$dif_2.3 <- abs(coverages$coverage.impute - coverages$coverage.remove)
-  coverages$dif_2.4 <- abs(coverages$coverage.impute - coverages$coverage.setmax)
-  coverages$dif_3.4 <- abs(coverages$coverage.remove - coverages$coverage.setmax)
+  coverages$dif_raw_clean <- abs(coverages$coverage_raw - coverages$coverage)
+  coverages$dif_1.2 <- abs(coverages$coverage - coverages$coverage_impute)
+  coverages$dif_1.3 <- abs(coverages$coverage - coverages$coverage_remove)
+  coverages$dif_1.4 <- abs(coverages$coverage - coverages$coverage_setmax)
+  coverages$dif_2.3 <- abs(coverages$coverage_impute - coverages$coverage_remove)
+  coverages$dif_2.4 <- abs(coverages$coverage_impute - coverages$coverage_setmax)
+  coverages$dif_3.4 <- abs(coverages$coverage_remove - coverages$coverage_setmax)
   coverages$dif_adj <- pmax(coverages$dif_1.2, coverages$dif_1.3, coverages$dif_1.4, 
                             coverages$dif_2.3, coverages$dif_2.4, coverages$dif_3.4, na.rm = TRUE)
-  coverage_raw.clean <- round(mean(coverages$dif_raw.clean, na.rm = TRUE), 3)
+  coverage_raw_clean <- round(mean(coverages$dif_raw_clean, na.rm = TRUE), 3)
   coverage_adjs <- round(mean(coverages$dif_adj, na.rm = TRUE), 3)
   
-  HIVprevs <- function(data){
-    prev_raw <- (weighted.mean((data$totpos_raw) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100
-    prev <- (weighted.mean((data$totpos_c) / data$n_status_c, w = data$n_status_c, na.rm = TRUE)) * 100
-    prev.impute <- (weighted.mean((data$totpos_c.impute) / data$n_status_c.impute, w = data$n_status_c.impute, na.rm = TRUE)) * 100
-    prev.remove <- (weighted.mean((data$totpos_c.remove) / data$n_status_c.remove, w = data$n_status_c.remove, na.rm = TRUE)) * 100
-    prev.setmax <- (weighted.mean((data$totpos_c.setmax) / data$n_status_c.setmax, w = data$n_status_c.setmax, na.rm = TRUE)) * 100
-    HIVprevs <- cbind(prev_raw, prev, prev.impute, prev.remove, prev.setmax)
-    return(HIVprevs)
+  hiv_prvs <- function(data) {
+    prv_raw <- (weighted.mean((data$totpos_raw) / data$n_status, w = data$n_status, na.rm = TRUE)) * 100
+    prv <- (weighted.mean((data$totpos_c) / data$n_status_c, w = data$n_status_c, na.rm = TRUE)) * 100
+    prv_impute <- (weighted.mean((data$totpos_c_impute) / data$n_status_c_impute, w = data$n_status_c_impute, na.rm = TRUE)) * 100
+    prv_remove <- (weighted.mean((data$totpos_c_remove) / data$n_status_c_remove, w = data$n_status_c_remove, na.rm = TRUE)) * 100
+    prv_setmax <- (weighted.mean((data$totpos_c_setmax) / data$n_status_c_setmax, w = data$n_status_c_setmax, na.rm = TRUE)) * 100
+    hiv_prvs <- cbind(prv_raw, prv, prv_impute, prv_remove, prv_setmax)
+    return(hiv_prvs)
   }
-  prevalences <- plyr::ddply(data, "time", HIVprevs)
-  prevalences$dif_raw.clean <- abs(prevalences$prev_raw - prevalences$prev)
-  prevalences$dif_1.2 <- abs(prevalences$prev - prevalences$prev.impute)
-  prevalences$dif_1.3 <- abs(prevalences$prev - prevalences$prev.remove)
-  prevalences$dif_1.4 <- abs(prevalences$prev - prevalences$prev.setmax)
-  prevalences$dif_2.3 <- abs(prevalences$prev.impute - prevalences$prev.remove)
-  prevalences$dif_2.4 <- abs(prevalences$prev.impute - prevalences$prev.setmax)
-  prevalences$dif_3.4 <- abs(prevalences$prev.remove - prevalences$prev.setmax)
+  prevalences <- plyr::ddply(data, "time", hiv_prvs)
+  prevalences$dif_raw_clean <- abs(prevalences$prv_raw - prevalences$prv)
+  prevalences$dif_1.2 <- abs(prevalences$prv - prevalences$prv_impute)
+  prevalences$dif_1.3 <- abs(prevalences$prv - prevalences$prv_remove)
+  prevalences$dif_1.4 <- abs(prevalences$prv - prevalences$prv_setmax)
+  prevalences$dif_2.3 <- abs(prevalences$prv_impute - prevalences$prv_remove)
+  prevalences$dif_2.4 <- abs(prevalences$prv_impute - prevalences$prv_setmax)
+  prevalences$dif_3.4 <- abs(prevalences$prv_remove - prevalences$prv_setmax)
   prevalences$dif_adj <- pmax(prevalences$dif_1.2, prevalences$dif_1.3, prevalences$dif_1.4, 
                               prevalences$dif_2.3, prevalences$dif_2.4, prevalences$dif_3.4, na.rm = TRUE)
-  prev_raw.clean <- round(mean(prevalences$dif_raw.clean, na.rm = TRUE), 3)
+  prev_raw_clean <- round(mean(prevalences$dif_raw_clean, na.rm = TRUE), 3)
   prev_adjs <- round(mean(prevalences$dif_adj, na.rm = TRUE), 3)
  
   #########
@@ -141,7 +141,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
     geom_point(aes(y = missingdata_cleaned, color = "Missing data in cleaned data")) +
     xlab("") +
     ylab("% facilities with data \n quality problem") +
-    ylim(c(ylim.ind_min, ylim.ind_max)) +
+    ylim(c(ylim_ind_min, ylim_ind_max)) +
     theme(axis.title.y = element_text(size = 9)) +
     scale_colour_manual(name = "",
                         values = c("Invalid values in raw data" = "orange", "Missing data in cleaned data" = "lightcoral")) +
@@ -151,16 +151,16 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
   coverage_plot <-
     ggplot(coverages, aes(time)) +
     geom_line(aes(y = coverage, color = "Cleaned data"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = coverage, color = "Cleaned data"), position=position_jitter(width = 0.02, height = 0)) +
-    geom_line(aes(y = coverage.impute, color = "Impute option"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = coverage.impute, color = "Impute option")) +
-    geom_line(aes(y = coverage.setmax, color = "Set to maximum option         "), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = coverage.setmax, color = "Set to maximum option         ")) +
-    geom_line(aes(y = coverage.remove, color = "Remove option"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = coverage.remove, color = "Remove option")) +
+    geom_point(aes(y = coverage, color = "Cleaned data"), position = position_jitter(width = 0.02, height = 0)) +
+    geom_line(aes(y = coverage_impute, color = "Impute option"), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = coverage_impute, color = "Impute option")) +
+    geom_line(aes(y = coverage_setmax, color = "Set to maximum option         "), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = coverage_setmax, color = "Set to maximum option         ")) +
+    geom_line(aes(y = coverage_remove, color = "Remove option"), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = coverage_remove, color = "Remove option")) +
     geom_line(aes(y = coverage_raw, color = "Raw data"), size = 1) + 
     geom_point(aes(y = coverage_raw, color = "Raw data")) +
-    ylim(c(ylim.cov_min, ylim.cov_max)) +
+    ylim(c(ylim_cov_min, ylim_cov_max)) +
     xlab("") +
     ylab("HIV testing coverage \n (%)") +
     theme(axis.title.y = element_text(size = 9)) +
@@ -172,19 +172,19 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
   
   prevalence_plot <-
     ggplot(prevalences, aes(time)) +
-    geom_line(aes(y = prev, color = "Cleaned data"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = prev, color = "Cleaned data"), position=position_jitter(width = 0.02, height = 0)) +
-    geom_line(aes(y = prev.impute, color = "Impute option"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = prev.impute, color = "Impute option")) +
-    geom_line(aes(y = prev.setmax, color = "Set to maximum option         "), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = prev.setmax, color = "Set to maximum option         ")) +
-    geom_line(aes(y = prev.remove, color = "Remove option"), linetype = "dashed", size = 1) + 
-    geom_point(aes(y = prev.remove, color = "Remove option")) +
-    geom_line(aes(y = prev_raw, color = "Raw data"), size = 1) + 
-    geom_point(aes(y = prev_raw, color = "Raw data")) +
+    geom_line(aes(y = prv, color = "Cleaned data"), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = prv, color = "Cleaned data"), position = position_jitter(width = 0.02, height = 0)) +
+    geom_line(aes(y = prv_impute, color = "Impute option"), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = prv_impute, color = "Impute option")) +
+    geom_line(aes(y = prv_setmax, color = "Set to maximum option         "), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = prv_setmax, color = "Set to maximum option         ")) +
+    geom_line(aes(y = prv_remove, color = "Remove option"), linetype = "dashed", size = 1) + 
+    geom_point(aes(y = prv_remove, color = "Remove option")) +
+    geom_line(aes(y = prv_raw, color = "Raw data"), size = 1) + 
+    geom_point(aes(y = prv_raw, color = "Raw data")) +
     xlab("Time") +
     ylab("HIV prevalence \n (%)") +
-    ylim(c(ylim.prev_min, ylim.prev_max)) +
+    ylim(c(ylim_prv_min, ylim_prv_max)) +
     theme(axis.title.y = element_text(size = 9)) +
     scale_colour_manual(name = "",
                       values = c("Raw data" = "red", "Cleaned data" = "darkgoldenrod4",
@@ -196,12 +196,12 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
      return(finalplot1)
    }
 
-   if(plot_type == "prev_cov"){
+   if(plot_type == "prv_cov"){
      finalplot2 <- ggpubr::ggarrange(coverage_plot, prevalence_plot, ncol = 1, nrow = 2, legend = "right")
      return(finalplot2)
    }
 
-   if(plot_type == "prev_ind"){
+   if(plot_type == "prv_ind"){
      finalplot3 <- ggpubr::ggarrange(indicator_plot, prevalence_plot, ncol = 1, nrow = 2, legend = "right")
      return(finalplot3)
    }
@@ -211,7 +211,7 @@ descriptive_plot <- function (data, ylim.ind_min = 0, ylim.ind_max = 100, ylim.c
      return(finalplot4)
    }
 
-   if(plot_type == "prev"){
+   if(plot_type == "prv"){
      finalplot5 <- prevalence_plot
      return(finalplot5)
    }

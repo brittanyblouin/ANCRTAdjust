@@ -39,7 +39,7 @@
 #' be automatically created by summing \code{testpos} and \code{knownpos}.
 #' @param age The variable name in \code{data} for the age category of pregnant women (if available).
 #' @param snu1 The variable name in \code{data} for the sub-national unit 1 (if available).
-#' @param Year The variable name in \code{data} for the sub-national unit 1 (if available).
+#' @param year The variable name in \code{data} for the sub-national unit 1 (if available).
 #'
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
@@ -49,7 +49,7 @@
 #' @export
 
 name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL, n_status = NULL, 
-                     knownpos = NULL, testpos = NULL, testneg = NULL, totpos = NULL, age = NULL, snu1 = NULL, Year = NULL) {
+                     knownpos = NULL, testpos = NULL, testneg = NULL, totpos = NULL, age = NULL, snu1 = NULL, year = NULL) {
   
   # verifying inputs
   if (is.null(data)) { stop('Provide input data') }
@@ -89,7 +89,7 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   if (length(names(data)[names(data) == totpos]) == 0 & !is.null(totpos)) { stop("totpos's name not recognized in data") }
   if (length(names(data)[names(data) == age]) == 0 & !is.null(age)) { stop("age's name not recognized in data") }
   if (length(names(data)[names(data) == snu1]) == 0 & !is.null(snu1)) { stop("snu1's name not recognized in data") }
-  if (length(names(data)[names(data) == Year]) == 0 & !is.null(Year)) { stop("Year's name not recognized in data") }
+  if (length(names(data)[names(data) == year]) == 0 & !is.null(year)) { stop("Year's name not recognized in data") }
   
 
   # chaging names
@@ -103,11 +103,11 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   names(data)[names(data) == totpos] <- "totpos"
   names(data)[names(data) == age] <- "age"
   names(data)[names(data) == snu1] <- "snu1"
-  names(data)[names(data) == Year] <- "Year"
+  names(data)[names(data) == year] <- "year"
   
   
   if (is.null(totpos)) { data$totpos <- data$testpos + data$knownpos }
-  if (!is.numeric(data$time)) { warning("The 'time' variable is not numeric.  For all functions in the R package 'ANCRTAdjust' 
+  if (!is.numeric(data$time)) { warning("The 'time' variable is not numeric. For all functions in the R package 'ANCRTAdjust' 
                                    to work properly, please create a numeric 'time' variable.")}
   
   return(data)

@@ -10,13 +10,13 @@
 #' prepare the data for use here.  The data set must have the following variables:
 #'  \itemize{
 #'   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.impute}: \code{n_status_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.remove}: \code{n_status_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{n_status_c.setmax}: \code{n_status_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_impute}: \code{n_status_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_remove}: \code{n_status_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{n_status_c_setmax}: \code{n_status_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.impute}: \code{totpos_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.remove}: \code{totpos_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-#'   \item \code{totpos_c.setmax}: \code{totpos_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_impute}: \code{totpos_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_remove}: \code{totpos_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+#'   \item \code{totpos_c_setmax}: \code{totpos_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{n_clients}: The number of women who attended the facility during the time period
 #'   }
 #' @param adjust_option The adjustment option chosen.  Possible options include:
@@ -31,7 +31,7 @@
 #' @author Brittany Blouin
 #'
 #' @return A data set with the variables \code{n_status_c} and \code{totpos_c}, adjusted for multiple testing using the selected adjustment option, is returned.  The 
-#' adjustment option variables (e.g. \code{n_status_c.impute}, \code{n_status_c.remove}, \code{totpos_c.impute}, etc.) are removed from the dataset.  Coverage and prevalence
+#' adjustment option variables (e.g. \code{n_status_c_impute}, \code{n_status_c_remove}, \code{totpos_c_impute}, etc.) are removed from the dataset.  Coverage and prevalence
 #' (for each facility-time period) are calculated using the newly adjusted variables.
 #'
 #' @export
@@ -39,34 +39,34 @@
 mt_adjust <- function(data, adjust_option) {
   
   if (adjust_option == "impute") {
-    data$n_status_c <- data$n_status_c.impute
-    data$totpos_c <- data$totpos_c.impute
-    data$n_status_c.impute <- data$n_status_c.remove <- data$n_status_c.setmax <- NULL
-    data$totpos_c.impute <- data$totpos_c.remove <- data$totpos_c.setmax <- NULL
+    data$n_status_c <- data$n_status_c_impute
+    data$totpos_c <- data$totpos_c_impute
+    data$n_status_c_impute <- data$n_status_c_remove <- data$n_status_c_setmax <- NULL
+    data$totpos_c_impute <- data$totpos_c_remove <- data$totpos_c_setmax <- NULL
     
   }
   
   if (adjust_option == "remove") {
-    data$n_status_c <- data$n_status_c.remove
-    data$totpos_c <- data$totpos_c.remove
-    data$n_status_c.impute <- data$n_status_c.remove <- data$n_status_c.setmax <- NULL
-    data$totpos_c.impute <- data$totpos_c.remove <- data$totpos_c.setmax <- NULL
+    data$n_status_c <- data$n_status_c_remove
+    data$totpos_c <- data$totpos_c_remove
+    data$n_status_c_impute <- data$n_status_c_remove <- data$n_status_c_setmax <- NULL
+    data$totpos_c_impute <- data$totpos_c_remove <- data$totpos_c_setmax <- NULL
   }
   
   if (adjust_option == "setmax") {
-    data$n_status_c <- data$n_status_c.setmax
-    data$totpos_c <- data$totpos_c.setmax
-    data$n_status_c.impute <- data$n_status_c.remove <- data$n_status_c.setmax <- NULL
-    data$totpos_c.impute <- data$totpos_c.remove <- data$totpos_c.setmax <- NULL
+    data$n_status_c <- data$n_status_c_setmax
+    data$totpos_c <- data$totpos_c_setmax
+    data$n_status_c_impute <- data$n_status_c_remove <- data$n_status_c_setmax <- NULL
+    data$totpos_c_impute <- data$totpos_c_remove <- data$totpos_c_setmax <- NULL
   }
   
   if (adjust_option == "none") {
-    data$n_status_c.impute <- data$n_status_c.remove <- data$n_status_c.setmax <- NULL
-    data$totpos_c.impute <- data$totpos_c.remove <- data$totpos_c.setmax <- NULL
+    data$n_status_c_impute <- data$n_status_c_remove <- data$n_status_c_setmax <- NULL
+    data$totpos_c_impute <- data$totpos_c_remove <- data$totpos_c_setmax <- NULL
   }
   
-  data$Cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), data$n_status_c / data$n_clients, NA)
-  data$Prv <- ifelse(data$n_status_c > 0 & !is.na(data$n_status_c), data$totpos_c / data$n_status_c, NA)
+  data$cov <- ifelse(data$n_clients > 0 & !is.na(data$n_clients), data$n_status_c / data$n_clients, NA)
+  data$prv <- ifelse(data$n_status_c > 0 & !is.na(data$n_status_c), data$totpos_c / data$n_status_c, NA)
   
   return(data)
 }

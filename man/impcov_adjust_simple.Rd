@@ -4,13 +4,13 @@
 \alias{impcov_adjust_simple}
 \title{Adjustment for imperfect HIV testing coverage}
 \usage{
-impcov_adjust_simple(HIVprev, HIVcov)
+impcov_adjust_simple(hiv_prv, hiv_cov)
 }
 \arguments{
-\item{HIVprev}{The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+\item{hiv_prv}{The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment 
 for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.}
 
-\item{HIVcov}{The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment 
+\item{hiv_cov}{The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment 
 for multiple testing and/or adjustment for missing reporting periods).  This MUST be input as a proportion, between 0-1.}
 }
 \value{

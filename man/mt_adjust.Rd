@@ -11,13 +11,13 @@ mt_adjust(data, adjust_option)
 prepare the data for use here.  The data set must have the following variables:
  \itemize{
   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{n_status_c.impute}: \code{n_status_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{n_status_c.remove}: \code{n_status_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{n_status_c.setmax}: \code{n_status_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{n_status_c_impute}: \code{n_status_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{n_status_c_remove}: \code{n_status_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{n_status_c_setmax}: \code{n_status_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{totpos_c}: Cleaned \code{totpos} (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{totpos_c.impute}: \code{totpos_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{totpos_c.remove}: \code{totpos_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
-  \item \code{totpos_c.setmax}: \code{totpos_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{totpos_c_impute}: \code{totpos_c} adjusted using the impute adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{totpos_c_remove}: \code{totpos_c} adjusted using the remove adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
+  \item \code{totpos_c_setmax}: \code{totpos_c} adjusted using the set to maximum adjustment option (generated using the \link[ANCRTAdjust]{data_clean} function)
   \item \code{n_clients}: The number of women who attended the facility during the time period
   }}
 
@@ -32,7 +32,7 @@ prepare the data for use here.  The data set must have the following variables:
 }
 \value{
 A data set with the variables \code{n_status_c} and \code{totpos_c}, adjusted for multiple testing using the selected adjustment option, is returned.  The 
-adjustment option variables (e.g. \code{n_status_c.impute}, \code{n_status_c.remove}, \code{totpos_c.impute}, etc.) are removed from the dataset.  Coverage and prevalence
+adjustment option variables (e.g. \code{n_status_c_impute}, \code{n_status_c_remove}, \code{totpos_c_impute}, etc.) are removed from the dataset.  Coverage and prevalence
 (for each facility-time period) are calculated using the newly adjusted variables.
 }
 \description{

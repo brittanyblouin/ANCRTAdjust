@@ -31,20 +31,20 @@ A cleaned ANC-RT database with additional variables:
   \item \code{testpos_c}: Cleaned \code{testpos} (according to description)
   \item \code{knownpos_c}: Cleaned \code{knownpos} (according to description)
   \item \code{n_status_c}: Cleaned \code{n_status} (according to description)
-  \item \code{n_status_c.impute}:  Adjusted \code{n_status_c} using the impute adjustment option for multiple testing
-  \item \code{n_status_c.remove}:  Adjusted \code{n_status_c} using the remove adjustment option for multiple testing
-  \item \code{n_status_c.setmax}:  Adjusted \code{n_status_c} using the set to maximum adjustment option for multiple testing
+  \item \code{n_status_c_impute}:  Adjusted \code{n_status_c} using the impute adjustment option for multiple testing
+  \item \code{n_status_c_remove}:  Adjusted \code{n_status_c} using the remove adjustment option for multiple testing
+  \item \code{n_status_c_setmax}:  Adjusted \code{n_status_c} using the set to maximum adjustment option for multiple testing
   \item \code{totpos_c}: Cleaned \code{totpos} (according to description)
-  \item \code{totpos_c.impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used
-  \item \code{totpos_c.remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used
-  \item \code{totpos_c.setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used
+  \item \code{totpos_c_impute}: Adjusted \code{totpos_c} if the impute adjustment option for multiple testing is used
+  \item \code{totpos_c_remove}: Adjusted \code{totpos_c} if the remove adjustment option for multiple testing is used
+  \item \code{totpos_c_setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used
  }
 }
 \description{
 Cleans ANC-RT data so that it can be used with other functions in the \code{ANCRTAdjust} package.
 }
 \details{
-This function has been developed to clean common issues asoociated with ANC-RT data.  The following tasks
+This function has been developed to clean common issues asoociated with ANC-RT data. The following tasks
 are accomplished:
  \itemize{
    \item Age disaggregated data is removed (if applicable).
@@ -57,16 +57,16 @@ are accomplished:
    missing but \code{totpos} is available, \code{totpos_c} is set to \code{totpos}.  If \code{totpos_c} is missing but \code{n_status_c} and \code{testneg_c} are available, \code{totpos_c} = \code{n_status_c} - \code{testneg_c}. 
    \item The three suggested \code{n_status_c} adjustments are created in the case that \code{n_status_c} > \code{n_clients}:
    \itemize{
-     \item \code{n_status_c.impute} uses the impute adjustment option
-     \item \code{n_status_c.remove} uses the remove adjustment option
-     \item \code{n_status_c.setmax} uses the set to maximum adjustment option
+     \item \code{n_status_c_impute} uses the impute adjustment option
+     \item \code{n_status_c_remove} uses the remove adjustment option
+     \item \code{n_status_c_setmax} uses the set to maximum adjustment option
      }
    \item \code{totpos_c} is adjusted if \code{totpos_c} > \code{n_status_c}:
      \itemize{
        \item \code{totpos_c}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c}
-       \item \code{totpos_c.impute}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.impute}
-       \item \code{totpos_c.remove}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.remove}
-       \item \code{totpos_c.setmax}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c.setmax}
+       \item \code{totpos_c_impute}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c_impute}
+       \item \code{totpos_c_remove}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c_remove}
+       \item \code{totpos_c_setmax}: \code{totpos_c} is set to missing when \code{totpos_c} > \code{n_status_c_setmax}
        }
    \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time}).
   }

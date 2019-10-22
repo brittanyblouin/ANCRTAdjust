@@ -22,4 +22,4 @@ Imports:
     ggplot2,
     grid,
     stringr,
-    ggpubr
+    plyr

@@ -4,15 +4,20 @@
 \alias{impcov_adjust}
 \title{Adjustment for imperfect HIV testing coverage}
 \usage{
-impcov_adjust(data)
+impcov_adjust(data = NULL, hiv_prv_point = NULL,
+  hiv_cov_point = NULL)
 }
 \arguments{
-\item{data}{The dataframe output from either the \link[ANCRTAdjust]{HIV_prev_cov} function (if adjustment for missing reporting periods is not being performed)
-or the \link[ANCRTAdjust]{HIVprev_ipcw} function (if adjustment for missing reporting periods is also being performed).  The required variables include:
+\item{data}{The dataframe output from either the \link[ANCRTAdjust]{hiv_prv_cov} function (if adjustment for missing reporting periods is not being performed)
+or the \link[ANCRTAdjust]{hiv_prv_ipcw} function (if adjustment for missing reporting periods is also being performed).  The required variables include:
 \itemize{
-  \item \code{HIVprev}: The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment for multiple testing and/or adjustment for missing reporting periods)
-  \item \code{HIVcov}: The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment for multiple testing and/or adjustment for missing reporting periods)
+  \item \code{hiv_prv}: The HIV prevalence adjusted for all previous adjustments (e.g. data cleaning, adjustment for multiple testing and/or adjustment for missing reporting periods)
+  \item \code{hiv_cov}: The HIV testing coverage adjusted for all previous adjustments (e.g. data cleaning, adjustment for multiple testing and/or adjustment for missing reporting periods)
   }}
+
+\item{hiv_prv_point}{Optional argument if \code{data} is not supplied. if The HIV prevalence estimates to be adjuted for. This MUST be input as a perecentage, between between >0 and 1.}
+
+\item{hiv_cov_point}{Optional argument if \code{data} is not supplied.The HIV testing coverage. This MUST be input as a proportion, between >0 and 1.}
 }
 \value{
 A dataframe including the original input data with an additional column, \code{Adjusted_prev}, for the HIV prevalence adjusted for imperfect HIV testing coverage.
@@ -23,7 +28,7 @@ Adjusts the HIV prevalence for imperfect HIV testing coverage
 \details{
 This function was designed to adjust HIV prevalence when HIV testing coverage is less than 100\%.  A dataframe with one or many HIV prevalence
 and HIV testing coverage estimates is input and all prevalence estimates are adjusted for imperfect HIV testing coverage.  This means that if the input data is stratified by 
-\code{time}, \code{period}, and/or \code{Year}, the adjustment will also be stratifed by the same variable(s).
+\code{time}, \code{period}, and/or \code{year}, the adjustment will also be stratifed by the same variable(s). Alternatively, one can supply only point estimates of both HIV prevalence and HIV testing coverage and obtain the adjusted prevalence estimate.
 }
 \author{
 Mathieu Maheu-Giroux

@@ -107,7 +107,7 @@ It is important to assess the quality of the data.  Specifically, missing data a
 The data quality indicators can be calculated for the entire country dataset or stratified by region and/or time period (see `help(quality_indicators)` for more information).
 
 ``` r
-ancrt_quality <- quality_indicators(ancrt_cleaned, byregion = FALSE, bytime = FALSE)
+ancrt_quality <- quality_indicators(ancrt_cleaned, by_region = FALSE, by_time = FALSE)
 ```
 ```r
 > ancrt_quality
@@ -135,7 +135,7 @@ Adjusting HIV testing coverage
 It is possible that testing coverage is higher than 100% if, following a first HIV negative test, subsequent tests at ANC visits are included (i.e. multiple testing). The `mt_adjust()` function can be used to adjust for this. There are three 3 different adjustment options. Consult the help file for more information by typing `help(mt_adjust)` in your console.
 
 ``` r
-ancrt_cleaned <- mt_adjust(ancrt_cleaned, adjust_option = 'setmax')
+ancrt_cleaned <- mt_adjust(ancrt_cleaned, adjust_option = "setmax")
 ``` 
 
 Flagging outliers
@@ -143,7 +143,7 @@ Flagging outliers
 It is possible that errors exist in the data and these may be detected by investigating outlier observations.  The function `flag_outliers()` will flag outliers for the variables `n_clients`, `n_status_c`, `testpos_c`, `testneg_c`, `knownpos_c`, `totpos_c`, `prv` and `cov`.  Outliers are defined as being more than two standard deviations greater than or less than the mean value.  The mean reference to which observations are compared can either be the facility-specific mean, the subnational unit 1-specific mean or the country-specific mean, according to user inputs.  The flagged data can either be output as the full dataset with additional variables indicating outlier observations, or a dataset that only includes data for outlier observations.  See `help(flag_outliers)` for more information.
 
 ``` r
-outliers <- flag_outliers(ancrt_cleaned, flagby = "facility", result = "outliers")
+outliers <- flag_outliers(ancrt_cleaned, flag_by = "facility", result = "outliers")
 ``` 
 
 ``` r
@@ -162,7 +162,7 @@ Calculating HIV prevalence and HIV testing coverage
 The function `HIV_prev_cov()`  will calculate the raw HIV prevalence, the HIV prevalence adjusted for previous adjustments, and the HIV testing coverage.  Note that these estimates are not adjusted for missing reporting periods or imperfect HIV testing coverage.  Results can be calculated stratified by the subnational unit 1, the reporting period or the year according to user inputs (see `help(HIV_prev_cov)` for more information).
 
 ```r
-> HIV_prev_cov(ancrt_cleaned, by_period = "FALSE", by_snu1 = "FALSE", by_year = "FALSE")
+> HIV_prev_cov(ancrt_cleaned, by_period = FALSE, by_snu1 = FALSE, by_year = FALSE)
   snu1 hiv_raw hiv_prv hiv_cov
 1  All  17.07   17.11  95.55
 ```
@@ -172,25 +172,25 @@ Calculating HIV prevalence adjusted for missing reporting periods
 In the event that some facilities did not report data at certain time periods, the function `hiv_prv_ipcw()` can be used to adjust the HIV prevalence and HIV testing coverage for missing reporting periods (thereby reducing a possible selection bias) using inverse probability of censoring weighting.  Results can be calculated stratified by the subnational unit 1, the reporting period or the year according to user inputs (see `help(hiv_prv_cov)` for more information).
 
 ```r
-> HIVprev_ipcw(ancrt_cleaned)
+> hiv_prv_ipcw(ancrt_cleaned)
   snu1 hiv_raw hiv_prv hiv_cov
-1  All  17.07   17.11  95.55
+1  all  17.07   17.11  95.55
 ```
 
 Adjusting HIV prevalence for imperfect testing coverage
 -------------------------------------------------------
-It has been found that selection bias can be introduced into HIV prevalence estimates due to imperfect HIV testing coverage (i.e. < 100% coverage).  This bias can be adjusted for using either the `impcov_adjust_simple()` function or the `impcov_adjust` function.  If data cleaning, adjustment for multiple testing and adjustment for missing reporting periods is also being performed, the `data_clean()`, `mt_adjust()` and `hiv_prv_ipcw()` functions must be run prior to this adjustment.  To use the `impcov_adjust_simple()` function, simply entre the HIV prevalence and HIV testing coverage and the adjusted prevalence will be output.
+It has been found that selection bias can be introduced into HIV prevalence estimates due to imperfect HIV testing coverage (i.e. < 100% coverage).  This bias can be adjusted for using either the `impcov_adjust_simple()` function or the `impcov_adjust` function.  If data cleaning, adjustment for multiple testing and adjustment for missing reporting periods is also being performed, the `data_clean()`, `mt_adjust()` and `hiv_prv_ipcw()` functions must be run prior to this adjustment.  To use the `impcov_adjust()` function, simply enter the point estimate for HIV prevalence and HIV testing coverage and the adjusted prevalence will be outputed.
 
 ```r
-> impcov_adjust_simple(0.1711, 0.9555)
+> impcov_adjust(hiv_prv_point = 0.1711, hiv_cov_point = 0.9555)
 [1] 0.170163
 ```
 
-To use the `impcov_adjust()` function, input the dataframe that was output from either the `hiv_prev_cov()` function (if results are not to be adjusted for missing reporting periods) or the `hiv_prv_ipcw()` function (if results are also to be adjusted for missing reporting periods).  If results were reported stratified by the subnational unit 1, the reporting period and/or the year in `hiv_prv_cov()` or `hiv_prv_ipcw()`, the adjustment for imperfect testing coverage will also be made strafied by the same variable(s).  See `help(impcov_adjust)` for more information.
+To use the `impcov_adjust()` function on a dataframe from either the  `hiv_prev_cov()` function (if results are not to be adjusted for missing reporting periods) or the `hiv_prv_ipcw()` function (if results are also to be adjusted for missing reporting periods).  If results were reported stratified by the subnational unit 1, the reporting period and/or the year in `hiv_prv_cov()` or `hiv_prv_ipcw()`, the adjustment for imperfect testing coverage will also be made strafied by the same variable(s).  See `help(impcov_adjust)` for more information.
 
 ```r
-> prv_cov <- HIV_prev_cov(ancrt_cleaned, by_snu1 = "TRUE", by_period = "FALSE", by_year = "FALSE")
-> results <- impcov_adjust(prv_cov)
+> prv_cov <- hiv_prv_cov(ancrt_cleaned, by_snu1 = TRUE, by_period = FALSE, by_year = FALSE)
+> results <- impcov_adjust(data = prv_cov)
 ```
 
 ```r
@@ -203,12 +203,12 @@ To use the `impcov_adjust()` function, input the dataframe that was output from 
 
 Plotting raw and adjusted HIV prevalence over time
 --------------------------------------------------
-It can be useful to compare the raw HIV prevalence to the fully adjusted HIV prevalence (following data cleaning, adjustment for multiple testing, adjustment for missing reporting periods and adjustment for imperfect HIV testing coverage).  The easiest way to compare these is by plotting the raw and fully adjusted HIV prevalence over time.  The function `plot_rawadjusted()` will perform this task.  This function requires that you input the dataframe output by `impcov_adjust()` and that the results be stratifed by reporting period or year.  Therefore, `byperiod = TRUE` or `byyear = TRUE` must be specified in the `HIV_prev_cov()` or `HIVprev_ipcw()` function, prior to running the `impcov_adjust()` function.  See `help(plot_rawadjusted)` for more information.
+It can be useful to compare the raw HIV prevalence to the fully adjusted HIV prevalence (following data cleaning, adjustment for multiple testing, adjustment for missing reporting periods and adjustment for imperfect HIV testing coverage).  The easiest way to compare these is by plotting the raw and fully adjusted HIV prevalence over time.  The function `plot_rawadjusted()` will perform this task.  This function requires that you input the dataframe output by `impcov_adjust()` and that the results be stratifed by reporting period or year.  Therefore, `byperiod = TRUE` or `byyear = TRUE` must be specified in the `hiv_prv_cov()` or `hiv_prv_ipcw()` function, prior to running the `impcov_adjust()` function.  See `help(plot_rawadjusted)` for more information.
 
 ```r
-> prv_cov <- hiv_prv_ipcw(ancrt_cleaned, by_snu1 = "FALSE", by_period = "TRUE", by_year = "FALSE")
+> prv_cov <- hiv_prv_ipcw(ancrt_cleaned, by_snu1 = FALSE, by_period = TRUE, by_year = FALSE)
 > results <- impcov_adjust(prv_cov)
-> plot_rawadjusted(results, snu1 = "All", time_unit = "PERIOD", hiv_raw = "TRUE", y_lim = 40)
+> plot_rawadjusted(results, snu1 = "all", time_unit = "PERIOD", hiv_raw = TRUE, y_lim = 40)
 ```
 ![](man/figures/README-example-2.png)
 
