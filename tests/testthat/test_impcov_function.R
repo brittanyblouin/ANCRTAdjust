@@ -1,8 +1,8 @@
 context("test_impcov_function.R")
 
 
-test_adj <- impcov_adjust(hiv_prv_point = 0.4, hiv_cov_point = 0.8)
+test_adj <- ANCRTAdjust::impcov_adjust(hiv_prv_point = 40, hiv_cov_point = 80)
   
-test_that("adjustment for imprefect HIV testing coverage is accurate", {
-  expect_equal(round(test_adj, 7), 0.3878801)
+testthat::test_that("adjustment for imprefect HIV testing coverage is accurate", {
+  expect_equal(round(test_adj, 5), 38.78801)
 })

@@ -1,4 +1,1 @@
-library(testthat)
-library(ANCRTAdjust)
-
-test_check("ANCRTAdjust")
+testthat::test_check("ANCRTAdjust")
