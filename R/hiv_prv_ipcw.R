@@ -1,12 +1,12 @@
 #' Adjustment for missing reporting periods
 #'
-#' Adjusts HIV prevalence and HIV testing coverage from ANC-RT data for missing data due to facilities missing reporting periods
-#'
+#' Adjusts HIV prevalence and HIV testing coverage from ANC-RT data for missing data due to facilities missing reporting periods. 
 #' This function has been developed to adjust HIV prevalence and HIV testing coverage from ANC-RT data for missing reporting periods within a facility.
-#' Inverse probability of censoring weighting is used to account for the missing reporting periods.  The weights are 
-#' calculated conditional on the facility.  The adjustment is only made for missing reporting periods in between the first and last 
-#' reported period in a facility to avoid adjusting for periods when the facility may have been inoperational. The adjusted HIV 
-#' prevalence and HIV testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
+#' Inverse probability of censoring weighting is used to account for the missing reporting periods. The weights are 
+#' calculated conditional on the facility. The adjustment is only made for missing reporting periods in between the first and last 
+#' reported period in a facility to avoid adjusting for periods when the facility may have been inoperational. Specifically, the weights are calculated as followed:
+#' \deqn{ w = \frac{1}{P(\text{Not being censored } | \text{ facility})}}
+#' The adjusted HIV prevalence and HIV testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, according to user inputs.
 #'
 #' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
