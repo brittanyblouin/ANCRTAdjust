@@ -1,2 +1,12 @@
 ^ANCRTAdjust\.Rproj$
 ^\.Rproj\.user$
+^\.travis\.yml$
+^paper$
+^docs$
+^data-raw$
+^\.Rproj\.user$ 
+^README\.*Rmd$
+^README\.*html$
+^cran-comments\.md$ 
+^NEWS\.md$         
+^\.travis\.yml$     
