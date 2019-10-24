@@ -6,7 +6,7 @@
 #' The HIV prevalence and testing coverage can be reported stratified by reporting period, year and/or subnational unit 1, 
 #' according to user inputs.
 #'
-#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{check_data}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here. The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women from the specified facility, during the specified time period, that attended their first ANC visit.

@@ -8,7 +8,7 @@ hiv_prv_ipcw(data, by_period = FALSE, by_snu1 = FALSE,
   by_year = FALSE)
 }
 \arguments{
-\item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+\item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{check_data}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 prepare the data for use here.  The dataset must have the following variables:
  \itemize{
   \item \code{faciluid}: Facility ID.

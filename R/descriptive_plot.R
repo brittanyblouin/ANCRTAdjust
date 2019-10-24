@@ -13,7 +13,7 @@
 #'    options for multiple testing (1. Using the impute option; 2. Using the remove option; and, 3. Using the set to maximum option).
 #'  }
 #'
-#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
+#' @param data The ANC-RT dataset. The functions \link[ANCRTAdjust]{check_data} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must include the following variables:
 #'  \itemize{
 #'   \item \code{n_clients}: The number of women who attended the specific facility during the specific time period for their first ANC visit
@@ -57,7 +57,7 @@
 #'
 #' @export
 
-descriptive_plot <- function (data, plot_type = "full") {
+descriptive_plot <- function (data, ylim_ind = NULL, ylim_cov = NULL, ylim_prv = NULL, plot_type = "full") {
   
   if (is.null(data$n_status_c)) {
     stop("Error: please use the data_clean() function prior to producing descriptive plots")
@@ -148,7 +148,8 @@ descriptive_plot <- function (data, plot_type = "full") {
     scale_colour_manual(name = "",
                         values = c("Invalid values in raw data" = "orange", "Missing data in cleaned data" = "lightcoral")) +
     geom_abline(aes(intercept = 10, slope = 0), linetype = "dashed")
-  if (exists("ylim_ind")) { 
+  if (!is.null(ylim_ind)) { 
+    if (length(ylim_ind) != 2) { stop('Please provide both the lower and upper limit of the y-axis') }
     indicator_plot <- indicator_plot + ylim(ylim_ind) }
   
   time <- coverage <- coverage_impute <- coverage_setmax <- coverage_remove <- coverage_raw <- NULL
@@ -171,7 +172,8 @@ descriptive_plot <- function (data, plot_type = "full") {
                       values = c("Raw data" = "red", "Cleaned data" = "darkgoldenrod4",
                                  "Set to maximum option         " = "purple", "Remove option" = "blue", "Impute option" = "forestgreen")) +
     geom_abline(aes(intercept = 100, slope = 0), linetype = "dashed")
-    if (exists("ylim_cov")) { 
+  if (!is.null(ylim_cov)) { 
+    if (length(ylim_cov) != 2) { stop('Please provide both the lower and upper limit of the y-axis') }
     coverage_plot <- coverage_plot + ylim(ylim_cov) }
   
   time <- prv <- prv_impute <- prv_setmax <- prv_remove <- prv_raw <- NULL 
@@ -193,7 +195,8 @@ descriptive_plot <- function (data, plot_type = "full") {
     scale_colour_manual(name = "",
                       values = c("Raw data" = "red", "Cleaned data" = "darkgoldenrod4",
                                  "Set to maximum option         " = "purple", "Remove option" = "blue", "Impute option" = "forestgreen"))
-    if (exists("ylim_prv")) { 
+  if (!is.null(ylim_prv)) { 
+    if (length(ylim_prv) != 2) { stop('Please provide both the lower and upper limit of the y-axis') }
     prevalence_plot <- prevalence_plot + ylim(ylim_prv) }
 
    if(plot_type == "full"){

@@ -7,7 +7,7 @@
 data_clean(data, total_age_cat = NULL)
 }
 \arguments{
-\item{data}{A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
+\item{data}{A country-specific ANC-RT database. The function \link[ANCRTAdjust]{check_data} should have been run on the data to properly
 prepare the data for use here.
 The following variables (with these variable names) must be included in \code{data}:
  \itemize{

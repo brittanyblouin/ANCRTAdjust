@@ -35,7 +35,7 @@ meancov_possible <- function(data) {
 #'    \item The data is checked for duplicates (i.e. more than one observation exists with the same \code{faciluid} and \code{time}).
 #'   }
 #'   
-#' @param data A country-specific ANC-RT database. The function \link[ANCRTAdjust]{name_var} should have been run on the data to properly
+#' @param data A country-specific ANC-RT database. The function \link[ANCRTAdjust]{check_data} should have been run on the data to properly
 #' prepare the data for use here.
 #' The following variables (with these variable names) must be included in \code{data}:
 #'  \itemize{

@@ -47,7 +47,7 @@ data(ancrt)
 6      F_1    6       214      214       30      39     145 0.3224299    1 2016
 ```
 
-Step 2) Naming your variables
+Step 2) Verifying your database and naming your variables
 ---------------------
 After loading the data, the next step is to make sure we are following the naming conventions for the most important variables. These include:
 
@@ -69,10 +69,10 @@ Finally, data might be available for the sub-national unit 1 and for the year (a
 * `snu1`: The sub-national unit 1.
 * `year`: The calendar year that the data was collected.
 
-The function `name_var()` can automatically rename the variables for you (see `help(name_var)` for more information).
+The function `check_data()` can automatically verify if you have the correct data structure and rename (if warranted) the variables for you (see `help(check_data)` for more information).
 
 ``` r
-> ancrt <- name_var(ancrt, faciluid = "faciluid", time = "time", n_clients = 'n_clients', n_status = "n_status", knownpos = "knownpos", testpos = "testpos", testneg = "testneg", snu1 = "snu1", year = "year")
+> ancrt <- check_data(ancrt, faciluid = "faciluid", time = "time", n_clients = 'n_clients', n_status = "n_status", knownpos = "knownpos", testpos = "testpos", testneg = "testneg", snu1 = "snu1", year = "year")
 ```
 
 Step 3) Data cleaning
@@ -203,7 +203,7 @@ Step 8) Adjusting HIV prevalence for imperfect testing coverage
 -------------------------------------------------------
 It has been found that selection bias can be introduced into HIV prevalence estimates due to imperfect HIV testing coverage (i.e. < 100% coverage). If the average testing coverage is low (i.e., <90%), it can be advised to adjust for these potential biases.
 
-Using data from the *President Emergency Funds for AIDS Relief in Africa*'s (PEPFAR) *Monitoring, Evaluation, and Reporting* (MER) database, we estimated adjustment factors for each 1% point increase in HIV testing coverage. To do so, we used binomial logistic regression models with facility-level fixed effects and marginal standardization to assess the effect of testing coverage on HIV prevalence (see Maheu-Giroux et al. (2019) for details on the methods, applied to Malawi's ANC-RT data). The PEPFAR MER database contains information on more than 37 millions ANC attendees from 19,527 unique facilities from 17 countries in sub-Saharan Africa, totalling 226,541 observations over the 2015-2019 period. The figure below shows the estimated relationship between imperfect testing coverage and HIV preavlence (Fig 2)
+Using data from the *President Emergency Funds for AIDS Relief in Africa*'s (PEPFAR) *Monitoring, Evaluation, and Reporting* (MER) database, we estimated adjustment factors for each 1% point increase in HIV testing coverage. To do so, we used binomial logistic regression models with facility-level fixed effects and marginal standardization to assess the effect of testing coverage on HIV prevalence (see Maheu-Giroux et al. (2019) for details on the methods, applied to Malawi's ANC-RT data). The PEPFAR MER database contains information on more than 37 millions ANC attendees from 19,527 unique facilities from 17 countries in sub-Saharan Africa, totaling 226,541 observations over the 2015-2019 period. The figure below shows the estimated relationship between imperfect testing coverage and HIV preavlence (Fig 2)
 
 ![Fig. 2. Relationship between routine HIV testing coverage during antenatal care and predicted HIV prevalence. The dots on the graph are a subset of monthly observations of HIV prevalence at antenatal care. The size of the dots is proportional to the number of women attending antenatal care.](man/figures/PEPFAR_MER.png)
 

@@ -7,7 +7,7 @@
 mt_adjust(data, adjust_option)
 }
 \arguments{
-\item{data}{The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
+\item{data}{The ANC-RT dataset. The functions \link[ANCRTAdjust]{check_data} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 prepare the data for use here.  The data set must have the following variables:
  \itemize{
   \item \code{n_status_c}: Cleaned \code{n_status} (generated using the \link[ANCRTAdjust]{data_clean} function)
