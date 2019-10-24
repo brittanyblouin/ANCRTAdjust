@@ -148,7 +148,7 @@ quality <- function(data) {
 #' \code{testneg} and, \code{knownpos}) are calculated and output in a dataframe. Data quality indicators are calculated from both raw and cleaned
 #' variables and can be calculated stratified by region and time, according to user inputs.
 #' 
-#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
+#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{check_data} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
 #' prepare the data for use here.  The data set must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: The facility identification code
@@ -212,14 +212,26 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
     
     table2 <- NULL
     region.list <- (unique(data$snu1))
-    for (i in 1:length(region.list)) {
-      RegionData <- data[data$snu1 == region.list[i],]
+    for (i in region.list) {
+      RegionData <- data[data$snu1 == i, ]
       table3 <- quality(RegionData)
       table3$region <- region.list[i]
-      row.names(table3)<-c(paste("Missing >=1 quarter", i, sep = '.'), paste("Missing n_clients", i, sep = '.'), paste("Missing n_status", i, sep = '.'), paste("Missing testpos", i, sep = '.'), paste("Missing testneg", i, sep = '.'),
-                           paste("Missing knownpos", i, sep = '.'), paste("Missing >=1 variables", i, sep = '.'), paste("Invalid coverage", i, sep = '.'), paste("Invalid prevalence", i, sep = '.'),
-                           paste("Inconsistent n_status", i, sep = '.'), paste("Negative n_clients", i, sep = '.'), paste("Negative n_status", i, sep = '.'), paste("Negative testpos", i, sep = '.'), paste("Negative testneg", i, sep = '.'),
-                           paste("Negative knownpos", i, sep = '.'), paste("One or more invalid variables", i, sep = '.'))
+      row.names(table3) <- c(paste("Missing >=1 quarter", " (region ", i, ")", sep = "" ), 
+                             paste("Missing n_clients", " (region ", i, ")", sep = "" ), 
+                             paste("Missing n_status", " (region ", i, ")", sep = "" ), 
+                             paste("Missing testpos", " (region ", i, ")", sep = "" ), 
+                             paste("Missing testneg", " (region ", i, ")", sep = "" ),
+                           paste("Missing knownpos", " (region ", i, ")", sep = "" ), 
+                           paste("Missing >=1 variables", " (region ", i, ")", sep = "" ), 
+                           paste("Invalid coverage", " (region ", i, ")", sep = "" ), 
+                           paste("Invalid prevalence", " (region ", i, ")", sep = "" ),
+                           paste("Inconsistent n_status", " (region ", i, ")", sep = "" ), 
+                           paste("Negative n_clients", " (region ", i, ")", sep = "" ), 
+                           paste("Negative n_status", " (region ", i, ")", sep = "" ), 
+                           paste("Negative testpos", " (region ", i, ")", sep = "" ), 
+                           paste("Negative testneg", " (region ", i, ")", sep = "" ),
+                           paste("Negative knownpos", " (region ", i, ")", sep = "" ), 
+                           paste("One or more invalid variables", " (region ", i, ")", sep = "" ))
       table2 <- rbind(table2, table3)
     }
     table <- rbind(table, table2)
@@ -236,15 +248,27 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
     
     table2 <- NULL
     time.list <- (unique(data$time))
-    for (i in 1:length(time.list)) {
-      TimeData <- data[data$time == time.list[i],]
+    for (i in time.list) {
+      TimeData <- data[data$time == i, ]
       table3 <- quality(TimeData)
       table3[1,1] <- table3[1,2] <- "NA"
       table3$time <- time.list[i]
-      row.names(table3)<-c(paste("Missing >=1 quarter", i, sep = '.'), paste("Missing n_clients", i, sep = '.'), paste("Missing n_status", i, sep = '.'), paste("Missing testpos", i, sep = '.'), paste("Missing testneg", i, sep = '.'),
-                           paste("Missing knownpos", i, sep = '.'), paste("Missing >=1 variables", i, sep = '.'), paste("Invalid coverage", i, sep = '.'), paste("Invalid prevalence", i, sep = '.'),
-                           paste("Inconsistent n_status", i, sep = '.'), paste("Negative n_clients", i, sep = '.'), paste("Negative n_status", i, sep = '.'), paste("Negative testpos", i, sep = '.'), paste("Negative testneg", i, sep = '.'),
-                           paste("Negative knownpos", i, sep = '.'), paste("One or more invalid variables", i, sep = '.'))
+      row.names(table3) <- c(paste("Missing >=1 quarter", " (time ", i, ")", sep = "" ), 
+                             paste("Missing n_clients", " (time ", i, ")", sep = "" ), 
+                             paste("Missing n_status", " (time ", i, ")", sep = "" ), 
+                             paste("Missing testpos", " (time ", i, ")", sep = "" ), 
+                             paste("Missing testneg", " (time ", i, ")", sep = "" ),
+                           paste("Missing knownpos", " (time ", i, ")", sep = "" ), 
+                           paste("Missing >=1 variables", " (time ", i, ")", sep = "" ), 
+                           paste("Invalid coverage", " (time ", i, ")", sep = "" ), 
+                           paste("Invalid prevalence", " (time ", i, ")", sep = "" ),
+                           paste("Inconsistent n_status", " (time ", i, ")", sep = "" ), 
+                           paste("Negative n_clients", " (time ", i, ")", sep = "" ), 
+                           paste("Negative n_status", " (time ", i, ")", sep = "" ), 
+                           paste("Negative testpos", " (time ", i, ")", sep = "" ), 
+                           paste("Negative testneg", " (time ", i, ")", sep = "" ),
+                           paste("Negative knownpos", " (time ", i, ")", sep = "" ), 
+                           paste("One or more invalid variables", " (time ", i, ")", sep = "" ))
       table2 <- rbind(table2, table3)
     }
     table <- rbind(table, table2)
@@ -263,16 +287,28 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
     table2 <- NULL
     data$snu1.time <- paste(data$snu1, data$time, sep = "-")
     timeregion.list <- (unique(data$snu1.time))
-    for (i in 1:length(timeregion.list)) {
-      Data <- data[data$snu1.time == timeregion.list[i],]
+    for (i in timeregion.list) {
+      Data <- data[data$snu1.time == i, ]
       table3 <- quality(Data)
       table3[1,1] <- table3[1,2] <- "NA"
       table3$time <- Data$time[1]
       table3$region <- Data$snu1[1]
-      row.names(table3)<-c(paste("Missing >=1 quarter", i, sep = '.'), paste("Missing n_clients", i, sep = '.'), paste("Missing n_status", i, sep = '.'), paste("Missing testpos", i, sep = '.'), paste("Missing testneg", i, sep = '.'),
-                           paste("Missing knownpos", i, sep = '.'), paste("Missing >=1 variables", i, sep = '.'), paste("Invalid coverage", i, sep = '.'), paste("Invalid prevalence", i, sep = '.'),
-                           paste("Inconsistent n_status", i, sep = '.'), paste("Negative n_clients", i, sep = '.'), paste("Negative n_status", i, sep = '.'), paste("Negative testpos", i, sep = '.'), paste("Negative testneg", i, sep = '.'),
-                           paste("Negative knownpos", i, sep = '.'), paste("One or more invalid variables", i, sep = '.'))
+      row.names(table3) <- c(paste("Missing >=1 quarter", " (region-time ", i, ")", sep = "" ), 
+                             paste("Missing n_clients", " (region-time ", i, ")", sep = "" ), 
+                             paste("Missing n_status", " (region-time ", i, ")", sep = "" ), 
+                             paste("Missing testpos", " (region-time ", i, ")", sep = "" ), 
+                             paste("Missing testneg", " (region-time ", i, ")", sep = "" ),
+                           paste("Missing knownpos", " (region-time ", i, ")", sep = "" ), 
+                           paste("Missing >=1 variables", " (region-time ", i, ")", sep = "" ), 
+                           paste("Invalid coverage", " (region-time ", i, ")", sep = "" ), 
+                           paste("Invalid prevalence", " (region-time ", i, ")", sep = "" ),
+                           paste("Inconsistent n_status", " (region-time ", i, ")", sep = "" ), 
+                           paste("Negative n_clients", " (region-time ", i, ")", sep = "" ), 
+                           paste("Negative n_status", " (region-time ", i, ")", sep = "" ), 
+                           paste("Negative testpos", " (region-time ", i, ")", sep = "" ), 
+                           paste("Negative testneg", " (region-time ", i, ")", sep = "" ),
+                           paste("Negative knownpos", " (region-time ", i, ")", sep = "" ), 
+                           paste("One or more invalid variables", " (region-time ", i, ")", sep = "" ))
       table2 <- rbind(table2, table3)
     }
     table <- rbind(table, table2)
