@@ -5,7 +5,7 @@
 #' This function has been developed to flag outlier observations for the following variables: \code{n_clients}, \code{n_status_c}, \code{testpos_c}, \code{testneg_c}, \code{knownpos_c}, 
 #' \code{totpos_c}, \code{prv} and \code{cov}.  Outliers are defined as 2 standard deviations greater than or less than the mean value.  
 #' 
-#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{name_var}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
+#' @param data The ANC-RT dataset.  The functions \link[ANCRTAdjust]{check_data}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
 #' prepare the data for use here.  The dataset must have the following variables:
 #'  \itemize{
 #'   \item \code{faciluid}: Facility ID.
@@ -24,6 +24,7 @@
 #'   \item \code{cov}:  The HIV testing coverage from the specified facility at the specified time period (generated using the \link[ANCRTAdjust]{mt_adjust} function).
 #'   \item \code{snu1}: The subnational unit 1 (only required if results are to be flagged by snu1).
 #'    }
+#' @param sd_for_outlier Standard deviation used to flag outliers (default is 2).
 #' @param flag_by Options include:
 #'  \itemize{
 #'    \item "\code{facility}" compares each observation's value to their facility's mean value and flags the observations that 
@@ -59,7 +60,7 @@
 #' @export
 #' 
 
-flag_outliers <- function(data, flag_by = "facility", result = "outliers") {
+flag_outliers <- function(data, sd_for_outlier = 2, flag_by = "facility", result = "outliers") {
   
   flag_n_clients <- faciluid <- n_clients <- flag_n_status_c <- n_status_c <- flag_testpos_c <- NULL
   testpos_c <- flag_testneg_c <- testneg_c <- flag_knownpos_c <- knownpos_c <- flag_totpos_c <-NULL
@@ -69,22 +70,22 @@ flag_outliers <- function(data, flag_by = "facility", result = "outliers") {
     data1 <- NULL
     for (i in levels(as.factor(data$faciluid))) {
       temp <- data[data$faciluid == i,]
-      temp$flag_n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
-                                    ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
-      temp$flag_n_status_c <- ifelse(((temp$n_status_c > (mean(temp$n_status_c, na.rm = TRUE) + (2 * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)) | 
-                                    ((temp$n_status_c < (mean(temp$n_status_c, na.rm = TRUE) - (2 * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)), 1, 0)
-      temp$flag_testpos_c <- ifelse(((temp$testpos_c > (mean(temp$testpos_c, na.rm = TRUE) + (2 * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)) | 
-                                 ((temp$testpos_c < (mean(temp$testpos_c, na.rm = TRUE) - (2 * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)), 1, 0)
-      temp$flag_testneg_c <- ifelse(((temp$testneg_c > (mean(temp$testneg_c, na.rm = TRUE) + (2 * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)) | 
-                                  ((temp$testneg_c < (mean(temp$testneg_c, na.rm = TRUE) - (2 * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)), 1, 0)
-      temp$flag_knownpos_c <- ifelse(((temp$knownpos_c > (mean(temp$knownpos_c, na.rm = TRUE) + (2 * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)) | 
-                                  ((temp$knownpos_c < (mean(temp$knownpos_c, na.rm = TRUE) - (2 * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)), 1, 0)
-      temp$flag_totpos_c <- ifelse(((temp$totpos_c > (mean(temp$totpos_c, na.rm = TRUE) + (2 * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)) | 
-                                  ((temp$totpos_c < (mean(temp$totpos_c, na.rm = TRUE) - (2 * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)), 1, 0)
-      temp$flag_prv <- ifelse(((temp$prv > (mean(temp$prv, na.rm = TRUE) + (2 * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)) | 
-                                 ((temp$prv < (mean(temp$prv, na.rm = TRUE) - (2 * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)), 1, 0)
-      temp$flag_cov <- ifelse(((temp$cov > (mean(temp$cov, na.rm = TRUE) + (2 * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)) | 
-                                 ((temp$cov < (mean(temp$cov, na.rm = TRUE) - (2 * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)), 1, 0)
+      temp$flag_n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (sd_for_outlier * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
+                                    ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (sd_for_outlier * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
+      temp$flag_n_status_c <- ifelse(((temp$n_status_c > (mean(temp$n_status_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)) | 
+                                    ((temp$n_status_c < (mean(temp$n_status_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)), 1, 0)
+      temp$flag_testpos_c <- ifelse(((temp$testpos_c > (mean(temp$testpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)) | 
+                                 ((temp$testpos_c < (mean(temp$testpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)), 1, 0)
+      temp$flag_testneg_c <- ifelse(((temp$testneg_c > (mean(temp$testneg_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)) | 
+                                  ((temp$testneg_c < (mean(temp$testneg_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)), 1, 0)
+      temp$flag_knownpos_c <- ifelse(((temp$knownpos_c > (mean(temp$knownpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)) | 
+                                  ((temp$knownpos_c < (mean(temp$knownpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)), 1, 0)
+      temp$flag_totpos_c <- ifelse(((temp$totpos_c > (mean(temp$totpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)) | 
+                                  ((temp$totpos_c < (mean(temp$totpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)), 1, 0)
+      temp$flag_prv <- ifelse(((temp$prv > (mean(temp$prv, na.rm = TRUE) + (sd_for_outlier * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)) | 
+                                 ((temp$prv < (mean(temp$prv, na.rm = TRUE) - (sd_for_outlier * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)), 1, 0)
+      temp$flag_cov <- ifelse(((temp$cov > (mean(temp$cov, na.rm = TRUE) + (sd_for_outlier * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)) | 
+                                 ((temp$cov < (mean(temp$cov, na.rm = TRUE) - (sd_for_outlier * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)), 1, 0)
       data1 <- rbind(data1, temp)
     }
   
@@ -113,22 +114,22 @@ flag_outliers <- function(data, flag_by = "facility", result = "outliers") {
     data1 <- NULL
     for (i in levels(as.factor(data$snu1))) {
       temp <- data[data$snu1 == i,]
-      temp$flag_n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
-                                      ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (2 * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
-      temp$flag_n_status_c <- ifelse(((temp$n_status_c > (mean(temp$n_status_c, na.rm = TRUE) + (2 * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)) | 
-                                   ((temp$n_status_c < (mean(temp$n_status_c, na.rm = TRUE) - (2 * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)), 1, 0)
-      temp$flag_testpos_c <- ifelse(((temp$testpos_c > (mean(temp$testpos_c, na.rm = TRUE) + (2 * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)) | 
-                                    ((temp$testpos_c < (mean(temp$testpos_c, na.rm = TRUE) - (2 * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)), 1, 0)
-      temp$flag_testneg_c <- ifelse(((temp$testneg_c > (mean(temp$testneg_c, na.rm = TRUE) + (2 * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)) | 
-                                    ((temp$testneg_c < (mean(temp$testneg_c, na.rm = TRUE) - (2 * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)), 1, 0)
-      temp$flag_knownpos_c <- ifelse(((temp$knownpos_c > (mean(temp$knownpos_c, na.rm = TRUE) + (2 * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)) | 
-                                     ((temp$knownpos_c < (mean(temp$knownpos_c, na.rm = TRUE) - (2 * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)), 1, 0)
-      temp$flag_totpos_c <- ifelse(((temp$totpos_c > (mean(temp$totpos_c, na.rm = TRUE) + (2 * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)) | 
-                                   ((temp$totpos_c < (mean(temp$totpos_c, na.rm = TRUE) - (2 * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)), 1, 0)
-      temp$flag_prv <- ifelse(((temp$prv > (mean(temp$prv, na.rm = TRUE) + (2 * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)) | 
-                                ((temp$prv < (mean(temp$prv, na.rm = TRUE) - (2 * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)), 1, 0)
-      temp$flag_cov <- ifelse(((temp$cov > (mean(temp$cov, na.rm = TRUE) + (2 * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)) | 
-                                ((temp$cov < (mean(temp$cov, na.rm = TRUE) - (2 * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)), 1, 0)
+      temp$flag_n_clients <- ifelse(((temp$n_clients > (mean(temp$n_clients, na.rm = TRUE) + (sd_for_outlier * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)) | 
+                                      ((temp$n_clients < (mean(temp$n_clients, na.rm = TRUE) - (sd_for_outlier * sd(temp$n_clients, na.rm = TRUE)))) & !is.na(temp$n_clients)), 1, 0)
+      temp$flag_n_status_c <- ifelse(((temp$n_status_c > (mean(temp$n_status_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)) | 
+                                   ((temp$n_status_c < (mean(temp$n_status_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$n_status_c, na.rm = TRUE)))) & !is.na(temp$n_status_c)), 1, 0)
+      temp$flag_testpos_c <- ifelse(((temp$testpos_c > (mean(temp$testpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)) | 
+                                    ((temp$testpos_c < (mean(temp$testpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$testpos_c, na.rm = TRUE)))) & !is.na(temp$testpos_c)), 1, 0)
+      temp$flag_testneg_c <- ifelse(((temp$testneg_c > (mean(temp$testneg_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)) | 
+                                    ((temp$testneg_c < (mean(temp$testneg_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$testneg_c, na.rm = TRUE)))) & !is.na(temp$testneg_c)), 1, 0)
+      temp$flag_knownpos_c <- ifelse(((temp$knownpos_c > (mean(temp$knownpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)) | 
+                                     ((temp$knownpos_c < (mean(temp$knownpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$knownpos_c, na.rm = TRUE)))) & !is.na(temp$knownpos_c)), 1, 0)
+      temp$flag_totpos_c <- ifelse(((temp$totpos_c > (mean(temp$totpos_c, na.rm = TRUE) + (sd_for_outlier * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)) | 
+                                   ((temp$totpos_c < (mean(temp$totpos_c, na.rm = TRUE) - (sd_for_outlier * sd(temp$totpos_c, na.rm = TRUE)))) & !is.na(temp$totpos_c)), 1, 0)
+      temp$flag_prv <- ifelse(((temp$prv > (mean(temp$prv, na.rm = TRUE) + (sd_for_outlier * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)) | 
+                                ((temp$prv < (mean(temp$prv, na.rm = TRUE) - (sd_for_outlier * sd(temp$prv, na.rm = TRUE)))) & !is.na(temp$prv)), 1, 0)
+      temp$flag_cov <- ifelse(((temp$cov > (mean(temp$cov, na.rm = TRUE) + (sd_for_outlier * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)) | 
+                                ((temp$cov < (mean(temp$cov, na.rm = TRUE) - (sd_for_outlier * sd(temp$cov, na.rm = TRUE)))) & !is.na(temp$cov)), 1, 0)
       data1 <- rbind(data1, temp)
     }
     
@@ -155,22 +156,22 @@ flag_outliers <- function(data, flag_by = "facility", result = "outliers") {
   
   if (flag_by == "country") {
     
-    data$flag_n_clients <- ifelse(((data$n_clients > (mean(data$n_clients, na.rm = TRUE) + (2 * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)) | 
-                                    ((data$n_clients < (mean(data$n_clients, na.rm = TRUE) - (2 * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)), 1, 0)
-    data$flag_n_status_c <- ifelse(((data$n_status_c > (mean(data$n_status_c, na.rm = TRUE) + (2 * sd(data$n_status_c, na.rm = TRUE)))) & !is.na(data$n_status_c)) | 
-                                 ((data$n_status_c < (mean(data$n_status_c, na.rm = TRUE) - (2 * sd(data$n_status_c, na.rm = TRUE)))) & !is.na(data$n_status_c)), 1, 0)
-    data$flag_testpos_c <- ifelse(((data$testpos_c > (mean(data$testpos_c, na.rm = TRUE) + (2 * sd(data$testpos_c, na.rm = TRUE)))) & !is.na(data$testpos_c)) | 
-                                  ((data$testpos_c < (mean(data$testpos_c, na.rm = TRUE) - (2 * sd(data$testpos_c, na.rm = TRUE)))) & !is.na(data$testpos_c)), 1, 0)
-    data$flag_testneg_c <- ifelse(((data$testneg_c > (mean(data$testneg_c, na.rm = TRUE) + (2 * sd(data$testneg_c, na.rm = TRUE)))) & !is.na(data$testneg_c)) | 
-                                  ((data$testneg_c < (mean(data$testneg_c, na.rm = TRUE) - (2 * sd(data$testneg_c, na.rm = TRUE)))) & !is.na(data$testneg_c)), 1, 0)
-    data$flag_knownpos_c <- ifelse(((data$knownpos_c > (mean(data$knownpos_c, na.rm = TRUE) + (2 * sd(data$knownpos_c, na.rm = TRUE)))) & !is.na(data$knownpos_c)) | 
-                                   ((data$knownpos_c < (mean(data$knownpos_c, na.rm = TRUE) - (2 * sd(data$knownpos_c, na.rm = TRUE)))) & !is.na(data$knownpos_c)), 1, 0)
-    data$flag_totpos_c <- ifelse(((data$totpos_c > (mean(data$totpos_c, na.rm = TRUE) + (2 * sd(data$totpos_c, na.rm = TRUE)))) & !is.na(data$totpos_c)) | 
-                                 ((data$totpos_c < (mean(data$totpos_c, na.rm = TRUE) - (2 * sd(data$totpos_c, na.rm = TRUE)))) & !is.na(data$totpos_c)), 1, 0)
-    data$flag_prv <- ifelse(((data$prv > (mean(data$prv, na.rm = TRUE) + (2 * sd(data$prv, na.rm = TRUE)))) & !is.na(data$prv)) | 
-                              ((data$prv < (mean(data$prv, na.rm = TRUE) - (2 * sd(data$prv, na.rm = TRUE)))) & !is.na(data$prv)), 1, 0)
-    data$flag_cov <- ifelse(((data$cov > (mean(data$cov, na.rm = TRUE) + (2 * sd(data$cov, na.rm = TRUE)))) & !is.na(data$cov)) | 
-                              ((data$cov < (mean(data$cov, na.rm = TRUE) - (2 * sd(data$cov, na.rm = TRUE)))) & !is.na(data$cov)), 1, 0)
+    data$flag_n_clients <- ifelse(((data$n_clients > (mean(data$n_clients, na.rm = TRUE) + (sd_for_outlier * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)) | 
+                                    ((data$n_clients < (mean(data$n_clients, na.rm = TRUE) - (sd_for_outlier * sd(data$n_clients, na.rm = TRUE)))) & !is.na(data$n_clients)), 1, 0)
+    data$flag_n_status_c <- ifelse(((data$n_status_c > (mean(data$n_status_c, na.rm = TRUE) + (sd_for_outlier * sd(data$n_status_c, na.rm = TRUE)))) & !is.na(data$n_status_c)) | 
+                                 ((data$n_status_c < (mean(data$n_status_c, na.rm = TRUE) - (sd_for_outlier * sd(data$n_status_c, na.rm = TRUE)))) & !is.na(data$n_status_c)), 1, 0)
+    data$flag_testpos_c <- ifelse(((data$testpos_c > (mean(data$testpos_c, na.rm = TRUE) + (sd_for_outlier * sd(data$testpos_c, na.rm = TRUE)))) & !is.na(data$testpos_c)) | 
+                                  ((data$testpos_c < (mean(data$testpos_c, na.rm = TRUE) - (sd_for_outlier * sd(data$testpos_c, na.rm = TRUE)))) & !is.na(data$testpos_c)), 1, 0)
+    data$flag_testneg_c <- ifelse(((data$testneg_c > (mean(data$testneg_c, na.rm = TRUE) + (sd_for_outlier * sd(data$testneg_c, na.rm = TRUE)))) & !is.na(data$testneg_c)) | 
+                                  ((data$testneg_c < (mean(data$testneg_c, na.rm = TRUE) - (sd_for_outlier * sd(data$testneg_c, na.rm = TRUE)))) & !is.na(data$testneg_c)), 1, 0)
+    data$flag_knownpos_c <- ifelse(((data$knownpos_c > (mean(data$knownpos_c, na.rm = TRUE) + (sd_for_outlier * sd(data$knownpos_c, na.rm = TRUE)))) & !is.na(data$knownpos_c)) | 
+                                   ((data$knownpos_c < (mean(data$knownpos_c, na.rm = TRUE) - (sd_for_outlier * sd(data$knownpos_c, na.rm = TRUE)))) & !is.na(data$knownpos_c)), 1, 0)
+    data$flag_totpos_c <- ifelse(((data$totpos_c > (mean(data$totpos_c, na.rm = TRUE) + (sd_for_outlier * sd(data$totpos_c, na.rm = TRUE)))) & !is.na(data$totpos_c)) | 
+                                 ((data$totpos_c < (mean(data$totpos_c, na.rm = TRUE) - (sd_for_outlier * sd(data$totpos_c, na.rm = TRUE)))) & !is.na(data$totpos_c)), 1, 0)
+    data$flag_prv <- ifelse(((data$prv > (mean(data$prv, na.rm = TRUE) + (sd_for_outlier * sd(data$prv, na.rm = TRUE)))) & !is.na(data$prv)) | 
+                              ((data$prv < (mean(data$prv, na.rm = TRUE) - (sd_for_outlier * sd(data$prv, na.rm = TRUE)))) & !is.na(data$prv)), 1, 0)
+    data$flag_cov <- ifelse(((data$cov > (mean(data$cov, na.rm = TRUE) + (sd_for_outlier * sd(data$cov, na.rm = TRUE)))) & !is.na(data$cov)) | 
+                              ((data$cov < (mean(data$cov, na.rm = TRUE) - (sd_for_outlier * sd(data$cov, na.rm = TRUE)))) & !is.na(data$cov)), 1, 0)
 
     n_clients_outliers <- subset(data, flag_n_clients == 1, c(faciluid, time, n_clients))
     n_status_c_outliers <- subset(data, flag_n_status_c == 1, c(faciluid, time, n_status_c))
