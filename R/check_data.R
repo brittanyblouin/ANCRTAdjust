@@ -1,6 +1,6 @@
-#' Prepares ANC-RT data
+#' Prepares and checks ANC-RT data
 #'
-#' Prepares the ANC-RT dataset to ensure that subsequent functions in the \code{ANCRTAdjust} package work properly.
+#' Prepares and checks the ANC-RT dataset to ensure that subsequent functions in the \code{ANCRTAdjust} package work properly.
 #'
 #' This function has been developed to prepare the ANC-RT dataset for use within the \code{ANCRTAdjust} package.  
 #' The function ensures that all necessary variables are included in the dataset and renames the variables to ensure that they conform to the 
@@ -48,7 +48,7 @@
 #'
 #' @export
 
-name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL, n_status = NULL, 
+check_data <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL, n_status = NULL, 
                      knownpos = NULL, testpos = NULL, testneg = NULL, totpos = NULL, age = NULL, snu1 = NULL, year = NULL) {
   
   # verifying inputs
@@ -75,7 +75,6 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
     data$testneg <- NA 
     warning("Because no 'testneg' variable was provided, this variable is assumed to be missing for all observations and 
              the variable 'testneg' was created reflecting this assumption.")
-    
     }
   
   # second verification
@@ -105,6 +104,12 @@ name_var <- function(data = NULL, faciluid = NULL, time = NULL, n_clients = NULL
   names(data)[names(data) == snu1] <- "snu1"
   names(data)[names(data) == year] <- "year"
   
+  # veryfing data 
+  if (!is.numeric(data$n_clients)) { stop("n_clients is not numeric") }
+  if (!is.numeric(data$n_status) & !is.null(n_status)) { stop("n_clients is not numeric") }
+  if (!is.numeric(data$knownpos) & !is.null(knownpos)) { stop("n_clients is not numeric") }
+  if (!is.numeric(data$testpos) & !is.null(testpos)) { stop("n_clients is not numeric") }  
+  if (!is.numeric(data$testneg) & !is.null(testneg)) { stop("n_clients is not numeric") }
   
   if (is.null(totpos)) { data$totpos <- data$testpos + data$knownpos }
   if (!is.numeric(data$time)) { warning("The 'time' variable is not numeric. For all functions in the R package 'ANCRTAdjust' 
