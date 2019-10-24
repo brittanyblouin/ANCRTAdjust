@@ -4,7 +4,8 @@
 \alias{flag_outliers}
 \title{Flag outlier observations}
 \usage{
-flag_outliers(data, flag_by = "facility", result = "outliers")
+flag_outliers(data, sd_for_outlier = 2, flag_by = "facility",
+  result = "outliers")
 }
 \arguments{
 \item{data}{The ANC-RT dataset.  The functions \link[ANCRTAdjust]{check_data}, \link[ANCRTAdjust]{data_clean} and \link[ANCRTAdjust]{mt_adjust} should have been run on the data to properly
@@ -26,6 +27,8 @@ prepare the data for use here.  The dataset must have the following variables:
   \item \code{cov}:  The HIV testing coverage from the specified facility at the specified time period (generated using the \link[ANCRTAdjust]{mt_adjust} function).
   \item \code{snu1}: The subnational unit 1 (only required if results are to be flagged by snu1).
    }}
+
+\item{sd_for_outlier}{Standard deviation used to flag outliers (default is 2).}
 
 \item{flag_by}{Options include:
 \itemize{
