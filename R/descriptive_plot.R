@@ -32,12 +32,9 @@
 #'   \item \code{totpos_c_setmax}: Adjusted \code{totpos_c} if the set to maximum adjustment option for multiple testing is used (generated using the \link[ANCRTAdjust]{data_clean} function)
 #'   \item \code{time}: The time period
 #'  }
-#' @param ylim_ind_min The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)
-#' @param ylim_ind_max The y-axis upper limit of the plot of the primary data quality indicators over time (default = 100)
-#' @param ylim_cov_min The y-axis lower limit of the plot of HIV testing coverage over time (default = 0)
-#' @param ylim_cov_max The y-axis upper limit of the plot of HIV testing coverage over time (default = 100)
-#' @param ylim_prv_min The y-axis lower limit of the plot of HIV prevalence over time (default = 0)
-#' @param ylim_prv_max The y-axis upper limit of the plot of HIV prevalence over time (default = 100)
+#' @param ylim_ind The y-axis lower and upper limits of the plot of the primary data quality indicators over time (default = c(0, 100))
+#' @param ylim_cov The y-axis lower and upper limits of the plot of HIV testing coverage over time (default = c(0, 100))
+#' @param ylim_prv The y-axis lower and upper limits of the plot of HIV prevalence over time (default = c(0, 100))
 #' @param plot_type The plots included in the final plot.  Options include:
 #'  \itemize{
 #'   \item \code{full} All three plots are included (default)
@@ -48,8 +45,10 @@
 #'   \item \code{cov} The plot of HIV testing coverage over time only is included
 #'   \item \code{ind} The plot of the primary data quality indicators over time only is included
 #'   }
-#'
-#' @import plyr ggplot2 ggpubr
+
+#' @import ggplot2 
+#' @importFrom plyr ddply
+#' @importFrom ggpubr ggarrange
 #'
 #' @author Mathieu Maheu-Giroux
 #' @author Brittany Blouin
@@ -58,8 +57,10 @@
 #'
 #' @export
 
-descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_cov_min = 0, ylim_cov_max = 100, 
-                              ylim_prv_min = 0, ylim_prv_max = 100, plot_type = "full"){
+descriptive_plot <- function (data, 
+                              ylim_ind = c(0, 100), 
+                              ylim_cov = c(0, 100), 
+                              ylim_prv = c(0, 100), plot_type = "full") {
 
   data$totpos_raw <- ifelse(!is.na(data$knownpos) & !is.na(data$testpos), data$knownpos + data$testpos, 
                             data$totpos)
@@ -89,7 +90,7 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
   coverages <- function(data) {
     coverage_raw <- (weighted.mean(data$n_status / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
     coverage <- (weighted.mean(data$n_status_c / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
-    coverage_impute <- (weighted.mean(data$n_status_c_impute/  data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
+    coverage_impute <- (weighted.mean(data$n_status_c_impute / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
     coverage_remove <- (weighted.mean(data$n_status_c_remove / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
     coverage_setmax <- (weighted.mean(data$n_status_c_setmax / data$n_clients, w = data$n_clients, na.rm = TRUE)) * 100
     results <- cbind (coverage_raw, coverage, coverage_impute, coverage_remove, coverage_setmax)
@@ -133,6 +134,7 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
   #########
   ##PLOTS##
   #########
+  time <- impdata <- missingdata_cleaned <- NULL
   indicator_plot <-
     ggplot(indicators, aes(time)) +
     geom_line(aes(y = impdata, color = "Invalid values in raw data"), size = 1) + 
@@ -141,13 +143,13 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
     geom_point(aes(y = missingdata_cleaned, color = "Missing data in cleaned data")) +
     xlab("") +
     ylab("% facilities with data \n quality problem") +
-    ylim(c(ylim_ind_min, ylim_ind_max)) +
+    ylim(ylim_ind) +
     theme(axis.title.y = element_text(size = 9)) +
     scale_colour_manual(name = "",
                         values = c("Invalid values in raw data" = "orange", "Missing data in cleaned data" = "lightcoral")) +
     geom_abline(aes(intercept = 10, slope = 0), linetype = "dashed")
   
-  
+  time <- coverage <- coverage_impute <- coverage_setmax <- coverage_remove <- coverage_raw <- NULL
   coverage_plot <-
     ggplot(coverages, aes(time)) +
     geom_line(aes(y = coverage, color = "Cleaned data"), linetype = "dashed", size = 1) + 
@@ -160,7 +162,7 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
     geom_point(aes(y = coverage_remove, color = "Remove option")) +
     geom_line(aes(y = coverage_raw, color = "Raw data"), size = 1) + 
     geom_point(aes(y = coverage_raw, color = "Raw data")) +
-    ylim(c(ylim_cov_min, ylim_cov_max)) +
+    ylim(ylim_cov) +
     xlab("") +
     ylab("HIV testing coverage \n (%)") +
     theme(axis.title.y = element_text(size = 9)) +
@@ -169,7 +171,7 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
                                  "Set to maximum option         " = "purple", "Remove option" = "blue", "Impute option" = "forestgreen")) +
     geom_abline(aes(intercept = 100, slope = 0), linetype = "dashed")
     
-  
+  time <- prv <- prv_impute <- prv_setmax <- prv_remove <- prv_raw <- NULL 
   prevalence_plot <-
     ggplot(prevalences, aes(time)) +
     geom_line(aes(y = prv, color = "Cleaned data"), linetype = "dashed", size = 1) + 
@@ -184,7 +186,7 @@ descriptive_plot <- function (data, ylim_ind_min = 0, ylim_ind_max = 100, ylim_c
     geom_point(aes(y = prv_raw, color = "Raw data")) +
     xlab("Time") +
     ylab("HIV prevalence \n (%)") +
-    ylim(c(ylim_prv_min, ylim_prv_max)) +
+    ylim(ylim_prv) +
     theme(axis.title.y = element_text(size = 9)) +
     scale_colour_manual(name = "",
                       values = c("Raw data" = "red", "Cleaned data" = "darkgoldenrod4",

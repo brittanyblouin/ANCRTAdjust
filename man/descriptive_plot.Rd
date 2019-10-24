@@ -4,9 +4,8 @@
 \alias{descriptive_plot}
 \title{Plot descriptive data over time}
 \usage{
-descriptive_plot(data, ylim_ind_min = 0, ylim_ind_max = 100,
-  ylim_cov_min = 0, ylim_cov_max = 100, ylim_prv_min = 0,
-  ylim_prv_max = 100, plot_type = "full")
+descriptive_plot(data, ylim_ind = c(0, 100), ylim_cov = c(0, 100),
+  ylim_prv = c(0, 100), plot_type = "full")
 }
 \arguments{
 \item{data}{The ANC-RT dataset. The functions \link[ANCRTAdjust]{name_var} and \link[ANCRTAdjust]{data_clean} should have been run on the data to properly
@@ -29,17 +28,11 @@ prepare the data for use here.  The dataset must include the following variables
   \item \code{time}: The time period
  }}
 
-\item{ylim_ind_min}{The y-axis lower limit of the plot of the primary data quality indicators over time (default = 0)}
+\item{ylim_ind}{The y-axis lower and upper limits of the plot of the primary data quality indicators over time (default = c(0, 100))}
 
-\item{ylim_ind_max}{The y-axis upper limit of the plot of the primary data quality indicators over time (default = 100)}
+\item{ylim_cov}{The y-axis lower and upper limits of the plot of HIV testing coverage over time (default = c(0, 100))}
 
-\item{ylim_cov_min}{The y-axis lower limit of the plot of HIV testing coverage over time (default = 0)}
-
-\item{ylim_cov_max}{The y-axis upper limit of the plot of HIV testing coverage over time (default = 100)}
-
-\item{ylim_prv_min}{The y-axis lower limit of the plot of HIV prevalence over time (default = 0)}
-
-\item{ylim_prv_max}{The y-axis upper limit of the plot of HIV prevalence over time (default = 100)}
+\item{ylim_prv}{The y-axis lower and upper limits of the plot of HIV prevalence over time (default = c(0, 100))}
 
 \item{plot_type}{The plots included in the final plot.  Options include:
 \itemize{

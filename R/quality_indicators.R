@@ -204,7 +204,7 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
   
   if (by_region == TRUE & by_time == FALSE){
     table <- quality(data)
-    table$region <- "All"
+    table$region <- "all"
     row.names(table) <- c("Missing >=1 quarter", "Missing n_clients", "Missing n_status", "Missing testpos", "Missing testneg", "Missing knownpos", "Missing >=1 variables",
                           "Invalid coverage", "Invalid prevalence", "Inconsistent n_status", "Negative n_clients", "Negative n_status", "Negative testpos", "Negative testneg", 
                           "Negative knownpos", "One or more invalid variables")
@@ -228,7 +228,7 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
 
   if (by_region == FALSE & by_time == TRUE) {
     table <- quality(data)
-    table$time <- "All"
+    table$time <- "all"
     row.names(table) <- c("Missing >=1 quarter", "Missing n_clients", "Missing n_status", "Missing testpos", "Missing testneg", "Missing knownpos", "Missing >=1 variables",
                           "Invalid coverage", "Invalid prevalence", "Inconsistent n_status", "Negative n_clients", "Negative n_status", "Negative testpos", "Negative testneg", 
                           "Negative knownpos", "One or more invalid variables")
@@ -253,8 +253,8 @@ quality_indicators <- function(data, by_region = FALSE, by_time = FALSE){
   
   if (by_region == TRUE & by_time == TRUE) {
     table <- quality(data)
-    table$time <- "All"
-    table$region <- "All"
+    table$time <- "all"
+    table$region <- "all"
     row.names(table) <- c("Missing >=1 quarter", "Missing n_clients", "Missing n_status", "Missing testpos", "Missing testneg", "Missing knownpos", "Missing >=1 variables",
                           "Invalid coverage", "Invalid prevalence", "Inconsistent n_status", "Negative n_clients", "Negative n_status", "Negative testpos", "Negative testneg", 
                           "Negative knownpos", "One or more invalid variables")

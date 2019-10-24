@@ -61,6 +61,10 @@
 
 flag_outliers <- function(data, flag_by = "facility", result = "outliers") {
   
+  flag_n_clients <- faciluid <- n_clients <- flag_n_status_c <- n_status_c <- flag_testpos_c <- NULL
+  testpos_c <- flag_testneg_c <- testneg_c <- flag_knownpos_c <- knownpos_c <- flag_totpos_c <-NULL
+  totpos_c <- flag_prv <- prv <- flag_cov <- hig_prv <- NULL
+  
   if (flag_by == "facility") {
     data1 <- NULL
     for (i in levels(as.factor(data$faciluid))) {

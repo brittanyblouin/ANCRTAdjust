@@ -9,6 +9,14 @@
 This package provides a variety of functions to prepare ANC-RT data for analysis and to
 ultimately adjust HIV prevalences for bias caused by missing and invalid data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/brittanyblouin/ANCRTAdjust}
+  \item Report bugs at \url{https://github.com/brittanyblouin/ANCRTAdjust/issues}
+}
+
+}
 \author{
 Brittany Blouin \email{brittany.blouin@mail.mcgill.ca}
 

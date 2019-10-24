@@ -44,7 +44,7 @@ A cleaned ANC-RT database with additional variables:
 Cleans ANC-RT data so that it can be used with other functions in the \code{ANCRTAdjust} package.
 }
 \details{
-This function has been developed to clean common issues asoociated with ANC-RT data. The following tasks
+This function has been developed to clean common issues associated with ANC-RT data. The following tasks
 are accomplished:
  \itemize{
    \item Age disaggregated data is removed (if applicable).

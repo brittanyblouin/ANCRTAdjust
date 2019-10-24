@@ -22,4 +22,13 @@ Imports:
     ggplot2,
     grid,
     stringr,
-    plyr
+    plyr,
+    ggpubr
+Suggests: 
+    knitr,
+    testthat (>= 2.2.1),
+    spelling (>= 2.1),
+    rmarkdown
+VignetteBuilder: knitr
+URL: https://github.com/brittanyblouin/ANCRTAdjust
+BugReports: https://github.com/brittanyblouin/ANCRTAdjust/issues

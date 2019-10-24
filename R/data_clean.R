@@ -8,7 +8,7 @@ meancov_possible <- function(data) {
 #'
 #' Cleans ANC-RT data so that it can be used with other functions in the \code{ANCRTAdjust} package.
 #'
-#' This function has been developed to clean common issues asoociated with ANC-RT data. The following tasks
+#' This function has been developed to clean common issues associated with ANC-RT data. The following tasks
 #' are accomplished:
 #'  \itemize{
 #'    \item Age disaggregated data is removed (if applicable).
@@ -81,6 +81,9 @@ data_clean <- function(data, total_age_cat = NULL){
   
   if(sum(data$check > 0) & !is.null(total_age_cat)){
     data <- data[data$age == total_age_cat,]
+  }
+  if (is.null(data$totpos)) {
+    data$totpos <- data$knownpos + data$testpos
   }
   
   data$testneg_c <- ifelse(!is.na(data$testneg), data$testneg,
