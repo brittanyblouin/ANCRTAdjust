@@ -32,6 +32,13 @@ that HIV prevalence estimates are consistent, reproducible and valid.
 After installation, we propose an 8-step approach to achieve this using
 functions implemented in the `ANCRTAdjust` package.
 
+Documentation
+-------------
+
+Further information on the `ANCRTAdjust` can be found below.
+[![Functions](https://img.shields.io/badge/Documentation-functions-orange.svg?style=flat)](https://github.com/brittanyblouin/ANCRTAdjust/blob/master/docs/index.html)
+[![Functions](https://img.shields.io/badge/Documentation-functions-orange.svg?style=flat)](https://github.com/brittanyblouin/ANCRTAdjust/blob/master/docs/reference/index.html)
+
 Installation
 ------------
 
