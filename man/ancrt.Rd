@@ -10,7 +10,7 @@
   \item{time}{the time period}
   \item{n_clients}{the number of clients attending antenatal care (ANC)}
   \item{n_status}{the number of women whose HIV status was ascertained}
-  \item{knownpos}{the number of women who were already diangosed as living with HIV}
+  \item{knownpos}{the number of women who were already diagnosed as living with HIV}
   \item{testpos}{the number of women who tested positive to HIV at ANC}
   \item{testneg}{the number of women who tested negative to HIV at ANC}
   \item{true_prv}{the true underlying HIV prevalence at this facility for the simulated dataset}
@@ -21,6 +21,6 @@
 ancrt
 }
 \description{
-A simulated dataset containing information on the number of clients attending antenatal care (ANC), the number for which their HIV status was ascertained, the number of known positive, the number who tested positive, the number who tested negative for eahc facility and time period.
+A simulated dataset containing information on the number of clients attending antenatal care (ANC), the number for which their HIV status was ascertained, the number of known positive, the number who tested positive, the number who tested negative for each facility and time period.
 }
 \keyword{datasets}

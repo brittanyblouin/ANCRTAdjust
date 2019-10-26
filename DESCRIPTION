@@ -10,6 +10,7 @@ Description: This package provides a series of tools to: 1) Prepare country-spec
 Depends:
 	R(>= 3.5)
 License: MIT + file LICENSE
+Language: en-US
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
