@@ -22,8 +22,9 @@ A standard protocol for data validation, implemented across all countries provid
 
 ## Documentation
 
-Further information on the `ANCRTAdjust` can be found below.
-[![Functions](https://img.shields.io/badge/Documentation-functions-orange.svg?style=flat)](https://github.com/brittanyblouin/ANCRTAdjust/blob/master/docs/index.html)
+Further information on the `ANCRTAdjust` can be found below.  
+
+[![Functions](https://img.shields.io/badge/Documentation-release-lightgrey.svg?style=flat)](https://github.com/brittanyblouin/ANCRTAdjust/blob/master/docs/index.html)
 [![Functions](https://img.shields.io/badge/Documentation-functions-orange.svg?style=flat)](https://github.com/brittanyblouin/ANCRTAdjust/blob/master/docs/reference/index.html)
 
 Installation
